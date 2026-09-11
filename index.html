@@ -1,0 +1,1108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gotham Media House</title>
+<meta name="description" content="Gotham Media House — cinematic video production and live event production based in Pearl River, NY, available nationwide and worldwide.">
+<link rel="icon" href="data:,">
+<style>
+  :root{
+    --bg: #EEF1EE;
+    --surface: #FFFFFF;
+    --surface-2: #E7EBE7;
+    --line: #D7DCD6;
+    --line-soft: #E2E6E1;
+    --ink: #14171A;
+    --ink-dim: #565D5F;
+    --ink-faint: #868D8E;
+    --teal: #1F8E7F;
+    --teal-soft: #DCEEEA;
+    --teal-ink: #FFFFFF;
+    --amber: #B97A1B;
+    --amber-soft: #F7E9D2;
+    --red: #B23F35;
+    --shadow: 0 1px 2px rgba(20,23,26,0.04);
+    --shadow-lift: 0 16px 32px rgba(20,23,26,0.12);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg: #101314;
+      --surface: #171B1D;
+      --surface-2: #1D2224;
+      --line: #2A3033;
+      --line-soft: #23282A;
+      --ink: #ECE9E2;
+      --ink-dim: #9AA1A3;
+      --ink-faint: #5F6668;
+      --teal: #2FB09E;
+      --teal-soft: #15302B;
+      --teal-ink: #06201C;
+      --amber: #E7A73E;
+      --amber-soft: #3A2A18;
+      --red: #E17569;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3);
+      --shadow-lift: 0 16px 36px rgba(0,0,0,0.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg: #101314;
+    --surface: #171B1D;
+    --surface-2: #1D2224;
+    --line: #2A3033;
+    --line-soft: #23282A;
+    --ink: #ECE9E2;
+    --ink-dim: #9AA1A3;
+    --ink-faint: #5F6668;
+    --teal: #2FB09E;
+    --teal-soft: #15302B;
+    --teal-ink: #06201C;
+    --amber: #E7A73E;
+    --amber-soft: #3A2A18;
+    --red: #E17569;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3);
+    --shadow-lift: 0 16px 36px rgba(0,0,0,0.5);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{
+    font-family:'Space Grotesk','Inter',sans-serif;
+    font-weight:600;
+    margin:0;
+    text-wrap:balance;
+    letter-spacing:-0.01em;
+  }
+  p{margin:0; line-height:1.65; max-width:62ch;}
+  a{color:inherit;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  .wrap{max-width:1160px; margin:0 auto; padding-inline:24px;}
+  @media (max-width:560px){ .wrap{padding-inline:16px;} }
+
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11.5px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--teal);
+    display:flex;
+    align-items:center;
+    gap:9px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:6px; height:6px;
+    background:var(--teal);
+    border-radius:50%;
+    flex-shrink:0;
+  }
+
+  /* ---- nav ---- */
+  .topbar{
+    position:sticky; top:0; z-index:20;
+    background:color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line-soft);
+  }
+  .topbar-inner{
+    display:flex; align-items:center; justify-content:space-between;
+    padding-block:16px;
+    gap:16px;
+  }
+  .wordmark{
+    display:flex; align-items:center; gap:10px;
+    font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:15.5px;
+    letter-spacing:0.01em; white-space:nowrap;
+    text-decoration:none;
+  }
+  .wordmark .dot{
+    width:9px; height:9px; border-radius:50%;
+    background:var(--red);
+    box-shadow:0 0 0 3px color-mix(in srgb, var(--red) 18%, transparent);
+    animation:pulse 2.2s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{opacity:1;} 50%{opacity:0.45;}
+  }
+  @media (prefers-reduced-motion: reduce){ .wordmark .dot{animation:none;} }
+  .navlinks{
+    display:flex; gap:28px; align-items:center;
+    font-size:13.5px; color:var(--ink-dim);
+  }
+  .navlinks a{text-decoration:none;}
+  .navlinks a:hover{color:var(--ink);}
+  .navlinks a.active{color:var(--ink);}
+  .tc-readout{
+    font-size:12px; color:var(--ink-faint);
+    letter-spacing:0.03em; white-space:nowrap;
+  }
+  .tc-readout span{color:var(--ink-dim);}
+  @media (max-width:760px){ .navlinks{display:none;} }
+
+  /* ---- buttons (shared) ---- */
+  .btn{
+    font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:14px;
+    padding:12px 20px; border-radius:6px; text-decoration:none;
+    display:inline-flex; align-items:center; gap:8px;
+    border:1px solid transparent;
+  }
+  .btn-solid{background:var(--teal); color:var(--teal-ink);}
+  .btn-ghost{border-color:var(--line); color:var(--ink);}
+  .btn-ghost:hover{border-color:var(--ink-faint);}
+  .btn-ghost-on-photo{border:1px solid rgba(245,244,238,0.55); color:#F5F4EE;}
+  .btn-ghost-on-photo:hover{border-color:#F5F4EE;}
+  .cta-row{display:flex; gap:12px; flex-wrap:wrap;}
+
+  /* ---- hero photo ---- */
+  .hero-photo{
+    position:relative;
+    min-height:60vh;
+    display:flex; align-items:flex-end;
+    overflow:hidden;
+    background:#0c0e0f;
+  }
+  .hero-photo > img{
+    position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+    filter:contrast(1.05);
+  }
+  .hero-photo::before{
+    content:""; position:absolute; inset:0; z-index:1;
+    background:
+      linear-gradient(90deg, rgba(8,10,10,0.55) 0%, rgba(8,10,10,0.28) 48%, rgba(8,10,10,0.05) 75%),
+      linear-gradient(180deg, rgba(8,10,10,0.25) 0%, rgba(8,10,10,0.55) 45%, rgba(8,10,10,0.92) 100%);
+  }
+  .hero-hud{position:absolute; inset:0; z-index:2; pointer-events:none; font-family:'JetBrains Mono',monospace;}
+  .hero-hud .corner{position:absolute; width:26px; height:26px; border-color:var(--teal); border-style:solid; border-width:0;}
+  .hero-hud .corner.tl{top:22px; left:22px; border-top-width:2.5px; border-left-width:2.5px;}
+  .hero-hud .corner.tr{top:22px; right:22px; border-top-width:2.5px; border-right-width:2.5px;}
+  .hero-hud .corner.bl{bottom:22px; left:22px; border-bottom-width:2.5px; border-left-width:2.5px;}
+  .hero-hud .corner.br{bottom:22px; right:22px; border-bottom-width:2.5px; border-right-width:2.5px;}
+  .hero-hud .row{position:absolute; left:48px; right:48px; display:flex; justify-content:space-between; font-size:11px; letter-spacing:0.05em;}
+  .hero-hud .row.top{top:28px; color:var(--teal);}
+  .hero-hud .row.bottom{bottom:28px; color:rgba(245,244,238,0.75);}
+  .hero-hud .rec{display:flex; align-items:center; gap:6px; color:#E17569;}
+  .hero-hud .rec .d{width:7px; height:7px; border-radius:50%; background:#E17569; animation:pulse 2.2s ease-in-out infinite;}
+  @media (prefers-reduced-motion: reduce){ .hero-hud .rec .d{animation:none;} }
+  .hero-photo-content{
+    position:relative; z-index:2; width:100%;
+    max-width:1160px; margin:0 auto; padding:90px 24px 64px;
+  }
+  @media (max-width:560px){ .hero-photo-content{padding:70px 16px 48px;} }
+  .hero-photo-content .eyebrow{color:var(--teal);}
+  .hero-photo-content h1{
+    color:#F5F4EE; font-size:clamp(38px, 7vw, 84px); line-height:1.02; margin-top:18px; max-width:16ch;
+  }
+  .hero-photo-content .lede{
+    color:rgba(245,244,238,0.84); margin-top:22px; font-size:18px; max-width:56ch; line-height:1.6;
+  }
+  .hero-photo-content .cta-row{margin-top:32px;}
+
+  /* ---- marquee ---- */
+  .marquee-band{
+    overflow:hidden; background:var(--surface-2);
+    border-bottom:1px solid var(--line-soft);
+    padding-block:14px;
+  }
+  .marquee-track{display:flex; width:max-content; gap:48px; animation:marquee 26s linear infinite;}
+  @keyframes marquee{ from{transform:translateX(0);} to{transform:translateX(-50%);} }
+  @media (prefers-reduced-motion: reduce){ .marquee-track{animation:none;} }
+  .marquee-item{
+    font-family:'JetBrains Mono',monospace; font-size:12.5px; letter-spacing:0.08em;
+    color:var(--ink-faint); display:inline-flex; align-items:center; gap:20px; white-space:nowrap;
+  }
+  .marquee-item .sep{color:var(--teal);}
+
+  /* ---- home services preview ---- */
+  .home-services{padding-block:64px;}
+  .home-services-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:18px;}
+  @media (max-width:900px){ .home-services-grid{grid-template-columns:1fr 1fr;} }
+  @media (max-width:520px){ .home-services-grid{grid-template-columns:1fr;} }
+  .home-service-card{
+    display:block; text-decoration:none; color:inherit;
+    background:var(--surface); border:1px solid var(--line); border-radius:10px;
+    padding:24px 22px; box-shadow:var(--shadow);
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .home-service-card:hover{transform:translateY(-4px); box-shadow:var(--shadow-lift);}
+  .home-service-card h3{font-size:17px; margin-top:12px;}
+  .home-service-card p{margin-top:10px; color:var(--ink-dim); font-size:13.5px; line-height:1.55;}
+  .home-service-card .card-link{
+    margin-top:16px; display:inline-block;
+    font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:12.5px; color:var(--teal);
+  }
+
+  /* ---- home closing cta band ---- */
+  .cta-band{
+    background:#101314; border-block:1px solid var(--line-soft);
+  }
+  .cta-band-inner{padding-block:72px; text-align:center;}
+  .cta-band .eyebrow{justify-content:center; color:var(--teal);}
+  .cta-band h2{color:#F5F4EE; font-size:clamp(28px,4vw,42px); margin-top:16px; max-width:20ch; margin-inline:auto;}
+  .cta-band p{color:rgba(245,244,238,0.72); margin-top:16px; max-width:52ch; margin-inline:auto; font-size:15px;}
+  .cta-band .cta-row{justify-content:center; margin-top:30px;}
+  .cta-band .btn-ghost{border-color:rgba(245,244,238,0.35); color:#F5F4EE;}
+  .cta-band .btn-ghost:hover{border-color:#F5F4EE;}
+
+  /* ---- teaser (home: from the field) ---- */
+  .teaser-section{padding-block:64px;}
+  .teaser-head{display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:28px; gap:16px; flex-wrap:wrap;}
+  .teaser-head h2{font-size:clamp(24px,3vw,32px);}
+  .teaser-link{font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:13.5px; color:var(--teal); text-decoration:none; white-space:nowrap;}
+  .teaser-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:14px;}
+  @media (max-width:760px){ .teaser-grid{grid-template-columns:1fr 1fr;} }
+  @media (max-width:480px){ .teaser-grid{grid-template-columns:1fr;} }
+  .teaser-item{aspect-ratio:4/3; border-radius:8px; overflow:hidden; border:1px solid var(--line);}
+  .teaser-item img{
+    width:100%; height:100%; object-fit:cover; display:block;
+    transition:transform .3s ease;
+  }
+  .teaser-item:hover img{transform:scale(1.05);}
+
+  /* ---- banner photo (services break) ---- */
+  .banner-photo{position:relative; min-height:280px; display:flex; align-items:center; overflow:hidden;}
+  .banner-photo img{
+    position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+    filter:contrast(1.05);
+  }
+  .banner-photo::before{
+    content:""; position:absolute; inset:0; z-index:1;
+    background:linear-gradient(90deg, rgba(8,10,10,0.8) 0%, rgba(8,10,10,0.3) 65%, rgba(8,10,10,0.15) 100%);
+  }
+  .banner-photo-content{position:relative; z-index:2; max-width:1160px; margin:0 auto; width:100%; padding:44px 24px;}
+  .banner-photo-content .eyebrow{color:var(--teal);}
+  .banner-photo-content h3{color:#F5F4EE; font-size:clamp(22px,3vw,30px); margin-top:12px; max-width:22ch; line-height:1.25;}
+  .about-banner-photo{min-height:340px;}
+  .about-banner-photo img{object-position:center 15%;}
+  .services-banner-photo img{object-position:center 20%;}
+
+  /* ---- lightbox ---- */
+  .lightbox-overlay{
+    position:fixed; inset:0; background:rgba(8,10,10,0.92);
+    display:none; align-items:center; justify-content:center; z-index:60; padding:32px;
+  }
+  .lightbox-overlay.open{display:flex;}
+  .lightbox-overlay img{max-width:100%; max-height:100%; border-radius:6px; box-shadow:0 20px 60px rgba(0,0,0,0.5);}
+  .lightbox-close{
+    position:fixed; top:20px; right:24px; color:#F5F4EE; font-size:30px; line-height:1;
+    background:rgba(255,255,255,0.08); border:1px solid rgba(245,244,238,0.3); border-radius:6px;
+    width:40px; height:40px; cursor:pointer; z-index:61;
+  }
+
+  /* ---- sections ---- */
+  section{padding-block:64px;}
+  .section-head{
+    display:flex; justify-content:space-between; align-items:flex-end;
+    gap:24px; flex-wrap:wrap;
+    margin-bottom:34px;
+    border-bottom:1px solid var(--line-soft);
+    padding-bottom:22px;
+  }
+  .section-head h2{font-size:clamp(26px, 3.4vw, 36px);}
+  .section-head .section-note{font-size:13.5px; color:var(--ink-faint); max-width:34ch;}
+
+  /* ---- chips ---- */
+  .chip-row{display:flex; gap:8px; flex-wrap:wrap;}
+  .chip{
+    font-family:'JetBrains Mono',monospace; font-size:10.5px;
+    padding:5px 10px; border-radius:3px;
+    background:var(--teal-soft); color:var(--teal);
+    letter-spacing:0.04em; white-space:nowrap;
+  }
+
+  /* ---- about ---- */
+  .about-section{
+    display:grid; grid-template-columns:1.1fr 0.9fr; gap:48px; align-items:start;
+  }
+  @media (max-width:860px){ .about-section{grid-template-columns:1fr; gap:32px;} }
+  .about-copy h2{font-size:clamp(26px, 3.2vw, 34px); margin-bottom:16px;}
+  .about-copy p{color:var(--ink-dim); font-size:15.5px;}
+  .about-copy .chip-row{margin-top:24px;}
+  .quote-card{
+    background:var(--surface); border:1px solid var(--line); border-radius:10px;
+    box-shadow:var(--shadow); padding:34px 30px; position:relative;
+  }
+  .quote-mark{
+    font-family:'Space Grotesk',sans-serif; font-size:52px; line-height:1;
+    color:var(--teal); opacity:0.5;
+  }
+  .quote-card blockquote{
+    margin:10px 0 0; font-family:'Space Grotesk',sans-serif; font-size:19px;
+    font-weight:500; line-height:1.4; color:var(--ink);
+  }
+  .quote-card .attrib{
+    margin-top:18px; font-size:12.5px; color:var(--ink-faint);
+    font-family:'JetBrains Mono',monospace; letter-spacing:0.03em;
+  }
+
+  /* ---- services ---- */
+  .services-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:20px;
+  }
+  @media (max-width:820px){ .services-grid{grid-template-columns:1fr;} }
+  .service-card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:28px 26px;
+    box-shadow:var(--shadow);
+    display:flex; flex-direction:column;
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .service-card:hover{transform:translateY(-4px); box-shadow:var(--shadow-lift);}
+  .service-card h3{font-size:21px; margin-top:14px;}
+  .service-card p{margin-top:12px; color:var(--ink-dim); font-size:14.5px;}
+  .spec-list{
+    margin-top:20px; padding-top:18px;
+    border-top:1px solid var(--line-soft);
+    display:flex; flex-direction:column; gap:11px;
+  }
+  .spec-row{
+    display:grid; grid-template-columns:104px 1fr; gap:14px;
+    font-size:13px;
+    align-items:baseline;
+  }
+  .spec-row .k{
+    font-family:'JetBrains Mono',monospace; font-size:10.5px;
+    letter-spacing:0.06em; color:var(--ink-faint); text-transform:uppercase;
+    padding-top:2px;
+  }
+  .spec-row .v{color:var(--ink);}
+
+  /* ---- coverage ---- */
+  .coverage-section{
+    display:grid; grid-template-columns:0.9fr 1.1fr; gap:48px; align-items:center;
+  }
+  @media (max-width:860px){ .coverage-section{grid-template-columns:1fr;} }
+  .coverage-copy p{color:var(--ink-dim); font-size:15px; margin-top:14px;}
+  .coverage-list{margin-top:22px; display:flex; flex-direction:column; gap:10px;}
+  .coverage-item{display:flex; align-items:center; gap:10px; font-size:14px;}
+  .coverage-item .tag{
+    font-family:'JetBrains Mono',monospace; font-size:10.5px;
+    padding:3px 8px; border-radius:3px;
+    background:var(--teal-soft); color:var(--teal);
+    letter-spacing:0.04em;
+  }
+  .coverage-worldwide{
+    margin-top:18px; padding-top:18px; border-top:1px solid var(--line-soft);
+    display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+    font-size:14px; color:var(--ink-dim);
+  }
+  .coverage-worldwide .tag-solid{
+    font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:700;
+    padding:5px 10px; border-radius:3px;
+    background:var(--teal); color:var(--teal-ink);
+    letter-spacing:0.05em;
+  }
+  .route-panel{
+    background:var(--surface); border:1px solid var(--line); border-radius:10px;
+    box-shadow:var(--shadow); padding:30px 22px;
+  }
+  .route-panel svg{width:100%; height:auto; display:block;}
+
+  /* ---- about media ---- */
+  .about-media{
+    position:relative;
+    border:1px solid var(--line); border-radius:10px; overflow:hidden;
+    box-shadow:var(--shadow); background:var(--surface);
+  }
+  .photo-frame{position:relative; overflow:hidden;}
+  .about-photo{
+    width:100%; aspect-ratio:4/5; object-fit:cover; display:block;
+    transform-origin:62% 38%;
+    animation:ab-kenburns 24s ease-in-out infinite alternate;
+  }
+  @keyframes ab-kenburns{ from{transform:scale(1);} to{transform:scale(1.09);} }
+  @media (prefers-reduced-motion: reduce){ .about-photo{animation:none;} }
+  .about-hud{position:absolute; inset:0; z-index:1; pointer-events:none; font-family:'JetBrains Mono',monospace;}
+  .about-hud .corner{position:absolute; width:20px; height:20px; border-color:rgba(245,244,238,0.85); border-style:solid; border-width:0;}
+  .about-hud .corner.tl{top:16px; left:16px; border-top-width:2px; border-left-width:2px;}
+  .about-hud .corner.br{bottom:16px; right:16px; border-bottom-width:2px; border-right-width:2px;}
+  .ab-rec{
+    position:absolute; top:14px; left:44px; z-index:1;
+    display:flex; align-items:center; gap:5px;
+    background:rgba(8,10,10,0.5); backdrop-filter:blur(3px);
+    color:#F5F4EE; padding:5px 9px; border-radius:4px;
+    font-size:10.5px; letter-spacing:0.06em;
+  }
+  .ab-rec .d{width:6px; height:6px; border-radius:50%; background:#E17569; animation:pulse 2.2s ease-in-out infinite;}
+  @media (prefers-reduced-motion: reduce){ .ab-rec .d{animation:none;} }
+  .ab-tc{
+    position:absolute; top:16px; right:16px; z-index:1;
+    color:rgba(245,244,238,0.8); font-size:10.5px; letter-spacing:0.04em;
+  }
+  .about-badge{
+    position:absolute; left:18px; bottom:18px; z-index:1;
+    background:rgba(8,10,10,0.72); backdrop-filter:blur(4px);
+    color:#F5F4EE; padding:10px 14px; border-radius:6px;
+    font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.05em;
+  }
+  .media-caption{padding:26px;}
+  .media-caption .quote-mark{font-size:44px;}
+  .media-caption blockquote{font-size:18px;}
+
+  /* ---- gallery ---- */
+  .gallery-filters{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:22px;}
+  .gallery-filter-btn{
+    font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.05em;
+    text-transform:uppercase; color:var(--ink-dim);
+    background:transparent; border:1px solid var(--line); border-radius:20px;
+    padding:7px 14px; cursor:pointer; transition:all .15s ease;
+  }
+  .gallery-filter-btn:hover{border-color:var(--ink-faint); color:var(--ink);}
+  .gallery-filter-btn.active{background:var(--teal); border-color:var(--teal); color:var(--teal-ink);}
+  .gallery-grid{
+    display:grid; grid-template-columns:repeat(3, 1fr); gap:14px;
+    margin-bottom:20px;
+  }
+  @media (max-width:760px){ .gallery-grid{grid-template-columns:repeat(2, 1fr);} }
+  @media (max-width:460px){ .gallery-grid{grid-template-columns:1fr;} }
+  .gallery-item{
+    position:relative;
+    aspect-ratio:4/3; border-radius:8px; overflow:hidden;
+    border:1px solid var(--line); background:var(--surface-2);
+    cursor:zoom-in; transition:transform .2s ease, box-shadow .2s ease, opacity .2s ease;
+  }
+  .gallery-item:hover{transform:translateY(-3px); box-shadow:var(--shadow-lift);}
+  .gallery-item img{
+    width:100%; height:100%; object-fit:cover; display:block;
+    transition:transform .3s ease;
+  }
+  .gallery-item:hover img{transform:scale(1.04);}
+  .gallery-caption{
+    position:absolute; left:0; right:0; bottom:0; z-index:1;
+    padding:20px 12px 10px;
+    background:linear-gradient(180deg, transparent, rgba(8,10,10,0.82) 70%);
+    color:#F5F4EE; font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:0.05em;
+    opacity:0; transform:translateY(6px);
+    transition:opacity .2s ease, transform .2s ease;
+    pointer-events:none;
+  }
+  .gallery-item:hover .gallery-caption{opacity:1; transform:translateY(0);}
+
+  /* ---- work ---- */
+  .work-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:20px;
+  }
+  @media (max-width:820px){ .work-grid{grid-template-columns:1fr;} }
+  .work-card{
+    background:var(--surface); border:1px solid var(--line); border-radius:10px;
+    box-shadow:var(--shadow); padding:28px 26px;
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .work-card:hover{transform:translateY(-4px); box-shadow:var(--shadow-lift);}
+  .work-card h3{font-size:20px; margin-top:12px;}
+  .work-card p{margin-top:12px; color:var(--ink-dim); font-size:14.5px;}
+  .work-card .chip-row{margin-top:20px;}
+
+  /* ---- contact / footer ---- */
+  .contact-bg-wrap{
+    position:relative; border-radius:14px; overflow:hidden;
+  }
+  .contact-bg-wrap > img{
+    position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+    filter:contrast(1.05);
+  }
+  .contact-bg-wrap::before{
+    content:""; position:absolute; inset:0; z-index:1;
+    background:
+      linear-gradient(90deg, rgba(8,10,10,0.6) 0%, rgba(8,10,10,0.35) 55%, rgba(8,10,10,0.45) 100%),
+      linear-gradient(180deg, rgba(8,10,10,0.5) 0%, rgba(8,10,10,0.8) 100%);
+  }
+  .contact-bg-wrap .contact-section{
+    position:relative; z-index:2;
+    background:transparent; border:none; box-shadow:none;
+  }
+  .contact-bg-wrap .contact-top h2{color:#F5F4EE;}
+  .contact-bg-wrap .slate{border-top-color:rgba(245,244,238,0.25);}
+  .contact-bg-wrap .slate-field .k{color:rgba(245,244,238,0.55);}
+  .contact-bg-wrap .slate-field .v{color:#F5F4EE;}
+  .contact-bg-wrap .slate-field a{color:var(--teal);}
+  .contact-hud{position:absolute; inset:0; z-index:2; pointer-events:none; font-family:'JetBrains Mono',monospace;}
+  .contact-hud .corner{position:absolute; width:22px; height:22px; border-color:rgba(245,244,238,0.4); border-style:solid; border-width:0;}
+  .contact-hud .corner.tl{top:20px; left:20px; border-top-width:2px; border-left-width:2px;}
+  .contact-hud .corner.tr{top:20px; right:20px; border-top-width:2px; border-right-width:2px;}
+  .contact-hud .rec-tag{position:absolute; top:24px; left:50px; display:flex; align-items:center; gap:6px; color:#E17569; font-size:10.5px; letter-spacing:0.06em;}
+  .contact-hud .rec-tag .d{width:6px; height:6px; border-radius:50%; background:#E17569; animation:pulse 2.2s ease-in-out infinite;}
+  @media (prefers-reduced-motion: reduce){ .contact-hud .rec-tag .d{animation:none;} }
+  .contact-hud .tc{position:absolute; top:24px; right:50px; color:rgba(245,244,238,0.6); font-size:10.5px; letter-spacing:0.04em;}
+  @media (max-width:560px){ .contact-hud .rec-tag, .contact-hud .tc{display:none;} }
+  .contact-top-copy{max-width:46ch;}
+  .contact-top-copy p{margin-top:12px; color:rgba(245,244,238,0.78); font-size:14.5px; line-height:1.6;}
+  .contact-steps{
+    margin-top:36px; padding-top:28px; border-top:1px solid rgba(245,244,238,0.18);
+    display:grid; grid-template-columns:repeat(3, 1fr); gap:26px;
+  }
+  @media (max-width:760px){ .contact-steps{grid-template-columns:1fr; gap:20px;} }
+  .contact-step .num{font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--teal); letter-spacing:0.06em;}
+  .contact-step h4{margin-top:8px; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:15.5px; color:#F5F4EE;}
+  .contact-step p{margin-top:8px; font-size:13.5px; color:rgba(245,244,238,0.66); line-height:1.55; max-width:34ch;}
+  .contact-section{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:44px 40px;
+    box-shadow:var(--shadow);
+  }
+  @media (max-width:560px){ .contact-section{padding:30px 22px;} }
+  .contact-top{
+    display:flex; justify-content:space-between; align-items:flex-end; gap:24px; flex-wrap:wrap;
+  }
+  .contact-top h2{font-size:clamp(28px,4vw,42px);}
+  .slate{
+    margin-top:32px; padding-top:28px; border-top:1px solid var(--line-soft);
+    display:grid; grid-template-columns:repeat(5, 1fr); gap:22px;
+  }
+  @media (max-width:900px){ .slate{grid-template-columns:repeat(3, 1fr); gap:20px;} }
+  @media (max-width:600px){ .slate{grid-template-columns:1fr 1fr; gap:16px;} }
+  @media (max-width:420px){ .slate{grid-template-columns:1fr;} }
+  .slate-field .k{
+    font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:0.06em;
+    color:var(--ink-faint); text-transform:uppercase;
+  }
+  .slate-field .v{margin-top:6px; font-size:15px;}
+  .slate-field a{text-decoration:none; color:var(--teal);}
+
+  footer{
+    padding-block:30px 50px;
+    display:flex; justify-content:space-between; align-items:center;
+    flex-wrap:wrap; gap:12px;
+    font-size:12.5px; color:var(--ink-faint);
+  }
+  footer a{text-decoration:none; color:var(--ink-faint);}
+  footer a:hover{color:var(--ink-dim);}
+  .footer-links{display:flex; gap:18px;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap topbar-inner">
+    <a class="wordmark" href="#top"><span class="dot"></span>GOTHAM MEDIA HOUSE</a>
+    <div class="navlinks">
+      <a href="#top">Home</a>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#work">Our Work</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="tc-readout mono">TC <span id="tcClock">00:00:00:00</span></div>
+  </div>
+</div>
+
+<div class="page" id="page-home">
+  <div class="hero-photo">
+    <img src="images/hero.jpg" alt="Camera on a tripod set up on location for a Gotham Media House shoot" />
+    <div class="hero-hud" aria-hidden="true">
+      <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+      <div class="row top"><span class="rec"><span class="d"></span>REC</span><span>4K · 24P</span></div>
+      <div class="row bottom"><span>ISO 800</span><span>f/2.8</span><span id="vfTc">00:00:00:00</span></div>
+    </div>
+    <div class="hero-photo-content">
+      <div class="eyebrow">PEARL RIVER, NY — CINEMATIC &amp; LIVE PRODUCTION</div>
+      <h1>Cinematic brilliance. Live event energy.</h1>
+      <p class="lede">We craft stories that resonate — merging cinematic brilliance with live event energy. Every project becomes a unique, immersive experience, delivered on time, on budget, and built to perform.</p>
+      <div class="cta-row">
+        <a class="btn btn-solid" href="mailto:info@gothammediahouse.com?subject=Project%20inquiry">Book a shoot</a>
+        <a class="btn btn-ghost-on-photo" href="#services">See services</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="marquee-band" aria-hidden="true">
+    <div class="marquee-track">
+      <span class="marquee-item">VIDEO PRODUCTION<span class="sep">/</span></span>
+      <span class="marquee-item">LIVE PRODUCTION &amp; STREAMING<span class="sep">/</span></span>
+      <span class="marquee-item">EVENT PRODUCTION<span class="sep">/</span></span>
+      <span class="marquee-item">CREATIVE &amp; TECHNICAL CONSULTING<span class="sep">/</span></span>
+      <span class="marquee-item">VIDEO PRODUCTION<span class="sep">/</span></span>
+      <span class="marquee-item">LIVE PRODUCTION &amp; STREAMING<span class="sep">/</span></span>
+      <span class="marquee-item">EVENT PRODUCTION<span class="sep">/</span></span>
+      <span class="marquee-item">CREATIVE &amp; TECHNICAL CONSULTING<span class="sep">/</span></span>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="home-services">
+      <div class="section-head">
+        <h2>What we do</h2>
+        <a class="teaser-link" href="#services">See all services →</a>
+      </div>
+      <div class="home-services-grid">
+        <a class="home-service-card" href="#services">
+          <div class="eyebrow">BRAND &amp; NARRATIVE</div>
+          <h3>Video Production</h3>
+          <p>High-quality video content designed to engage audiences and strengthen brand identity.</p>
+          <span class="card-link">Learn more →</span>
+        </a>
+        <a class="home-service-card" href="#services">
+          <div class="eyebrow">BROADCAST-LEVEL</div>
+          <h3>Live Production &amp; Streaming</h3>
+          <p>Dependable, broadcast-level live production for moments that only happen once.</p>
+          <span class="card-link">Learn more →</span>
+        </a>
+        <a class="home-service-card" href="#services">
+          <div class="eyebrow">ON-SITE EXECUTION</div>
+          <h3>Event Production</h3>
+          <p>Scalable production solutions, combining technical precision with creative execution.</p>
+          <span class="card-link">Learn more →</span>
+        </a>
+        <a class="home-service-card" href="#services">
+          <div class="eyebrow">PLANNING &amp; STRATEGY</div>
+          <h3>Creative &amp; Technical Consulting</h3>
+          <p>Guidance for productions that need the right plan before the cameras roll.</p>
+          <span class="card-link">Learn more →</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="teaser-section">
+      <div class="teaser-head">
+        <h2>From the field</h2>
+        <a class="teaser-link" href="#work">See all our work →</a>
+      </div>
+      <div class="teaser-grid" id="fieldGrid"></div>
+    </div>
+  </div>
+
+  <div class="cta-band">
+    <div class="wrap cta-band-inner">
+      <div class="eyebrow">START A PROJECT</div>
+      <h2>Let's make something worth watching.</h2>
+      <p>From a first call to final delivery, Matt is hands-on for every project — brand films, live streams, and everything in between.</p>
+      <div class="cta-row">
+        <a class="btn btn-solid" href="mailto:info@gothammediahouse.com?subject=Project%20inquiry">Book a shoot</a>
+        <a class="btn btn-ghost" href="#work">See our work</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-about" hidden>
+<div class="wrap" id="about">
+  <section class="about-section">
+    <div class="about-copy">
+      <div class="eyebrow">WHO WE ARE</div>
+      <h2 style="margin-top:14px;">Built around nearly two decades behind the camera.</h2>
+      <p>Gotham Media House is led by Matt Fox, an Emmy Award–winning filmmaker whose work spans drama, documentary, corporate, and live broadcast — including major national broadcasts, presidential debates, and large-scale live music events. Every story deserves to be told with authenticity and impact, and that starts with a hands-on approach from first call to final delivery.</p>
+      <p>Nineteen years in, that hands-on approach covers the full technical range — directing, cinematography, audio, lighting, and live event engineering — behind brand films, live streams, and cinematic documentaries for clients across a range of industries.</p>
+      <div class="chip-row">
+        <span class="chip">EMMY AWARD-WINNING</span>
+        <span class="chip">NATIONAL BROADCASTS</span>
+        <span class="chip">PRESIDENTIAL DEBATES</span>
+        <span class="chip">LIVE MUSIC EVENTS</span>
+      </div>
+      <div class="spec-list">
+        <div class="spec-row"><div class="k">Core</div><div class="v">Directing, cinematography, audio &amp; lighting</div></div>
+        <div class="spec-row"><div class="k">Live</div><div class="v">Multi-camera live event engineering</div></div>
+        <div class="spec-row"><div class="k">Formats</div><div class="v">Brand films, live streams &amp; cinematic documentaries</div></div>
+      </div>
+    </div>
+    <div class="about-media">
+    <div class="photo-frame">
+      <img class="about-photo" src="images/about-portrait.jpg" alt="Matt Fox operating a camera on set" />
+      <div class="about-hud" aria-hidden="true">
+        <span class="corner tl"></span><span class="corner br"></span>
+        <div class="ab-rec"><span class="d"></span>REC</div>
+        <div class="ab-tc" id="abTc">00:00:00:00</div>
+      </div>
+      <div class="about-badge">EMMY AWARD-WINNING FILMMAKER</div>
+    </div>
+      <div class="media-caption">
+        <div class="quote-mark">&ldquo;</div>
+        <blockquote>Every story deserves to be told with authenticity and impact.</blockquote>
+        <div class="attrib">— MATT FOX, FOUNDER</div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="banner-photo about-banner-photo">
+  <img src="images/about-banner.jpg" alt="Crew filming talent descending a staircase on set" />
+  <div class="banner-photo-content">
+    <div class="eyebrow">HANDS-ON, EVERY TIME</div>
+    <h3>First call to final delivery, Matt is behind the camera — not just running the business.</h3>
+  </div>
+</div>
+</div>
+
+<div class="page" id="page-services" hidden>
+<div class="wrap" id="services">
+  <section>
+    <div class="section-head">
+      <h2>What we do</h2>
+      <div class="section-note">Four ways we help a project become a unique, immersive experience.</div>
+    </div>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="eyebrow">BRAND &amp; NARRATIVE</div>
+        <h3>Video Production</h3>
+        <p>High-quality video content designed to engage audiences and strengthen brand identity, built with a cinematic eye and a strategic understanding of how video performs across platforms.</p>
+        <div class="spec-list">
+          <div class="spec-row"><div class="k">Formats</div><div class="v">Brand &amp; promotional video</div></div>
+          <div class="spec-row"><div class="k">Formats</div><div class="v">Corporate &amp; documentary content</div></div>
+          <div class="spec-row"><div class="k">Formats</div><div class="v">Social campaigns &amp; event recap</div></div>
+        </div>
+      </div>
+      <div class="service-card">
+        <div class="eyebrow">BROADCAST-LEVEL</div>
+        <h3>Live Production &amp; Streaming</h3>
+        <p>Dependable, broadcast-level live production for moments that only happen once.</p>
+        <div class="spec-list">
+          <div class="spec-row"><div class="k">Streaming</div><div class="v">Multi-camera live streaming</div></div>
+          <div class="spec-row"><div class="k">Events</div><div class="v">Hybrid &amp; virtual events, concerts</div></div>
+          <div class="spec-row"><div class="k">Crew</div><div class="v">Technical planning &amp; staffing</div></div>
+        </div>
+      </div>
+      <div class="service-card">
+        <div class="eyebrow">ON-SITE EXECUTION</div>
+        <h3>Event Production</h3>
+        <p>Scalable production solutions, combining technical precision with creative execution.</p>
+        <div class="spec-list">
+          <div class="spec-row"><div class="k">Systems</div><div class="v">Video, camera, audio, lighting &amp; flypack solutions</div></div>
+          <div class="spec-row"><div class="k">Partners</div><div class="v">Venues, agencies &amp; event planners</div></div>
+          <div class="spec-row"><div class="k">On-site</div><div class="v">Full on-site management</div></div>
+          <div class="spec-row"><div class="k">Delivery</div><div class="v">Post-event content delivery</div></div>
+        </div>
+      </div>
+      <div class="service-card">
+        <div class="eyebrow">PLANNING &amp; STRATEGY</div>
+        <h3>Creative &amp; Technical Consulting</h3>
+        <p>Guidance for productions that need the right plan before the cameras roll.</p>
+        <div class="spec-list">
+          <div class="spec-row"><div class="k">Planning</div><div class="v">Production planning &amp; budgeting</div></div>
+          <div class="spec-row"><div class="k">Systems</div><div class="v">Live production system design</div></div>
+          <div class="spec-row"><div class="k">Strategy</div><div class="v">Content strategy &amp; distribution</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="banner-photo services-banner-photo">
+  <img src="images/services-banner.jpg" alt="Crew reviewing a shot on a field monitor between takes" />
+  <div class="banner-photo-content">
+    <div class="eyebrow">HOW WE WORK</div>
+    <h3>Every setup, dialed in before we roll.</h3>
+  </div>
+</div>
+
+<div class="wrap" id="coverage">
+  <section class="coverage-section">
+    <div class="coverage-copy">
+      <div class="eyebrow">WHERE WE SHOOT</div>
+      <h2 style="margin-top:14px; font-size:clamp(26px,3.2vw,34px);">Based in New York. Available worldwide.</h2>
+      <p>Live production travels regularly across three East Coast regions — and the crew, gear, and experience travel just as easily beyond that, wherever a project calls for it.</p>
+      <div class="coverage-list">
+        <div class="coverage-item"><span class="tag">HOME</span>New York</div>
+        <div class="coverage-item"><span class="tag">REGULAR</span>Washington, D.C.</div>
+        <div class="coverage-item"><span class="tag">REGULAR</span>Florida</div>
+      </div>
+      <div class="coverage-worldwide">
+        <span class="tag tag-solid">WORLDWIDE</span>
+        <span>Available for the right project, anywhere.</span>
+      </div>
+    </div>
+    <div class="route-panel">
+      <svg viewBox="0 0 500 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Schematic route diagram: New York to Washington D.C. to Florida, with worldwide travel available on request">
+        <line x1="55" y1="60" x2="230" y2="150" stroke="var(--line)" stroke-width="2"/>
+        <line x1="230" y1="150" x2="400" y2="60" stroke="var(--line)" stroke-width="2"/>
+        <line x1="400" y1="60" x2="458" y2="128" stroke="var(--teal)" stroke-width="2" stroke-dasharray="4 5" opacity="0.6"/>
+        <g>
+          <circle cx="55" cy="60" r="7" fill="var(--teal)"/>
+          <text x="55" y="38" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" fill="var(--ink)">NY</text>
+        </g>
+        <g>
+          <circle cx="230" cy="150" r="6" fill="var(--teal)"/>
+          <text x="230" y="176" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" fill="var(--ink)">D.C.</text>
+        </g>
+        <g>
+          <circle cx="400" cy="60" r="6" fill="var(--teal)"/>
+          <text x="400" y="38" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" fill="var(--ink)">FL</text>
+        </g>
+        <g>
+          <circle cx="458" cy="128" r="9" fill="var(--teal)"/>
+          <circle cx="458" cy="128" r="14" fill="none" stroke="var(--teal)" stroke-width="1.5" opacity="0.4"/>
+          <text x="458" y="158" text-anchor="middle" font-family="JetBrains Mono, monospace" font-weight="700" font-size="13" fill="var(--ink)">WORLD</text>
+        </g>
+      </svg>
+    </div>
+  </section>
+</div>
+</div>
+
+<div class="page" id="page-work" hidden>
+<div class="wrap" id="work">
+  <section>
+    <div class="section-head">
+      <h2>Our work</h2>
+      <div class="section-note">Every project we produce is driven by story, executed with precision, and delivered at broadcast-level quality.</div>
+    </div>
+    <div class="gallery-filters" role="group" aria-label="Filter work by category">
+      <button type="button" class="gallery-filter-btn active" data-filter="all">All</button>
+      <button type="button" class="gallery-filter-btn" data-filter="narrative">Narrative</button>
+      <button type="button" class="gallery-filter-btn" data-filter="documentary">Documentary</button>
+      <button type="button" class="gallery-filter-btn" data-filter="live">Live &amp; Broadcast</button>
+    </div>
+    <div class="gallery-grid" id="workGrid"></div>
+
+    <div class="work-grid">
+      <div class="work-card">
+        <div class="eyebrow">NARRATIVE</div>
+        <h3>Stories in Motion</h3>
+        <p>High-quality storytelling and thoughtful production — from brand and promotional films to corporate, documentary, social, and event-driven content.</p>
+        <div class="chip-row">
+          <span class="chip">BRAND</span>
+          <span class="chip">DOCUMENTARY</span>
+          <span class="chip">SOCIAL</span>
+          <span class="chip">EVENT RECAP</span>
+        </div>
+      </div>
+      <div class="work-card">
+        <div class="eyebrow">REAL-TIME</div>
+        <h3>Live Production Services</h3>
+        <p>Built on precision, reliability, and real-time execution — from corporate meetings and brand activations to large-scale events and broadcast productions.</p>
+        <div class="chip-row">
+          <span class="chip">CORPORATE</span>
+          <span class="chip">BRAND ACTIVATIONS</span>
+          <span class="chip">LARGE-SCALE EVENTS</span>
+          <span class="chip">BROADCAST</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+</div>
+
+<div class="page" id="page-contact" hidden>
+<div class="wrap" id="contact">
+  <section style="padding-block:20px 64px;">
+    <div class="contact-bg-wrap">
+    <img src="images/contact-bg.jpg" alt="On-location crew and talent on a city street" />
+    <div class="contact-hud" aria-hidden="true">
+      <span class="corner tl"></span><span class="corner tr"></span>
+      <span class="rec-tag"><span class="d"></span>REC</span>
+      <span class="tc" id="ctTc">00:00:00:00</span>
+    </div>
+    <div class="contact-section">
+      <div class="contact-top">
+        <div class="contact-top-copy">
+          <div class="eyebrow">GET IN TOUCH</div>
+          <h2>Let's roll.</h2>
+          <p>Brand film, live stream, or full event coverage — tell us what you're planning and we'll put together the right crew and plan for it.</p>
+        </div>
+        <a class="btn btn-solid" href="mailto:info@gothammediahouse.com?subject=Project%20inquiry">Start a project</a>
+      </div>
+      <div class="contact-steps">
+        <div class="contact-step">
+          <div class="num">01 / REACH OUT</div>
+          <h4>Tell us about it</h4>
+          <p>Send a note on what the project is, roughly when it's happening, and any dates already locked in.</p>
+        </div>
+        <div class="contact-step">
+          <div class="num">02 / WE SCOPE IT</div>
+          <h4>Format, crew &amp; gear</h4>
+          <p>A short call or email thread to work out format, crew size, and equipment — live, narrative, or event coverage.</p>
+        </div>
+        <div class="contact-step">
+          <div class="num">03 / WE ROLL</div>
+          <h4>Cameras up, on schedule</h4>
+          <p>Same crew carries it from pre-production through final delivery.</p>
+        </div>
+      </div>
+      <div class="slate">
+        <div class="slate-field">
+          <div class="k">Location</div>
+          <div class="v">Pearl River, NY</div>
+        </div>
+        <div class="slate-field">
+          <div class="k">Coverage</div>
+          <div class="v">NY, D.C. &amp; Florida — worldwide on request</div>
+        </div>
+        <div class="slate-field">
+          <div class="k">Contact</div>
+          <div class="v"><a href="mailto:info@gothammediahouse.com">info@gothammediahouse.com</a></div>
+        </div>
+        <div class="slate-field">
+          <div class="k">Instagram</div>
+          <div class="v"><a href="https://instagram.com/gothammediahouse" target="_blank" rel="noopener">@gothammediahouse</a></div>
+        </div>
+        <div class="slate-field">
+          <div class="k">Twitter / X</div>
+          <div class="v"><a href="https://x.com/GothamMediaNY" target="_blank" rel="noopener">@GothamMediaNY</a></div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </section>
+</div>
+</div>
+
+<div class="wrap">
+  <footer>
+    <div>© <span id="yr"></span> Gotham Media House</div>
+    <div class="footer-links">
+      <a href="https://instagram.com/gothammediahouse" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://x.com/GothamMediaNY" target="_blank" rel="noopener">Twitter / X</a>
+    </div>
+    <div>Pearl River, NY</div>
+  </footer>
+</div>
+
+<div class="lightbox-overlay" id="lightboxOverlay">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
+  <img id="lightboxImg" src="" alt="" />
+</div>
+
+<script>
+(function(){
+  document.getElementById('yr').textContent = new Date().getFullYear();
+  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var start = Date.now();
+  var tcEls = [document.getElementById('tcClock'), document.getElementById('vfTc'), document.getElementById('abTc'), document.getElementById('ctTc')];
+  function pad(n, len){ n = String(n); while(n.length < (len||2)) n = '0'+n; return n; }
+  function tick(){
+    var elapsed = Date.now() - start;
+    var totalFrames = Math.floor(elapsed / (1000/24));
+    var ff = totalFrames % 24;
+    var totalSec = Math.floor(totalFrames / 24);
+    var ss = totalSec % 60;
+    var mm = Math.floor(totalSec/60) % 60;
+    var hh = Math.floor(totalSec/3600) % 24;
+    var str = pad(hh)+':'+pad(mm)+':'+pad(ss)+':'+pad(ff);
+    tcEls.forEach(function(el){ if(el) el.textContent = str; });
+  }
+  tick();
+  if(!reduced){
+    setInterval(tick, 1000/12);
+  } else {
+    setInterval(tick, 1000);
+  }
+})();
+
+(function(){
+  var pageMap = {
+    '': 'home', 'top': 'home', 'home': 'home',
+    'about': 'about',
+    'services': 'services', 'coverage': 'services',
+    'work': 'work',
+    'contact': 'contact'
+  };
+  var titles = {
+    home: 'Gotham Media House',
+    about: 'About — Gotham Media House',
+    services: 'Services — Gotham Media House',
+    work: 'Our Work — Gotham Media House',
+    contact: 'Contact — Gotham Media House'
+  };
+  var pageKeys = ['home','about','services','work','contact'];
+  function showPage(key){
+    pageKeys.forEach(function(k){
+      var el = document.getElementById('page-'+k);
+      if(el) el.hidden = (k !== key);
+    });
+    document.querySelectorAll('.navlinks a').forEach(function(a){
+      var h = (a.getAttribute('href') || '').replace('#','');
+      var mapped = pageMap.hasOwnProperty(h) ? pageMap[h] : 'home';
+      a.classList.toggle('active', mapped === key);
+    });
+    document.title = titles[key] || titles.home;
+  }
+  function route(fromHashChange){
+    var hash = location.hash.replace('#','');
+    var key = pageMap.hasOwnProperty(hash) ? pageMap[hash] : 'home';
+    showPage(key);
+    if(fromHashChange) window.scrollTo(0,0);
+  }
+  window.addEventListener('hashchange', function(){ route(true); });
+  route(false);
+})();
+
+(function(){
+  // Lightbox: delegated so it works on gallery items added dynamically after fetch.
+  var overlay = document.getElementById('lightboxOverlay');
+  var overlayImg = document.getElementById('lightboxImg');
+  if(!overlay || !overlayImg) return;
+  function openBox(src, alt){
+    overlayImg.src = src;
+    overlayImg.alt = alt || '';
+    overlay.classList.add('open');
+  }
+  function closeBox(){
+    overlay.classList.remove('open');
+    overlayImg.src = '';
+  }
+  document.addEventListener('click', function(e){
+    var img = e.target.closest('.gallery-item img');
+    if(img) openBox(img.src, img.alt);
+  });
+  overlay.addEventListener('click', closeBox);
+  document.getElementById('lightboxClose').addEventListener('click', function(e){
+    e.stopPropagation(); closeBox();
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') closeBox();
+  });
+})();
+
+(function(){
+  // Gallery filter: delegated, and re-reads items each click so it always
+  // sees whatever gallery.json most recently rendered.
+  var filterBtns = document.querySelectorAll('.gallery-filter-btn');
+  if(!filterBtns.length) return;
+  filterBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      filterBtns.forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      var cat = btn.getAttribute('data-filter');
+      document.querySelectorAll('#workGrid .gallery-item').forEach(function(item){
+        item.hidden = !(cat === 'all' || item.getAttribute('data-cat') === cat);
+      });
+    });
+  });
+})();
+
+(function(){
+  // Content-managed photo grids. Add or remove a photo by editing field.json
+  // (Home "From the field") or gallery.json (Our Work) — no HTML editing needed.
+  // Each entry: { "file": "images/gallery/xxx.jpg", "alt": "...", "category": "narrative|documentary|live" }
+  var fieldGrid = document.getElementById('fieldGrid');
+  var workGrid = document.getElementById('workGrid');
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
+    });
+  }
+
+  if(fieldGrid){
+    fetch('field.json').then(function(r){ return r.json(); }).then(function(list){
+      fieldGrid.innerHTML = list.map(function(p){
+        return '<div class="teaser-item"><img src="' + escapeHtml(p.file) + '" alt="' + escapeHtml(p.alt) + '"></div>';
+      }).join('');
+    }).catch(function(err){ console.warn('field.json failed to load', err); });
+  }
+
+  if(workGrid){
+    var catLabel = { narrative: 'NARRATIVE', documentary: 'DOCUMENTARY', live: 'LIVE & BROADCAST' };
+    fetch('gallery.json').then(function(r){ return r.json(); }).then(function(list){
+      workGrid.innerHTML = list.map(function(p){
+        var label = catLabel[p.category] || p.category.toUpperCase();
+        return '<div class="gallery-item" data-cat="' + escapeHtml(p.category) + '">' +
+          '<img src="' + escapeHtml(p.file) + '" alt="' + escapeHtml(p.alt) + '" />' +
+          '<span class="gallery-caption">' + escapeHtml(label) + '</span></div>';
+      }).join('');
+    }).catch(function(err){ console.warn('gallery.json failed to load', err); });
+  }
+})();
+</script>
+</body>
+</html>
