@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Gotham Media House</title>
 <meta name="description" content="Gotham Media House — cinematic video production and live event production based in Pearl River, NY, available nationwide and worldwide.">
-<link rel="icon" href="data:,">
+<link rel="icon" type="image/png" href="images/favicon.png">
+<link rel="apple-touch-icon" href="images/favicon.png">
 <style>
   :root{
     --bg: #EEF1EE;
@@ -122,6 +123,7 @@
     letter-spacing:0.01em; white-space:nowrap;
     text-decoration:none;
   }
+  .wordmark img{height:30px; width:auto; display:block; border-radius:3px;}
   .wordmark .dot{
     width:9px; height:9px; border-radius:50%;
     background:var(--red);
@@ -203,6 +205,30 @@
     color:rgba(245,244,238,0.84); margin-top:22px; font-size:18px; max-width:56ch; line-height:1.6;
   }
   .hero-photo-content .cta-row{margin-top:32px;}
+
+  /* ---- reel page ---- */
+  .reel-intro{padding:56px 0 8px; max-width:72ch;}
+  .reel-intro h1{font-size:clamp(30px,4.5vw,44px); line-height:1.08;}
+  .reel-intro .lede{color:var(--ink-dim); margin-top:16px; font-size:16.5px; line-height:1.65; max-width:62ch;}
+  .reel-frame{
+    position:relative; margin:36px 0 64px; border-radius:8px; overflow:hidden;
+    background:#000; box-shadow:var(--shadow-lift);
+  }
+  .reel-video{position:relative; width:100%; aspect-ratio:16/9;}
+  .reel-video iframe{position:absolute; inset:0; width:100%; height:100%; border:0;}
+  .reel-hud{position:absolute; inset:0; z-index:2; pointer-events:none; font-family:'JetBrains Mono',monospace;}
+  .reel-hud .corner{position:absolute; width:20px; height:20px; border-color:var(--teal); border-style:solid; border-width:0;}
+  .reel-hud .corner.tl{top:14px; left:14px; border-top-width:2px; border-left-width:2px;}
+  .reel-hud .corner.tr{top:14px; right:14px; border-top-width:2px; border-right-width:2px;}
+  .reel-hud .corner.bl{bottom:14px; left:14px; border-bottom-width:2px; border-left-width:2px;}
+  .reel-hud .corner.br{bottom:14px; right:14px; border-bottom-width:2px; border-right-width:2px;}
+  .reel-hud .row{position:absolute; left:34px; right:34px; display:flex; justify-content:space-between; font-size:10.5px; letter-spacing:0.05em;}
+  .reel-hud .row.top{top:16px; color:var(--teal);}
+  .reel-hud .row.bottom{bottom:16px; color:rgba(245,244,238,0.75);}
+  .reel-hud .rec{display:flex; align-items:center; gap:6px; color:#E17569;}
+  .reel-hud .rec .d{width:6px; height:6px; border-radius:50%; background:#E17569; animation:pulse 2.2s ease-in-out infinite;}
+  @media (prefers-reduced-motion: reduce){ .reel-hud .rec .d{animation:none;} }
+  @media (max-width:560px){ .reel-hud .row{display:none;} }
 
   /* ---- marquee ---- */
   .marquee-band{
@@ -610,15 +636,18 @@
   footer a{text-decoration:none; color:var(--ink-faint);}
   footer a:hover{color:var(--ink-dim);}
   .footer-links{display:flex; gap:18px;}
+  .footer-brand{display:flex; align-items:center; gap:12px;}
+  .footer-brand img{height:34px; width:auto; display:block; border-radius:3px;}
 </style>
 </head>
 <body>
 
 <div class="topbar">
   <div class="wrap topbar-inner">
-    <a class="wordmark" href="#top"><span class="dot"></span>GOTHAM MEDIA HOUSE</a>
+    <a class="wordmark" href="#top"><img src="images/logo.png" alt="" /><span>GOTHAM MEDIA HOUSE</span></a>
     <div class="navlinks">
       <a href="#top">Home</a>
+      <a href="#reel">Reel</a>
       <a href="#about">About</a>
       <a href="#services">Services</a>
       <a href="#work">Our Work</a>
@@ -716,6 +745,42 @@
       </div>
     </div>
   </div>
+</div>
+
+<div class="page" id="page-reel" hidden>
+<div class="wrap" id="reel">
+  <section class="reel-intro">
+    <div class="eyebrow">SHOWREEL</div>
+    <h1 style="margin-top:14px;">Cinematography Reel</h1>
+    <p class="lede">A look at the cinematography, live production, and event work that defines Gotham Media House —
+      pulled from projects across narrative, documentary, and broadcast.</p>
+  </section>
+
+  <div class="reel-frame">
+    <div class="reel-video">
+      <iframe src="https://www.youtube.com/embed/VcVEsj3bFBI" title="Gotham Media House — Cinematography Reel"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen loading="lazy"></iframe>
+    </div>
+    <div class="reel-hud" aria-hidden="true">
+      <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+      <div class="row top"><span class="rec"><span class="d"></span>REEL</span><span>16:9 &middot; HD</span></div>
+      <div class="row bottom"><span>GOTHAM MEDIA HOUSE</span><span>2026</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="cta-band">
+  <div class="wrap cta-band-inner">
+    <div class="eyebrow">LIKE WHAT YOU SEE</div>
+    <h2>Let's make something worth watching.</h2>
+    <p>From a first call to final delivery, Matt is hands-on for every project — brand films, live streams, and everything in between.</p>
+    <div class="cta-row">
+      <a class="btn btn-solid" href="mailto:info@gothammediahouse.com?subject=Project%20inquiry">Book a shoot</a>
+      <a class="btn btn-ghost" href="#work">See our work</a>
+    </div>
+  </div>
+</div>
 </div>
 
 <div class="page" id="page-about" hidden>
@@ -983,7 +1048,10 @@
 
 <div class="wrap">
   <footer>
-    <div>© <span id="yr"></span> Gotham Media House</div>
+    <div class="footer-brand">
+      <img src="images/logo.png" alt="Gotham Media House" />
+      <div>© <span id="yr"></span> Gotham Media House</div>
+    </div>
     <div class="footer-links">
       <a href="https://instagram.com/gothammediahouse" target="_blank" rel="noopener">Instagram</a>
       <a href="https://x.com/GothamMediaNY" target="_blank" rel="noopener">Twitter / X</a>
@@ -1027,6 +1095,7 @@
 (function(){
   var pageMap = {
     '': 'home', 'top': 'home', 'home': 'home',
+    'reel': 'reel',
     'about': 'about',
     'services': 'services', 'coverage': 'services',
     'work': 'work',
@@ -1034,12 +1103,13 @@
   };
   var titles = {
     home: 'Gotham Media House',
+    reel: 'Reel — Gotham Media House',
     about: 'About — Gotham Media House',
     services: 'Services — Gotham Media House',
     work: 'Our Work — Gotham Media House',
     contact: 'Contact — Gotham Media House'
   };
-  var pageKeys = ['home','about','services','work','contact'];
+  var pageKeys = ['home','reel','about','services','work','contact'];
   function showPage(key){
     pageKeys.forEach(function(k){
       var el = document.getElementById('page-'+k);
