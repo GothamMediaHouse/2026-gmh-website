@@ -65,5 +65,11 @@
     "alt": "2026 Reel",
     "category": "narrative",
     "videoEmbed": "https://youtu.be/VcVEsj3bFBI?si=GTuoE4XjboP4XGuq"
+  },
+  {
+    "type": "photo",
+    "file": "images/gallery/img-2755.jpg",
+    "alt": "Live Tent Setup",
+    "category": "live"
   }
 ]
