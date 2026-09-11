@@ -77,5 +77,11 @@
     "file": "images/gallery/img-2758.jpg",
     "alt": "Live Camera",
     "category": "live"
+  },
+  {
+    "type": "photo",
+    "file": "images/gallery/img-2766.jpg",
+    "alt": "Wireless Camera",
+    "category": "live"
   }
 ]
