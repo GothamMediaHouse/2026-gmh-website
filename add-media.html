@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Add a photo or video — Gotham Media House</title>
+<meta name="robots" content="noindex">
+<style>
+  :root{
+    --bg:#101314; --surface:#171B1D; --surface-2:#1D2224; --line:#2A3033; --line-soft:#23282A;
+    --ink:#ECE9E2; --ink-dim:#9AA1A3; --ink-faint:#5F6668;
+    --teal:#2FB09E; --teal-soft:#15302B; --teal-ink:#06201C;
+    --amber:#E7A73E; --red:#E17569;
+    --shadow-lift:0 16px 36px rgba(0,0,0,0.5);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif; font-size:15px; line-height:1.55;
+    padding:40px 20px 80px;
+  }
+  .wrap{max-width:640px; margin:0 auto;}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace; font-size:11.5px; letter-spacing:0.08em;
+    color:var(--teal); text-transform:uppercase;
+  }
+  h1{
+    font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:30px;
+    margin:8px 0 6px; letter-spacing:-0.01em;
+  }
+  .sub{color:var(--ink-dim); margin:0 0 32px; max-width:52ch;}
+  .card{
+    background:var(--surface); border:1px solid var(--line); border-radius:10px;
+    padding:26px 28px; margin-bottom:20px;
+  }
+  .card h2{
+    font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:16px;
+    margin:0 0 18px; display:flex; align-items:center; gap:10px;
+  }
+  .card h2 .n{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:22px; height:22px; border-radius:50%; background:var(--teal-soft); color:var(--teal);
+    font-family:'JetBrains Mono',monospace; font-size:12px; flex:none;
+  }
+  .type-toggle{display:flex; gap:8px; margin-bottom:22px;}
+  .type-toggle button{
+    flex:1; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:13.5px;
+    padding:12px; border-radius:7px; border:1px solid var(--line); background:var(--surface-2);
+    color:var(--ink-dim); cursor:pointer; transition:border-color .15s ease, color .15s ease, background .15s ease;
+  }
+  .type-toggle button.active{background:var(--teal-soft); border-color:var(--teal); color:var(--teal);}
+  label{
+    display:block; font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.05em;
+    text-transform:uppercase; color:var(--ink-faint); margin:0 0 6px;
+  }
+  .field{margin-bottom:16px;}
+  .field:last-child{margin-bottom:0;}
+  input[type=text], select, textarea{
+    width:100%; background:var(--surface-2); border:1px solid var(--line); border-radius:6px;
+    padding:11px 12px; color:var(--ink); font-family:'Inter',system-ui,sans-serif; font-size:14px;
+  }
+  input[type=text]:focus, select:focus, textarea:focus{outline:none; border-color:var(--teal);}
+  select{appearance:none; cursor:pointer;}
+  .hint{font-size:12.5px; color:var(--ink-faint); margin-top:6px;}
+  .hint.err{color:var(--red);}
+  .hint.ok{color:var(--teal);}
+  .row2{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  @media (max-width:480px){ .row2{grid-template-columns:1fr;} }
+  .out-label{
+    display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;
+  }
+  .out-label label{margin:0;}
+  .copy-btn{
+    font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:12.5px;
+    padding:6px 12px; border-radius:6px; border:1px solid var(--line); background:transparent;
+    color:var(--ink); cursor:pointer;
+  }
+  .copy-btn:hover{border-color:var(--teal); color:var(--teal);}
+  .copy-btn.copied{border-color:var(--teal); color:var(--teal); background:var(--teal-soft);}
+  textarea.snippet{
+    font-family:'JetBrains Mono',monospace; font-size:12.5px; color:var(--teal);
+    resize:none; height:100px;
+  }
+  .steps{list-style:none; margin:0; padding:0; counter-reset:s;}
+  .steps li{
+    position:relative; padding-left:34px; margin-bottom:16px; counter-increment:s;
+  }
+  .steps li:last-child{margin-bottom:0;}
+  .steps li::before{
+    content:counter(s); position:absolute; left:0; top:0;
+    width:22px; height:22px; border-radius:50%; background:var(--teal-soft); color:var(--teal);
+    font-family:'JetBrains Mono',monospace; font-size:12px; display:flex; align-items:center; justify-content:center;
+  }
+  .steps b{color:var(--ink);}
+  .steps code{
+    background:var(--surface-2); border:1px solid var(--line); border-radius:4px;
+    padding:1px 6px; font-family:'JetBrains Mono',monospace; font-size:12.5px; color:var(--teal);
+  }
+  .back{
+    display:inline-block; margin-bottom:28px; color:var(--ink-faint); text-decoration:none;
+    font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.04em;
+  }
+  .back:hover{color:var(--teal);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="index.html">&larr; BACK TO SITE</a>
+  <div class="eyebrow">Our Work — media helper</div>
+  <h1>Add a photo or video</h1>
+  <p class="sub">Fill this in and it builds the exact line to paste into <code>gallery.json</code> — no need to
+    write the JSON by hand or convert video links yourself. This page doesn't upload or save anything on its
+    own; the last step still happens on GitHub.</p>
+
+  <div class="card">
+    <h2><span class="n">1</span>What are you adding?</h2>
+    <div class="type-toggle">
+      <button type="button" id="btnPhoto" class="active">Photo</button>
+      <button type="button" id="btnVideo">Video</button>
+    </div>
+
+    <div class="row2">
+      <div class="field">
+        <label>Category</label>
+        <select id="category">
+          <option value="narrative">Narrative</option>
+          <option value="documentary">Documentary</option>
+          <option value="live">Live &amp; Broadcast</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Alt text (short description)</label>
+        <input type="text" id="alt" placeholder="e.g. Crew setting up a night shoot downtown">
+      </div>
+    </div>
+
+    <div class="field" id="photoFields" style="margin-top:16px;">
+      <label>Image file name</label>
+      <input type="text" id="photoFile" placeholder="e.g. downtown-night-shoot.jpg">
+      <div class="hint" id="photoFileHint">You'll upload this file into <code>images/gallery/</code> — the exact name you type here is what it must be saved as.</div>
+    </div>
+
+    <div class="field" id="videoFields" style="margin-top:16px; display:none;">
+      <label>Video link</label>
+      <input type="text" id="videoUrl" placeholder="Paste the normal YouTube or Vimeo link">
+      <div class="hint" id="videoUrlHint">Paste the regular share/watch link — this converts it automatically.</div>
+      <div class="field" style="margin-top:14px;">
+        <label>Thumbnail image file name</label>
+        <input type="text" id="videoThumb" placeholder="e.g. downtown-night-shoot-thumb.jpg">
+        <div class="hint">A still frame or behind-the-scenes photo to represent the video in the grid — you'll upload this into <code>images/gallery/</code> too.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="n">2</span>Upload the image</h2>
+    <p style="margin:0; color:var(--ink-dim);" id="uploadInstruction">
+      In your GitHub repo, open <code>images/gallery/</code>, click <b>Add file → Upload files</b>, and add your
+      image — it must be named exactly <code id="uploadFilenameOut">—</code>.
+    </p>
+  </div>
+
+  <div class="card">
+    <h2><span class="n">3</span>Copy this into gallery.json</h2>
+    <div class="out-label">
+      <label>Entry to paste</label>
+      <button type="button" class="copy-btn" id="copyBtn">Copy</button>
+    </div>
+    <textarea class="snippet" id="snippetOut" readonly rows="4"></textarea>
+    <div class="hint" id="snippetHint">Fill in the fields above to generate this.</div>
+  </div>
+
+  <div class="card">
+    <h2><span class="n">4</span>Paste it in</h2>
+    <ol class="steps">
+      <li>Open <b>gallery.json</b> in your GitHub repo and click the pencil (edit) icon.</li>
+      <li>Click at the very end of the <b>last</b> entry in the list, right after its closing <code>}</code>, and type a comma <code>,</code>.</li>
+      <li>Press Enter, then paste the text from Step 3 on its own new line — right before the closing <code>]</code> at the bottom of the file.</li>
+      <li>Scroll down and click <b>Commit changes</b>. It'll be live within a minute or two.</li>
+    </ol>
+  </div>
+</div>
+
+<script>
+(function(){
+  var typePhoto = document.getElementById('btnPhoto');
+  var typeVideo = document.getElementById('btnVideo');
+  var photoFields = document.getElementById('photoFields');
+  var videoFields = document.getElementById('videoFields');
+  var category = document.getElementById('category');
+  var alt = document.getElementById('alt');
+  var photoFile = document.getElementById('photoFile');
+  var videoUrl = document.getElementById('videoUrl');
+  var videoUrlHint = document.getElementById('videoUrlHint');
+  var videoThumb = document.getElementById('videoThumb');
+  var uploadInstruction = document.getElementById('uploadInstruction');
+  var uploadFilenameOut = document.getElementById('uploadFilenameOut');
+  var snippetOut = document.getElementById('snippetOut');
+  var snippetHint = document.getElementById('snippetHint');
+  var copyBtn = document.getElementById('copyBtn');
+
+  var mode = 'photo';
+
+  function setMode(m){
+    mode = m;
+    typePhoto.classList.toggle('active', m === 'photo');
+    typeVideo.classList.toggle('active', m === 'video');
+    photoFields.style.display = m === 'photo' ? '' : 'none';
+    videoFields.style.display = m === 'video' ? '' : 'none';
+    render();
+  }
+  typePhoto.addEventListener('click', function(){ setMode('photo'); });
+  typeVideo.addEventListener('click', function(){ setMode('video'); });
+
+  function cleanName(s){
+    return (s || '').trim().replace(/^\/+/, '');
+  }
+
+  function escapeJson(s){
+    return JSON.stringify(s == null ? '' : s).slice(1, -1);
+  }
+
+  // Accepts a normal YouTube or Vimeo share link and returns its embed URL, or null if unrecognized.
+  function toEmbedUrl(raw){
+    var s = (raw || '').trim();
+    if(!s) return null;
+    if(!/^https?:\/\//i.test(s)) s = 'https://' + s;
+    var u;
+    try{ u = new URL(s); } catch(e){ return null; }
+    var host = u.hostname.replace(/^www\./, '');
+
+    if(host === 'youtu.be'){
+      var id = u.pathname.split('/').filter(Boolean)[0];
+      return id ? { platform: 'YouTube', embedUrl: 'https://www.youtube.com/embed/' + id } : null;
+    }
+    if(host === 'youtube.com' || host === 'm.youtube.com'){
+      var parts = u.pathname.split('/').filter(Boolean);
+      if(parts[0] === 'embed' && parts[1]) return { platform: 'YouTube', embedUrl: 'https://www.youtube.com/embed/' + parts[1] };
+      if(parts[0] === 'shorts' && parts[1]) return { platform: 'YouTube', embedUrl: 'https://www.youtube.com/embed/' + parts[1] };
+      var v = u.searchParams.get('v');
+      if(v) return { platform: 'YouTube', embedUrl: 'https://www.youtube.com/embed/' + v };
+      return null;
+    }
+    if(host === 'player.vimeo.com'){
+      var pv = u.pathname.split('/').filter(Boolean);
+      if(pv[0] === 'video' && pv[1]) return { platform: 'Vimeo', embedUrl: 'https://player.vimeo.com/video/' + pv[1] };
+      return null;
+    }
+    if(host === 'vimeo.com'){
+      var pparts = u.pathname.split('/').filter(Boolean);
+      var num = pparts.filter(function(p){ return /^\d+$/.test(p); })[0];
+      return num ? { platform: 'Vimeo', embedUrl: 'https://player.vimeo.com/video/' + num } : null;
+    }
+    return null;
+  }
+
+  function render(){
+    var cat = category.value;
+    var altText = alt.value.trim();
+    var entry = null;
+    var problems = [];
+
+    if(mode === 'photo'){
+      var file = cleanName(photoFile.value);
+      var fullPath = file ? 'images/gallery/' + file : '';
+      uploadInstruction.innerHTML = 'In your GitHub repo, open <code>images/gallery/</code>, click <b>Add file &rarr; Upload files</b>, and add your image — it must be named exactly <code id="uploadFilenameOut">' + (file ? escapeHtml(file) : '—') + '</code>.';
+      uploadFilenameOut = document.getElementById('uploadFilenameOut');
+      if(!file) problems.push('image file name');
+      if(!altText) problems.push('alt text');
+      if(problems.length === 0){
+        entry = '{ "type": "photo", "file": "' + escapeJson(fullPath) + '", "alt": "' + escapeJson(altText) + '", "category": "' + cat + '" }';
+      }
+    } else {
+      var thumb = cleanName(videoThumb.value);
+      var thumbPath = thumb ? 'images/gallery/' + thumb : '';
+      uploadInstruction.innerHTML = 'In your GitHub repo, open <code>images/gallery/</code>, click <b>Add file &rarr; Upload files</b>, and add your thumbnail image — it must be named exactly <code id="uploadFilenameOut">' + (thumb ? escapeHtml(thumb) : '—') + '</code>.';
+
+      var embed = toEmbedUrl(videoUrl.value);
+      if(!videoUrl.value.trim()){
+        videoUrlHint.textContent = 'Paste the regular share/watch link — this converts it automatically.';
+        videoUrlHint.className = 'hint';
+      } else if(!embed){
+        videoUrlHint.textContent = "Couldn't recognize that as a YouTube or Vimeo link — double-check it's the full URL.";
+        videoUrlHint.className = 'hint err';
+        problems.push('video link');
+      } else {
+        videoUrlHint.textContent = 'Recognized as ' + embed.platform + ' — will use: ' + embed.embedUrl;
+        videoUrlHint.className = 'hint ok';
+      }
+
+      if(!thumb) problems.push('thumbnail file name');
+      if(!altText) problems.push('alt text');
+      if(!videoUrl.value.trim()) problems.push('video link');
+
+      if(problems.length === 0 && embed){
+        entry = '{ "type": "video", "file": "' + escapeJson(thumbPath) + '", "alt": "' + escapeJson(altText) + '", "category": "' + cat + '", "videoEmbed": "' + escapeJson(embed.embedUrl) + '" }';
+      }
+    }
+
+    if(entry){
+      snippetOut.value = entry + ',';
+      snippetHint.textContent = 'Looks good — copy this in.';
+      snippetHint.className = 'hint ok';
+      copyBtn.disabled = false;
+    } else {
+      snippetOut.value = '';
+      snippetHint.textContent = problems.length ? ('Still need: ' + problems.join(', ')) : 'Fill in the fields above to generate this.';
+      snippetHint.className = 'hint';
+      copyBtn.disabled = true;
+    }
+  }
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
+    });
+  }
+
+  [category, alt, photoFile, videoUrl, videoThumb].forEach(function(el){
+    el.addEventListener('input', render);
+    el.addEventListener('change', render);
+  });
+
+  copyBtn.addEventListener('click', function(){
+    if(!snippetOut.value) return;
+    function fallback(){
+      snippetOut.removeAttribute('readonly');
+      snippetOut.focus();
+      snippetOut.select();
+      try{ document.execCommand('copy'); } catch(e){}
+      snippetOut.setAttribute('readonly', 'readonly');
+    }
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(snippetOut.value).then(flash, fallback);
+    } else {
+      fallback(); flash();
+    }
+    function flash(){
+      copyBtn.textContent = 'Copied';
+      copyBtn.classList.add('copied');
+      setTimeout(function(){ copyBtn.textContent = 'Copy'; copyBtn.classList.remove('copied'); }, 1400);
+    }
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
