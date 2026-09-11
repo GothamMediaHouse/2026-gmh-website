@@ -1,13 +1,62 @@
 [
-  { "type": "photo", "file": "/images/gallery/street-scene-setup.jpg", "alt": "On-location film shoot, crew and cast setting up a street scene", "category": "narrative" },
-  { "type": "photo", "file": "/images/gallery/car-window-rig.jpg", "alt": "Camera rig shooting through a car window during a driving scene", "category": "narrative" },
-  { "type": "photo", "file": "/images/gallery/doorway-narrative.jpg", "alt": "Talent walking through a doorway during a narrative shoot", "category": "narrative" },
-  { "type": "photo", "file": "/images/gallery/field-monitor-review.jpg", "alt": "Crew reviewing a shot on a field monitor between takes", "category": "narrative" },
-  { "type": "photo", "file": "/images/gallery/tripod-on-location.jpg", "alt": "Camera on a tripod set up on location outside a building", "category": "narrative" },
-  { "type": "photo", "file": "/images/gallery/staircase-crew.jpg", "alt": "Crew filming talent descending a staircase on set", "category": "narrative" },
-  { "type": "photo", "file": "/images/gallery/lakeside-camera.jpg", "alt": "Cinema camera on tripod set up at a lakeside location for a scenic shoot", "category": "documentary" },
-  { "type": "photo", "file": "/images/gallery/boom-mic-bar.jpg", "alt": "Boom mic operator recording a scene at a bar during a documentary shoot", "category": "documentary" },
-  { "type": "photo", "file": "/images/gallery/live-switcher-monitors.jpg", "alt": "Multi-camera switcher and preview monitors set up for a live outdoor event broadcast", "category": "live" },
-  { "type": "photo", "file": "/images/gallery/hardware-store-interview.jpg", "alt": "Sony camera capturing an interview with a shop owner in a hardware store aisle", "category": "documentary" }
-  
+  {
+    "type": "photo",
+    "file": "/images/gallery/street-scene-setup.jpg",
+    "alt": "On-location film shoot, crew and cast setting up a street scene",
+    "category": "narrative"
+  },
+  {
+    "type": "photo",
+    "file": "/images/gallery/car-window-rig.jpg",
+    "alt": "Camera rig shooting through a car window during a driving scene",
+    "category": "narrative"
+  },
+  {
+    "type": "photo",
+    "file": "/images/gallery/doorway-narrative.jpg",
+    "alt": "Talent walking through a doorway during a narrative shoot",
+    "category": "narrative"
+  },
+  {
+    "type": "photo",
+    "file": "/images/gallery/field-monitor-review.jpg",
+    "alt": "Crew reviewing a shot on a field monitor between takes",
+    "category": "narrative"
+  },
+  {
+    "type": "photo",
+    "file": "/images/gallery/tripod-on-location.jpg",
+    "alt": "Camera on a tripod set up on location outside a building",
+    "category": "narrative"
+  },
+  {
+    "type": "photo",
+    "file": "/images/gallery/staircase-crew.jpg",
+    "alt": "Crew filming talent descending a staircase on set",
+    "category": "narrative"
+  },
+  {
+    "type": "photo",
+    "file": "/images/gallery/lakeside-camera.jpg",
+    "alt": "Cinema camera on tripod set up at a lakeside location for a scenic shoot",
+    "category": "documentary"
+  },
+  {
+    "type": "photo",
+    "file": "/images/gallery/boom-mic-bar.jpg",
+    "alt": "Boom mic operator recording a scene at a bar during a documentary shoot",
+    "category": "documentary"
+  },
+  {
+    "type": "photo",
+    "file": "/images/gallery/live-switcher-monitors.jpg",
+    "alt": "Multi-camera switcher and preview monitors set up for a live outdoor event broadcast",
+    "category": "live"
+  },
+  {
+    "type": "photo",
+    "file": "/images/gallery/hardware-store-interview.jpg",
+    "alt": "Sony camera capturing an interview with a shop owner in a hardware store aisle",
+    "category": "documentary"
+  }
 ]
