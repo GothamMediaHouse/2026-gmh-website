@@ -46,19 +46,46 @@ CNAME                tells GitHub Pages this site should answer to gothammediaho
 
 ## Adding or removing a photo — no code required
 
-**Our Work gallery** — open `gallery.json` in GitHub (click the file, then the
-pencil/edit icon). It's a list like this:
+The Our Work gallery uses a "bento" layout — tiles are different sizes for visual
+rhythm, and it automatically shows a "Load more" button once there are more than
+12 items in the current filter, so you can keep adding photos (and videos)
+without the page ever feeling unwieldy.
+
+Open `gallery.json` in GitHub (click the file, then the pencil/edit icon). It's a
+list like this:
 
 ```json
-{ "file": "images/gallery/lakeside-camera.jpg", "alt": "Cinema camera on tripod set up at a lakeside location for a scenic shoot", "category": "documentary" }
+{ "type": "photo", "file": "images/gallery/lakeside-camera.jpg", "alt": "Cinema camera on tripod set up at a lakeside location for a scenic shoot", "category": "documentary" }
 ```
 
 - **To add a photo:** upload the new image file into `images/gallery/` (Add file →
   Upload files), then add one more entry like the one above to `gallery.json` —
-  `file` is the path you just uploaded to, `alt` is a plain description (for
-  accessibility and search), `category` is `narrative`, `documentary`, or `live`.
+  `type` is `"photo"`, `file` is the path you just uploaded to, `alt` is a plain
+  description (for accessibility and search), `category` is `narrative`,
+  `documentary`, or `live`.
 - **To remove one:** delete its entry from `gallery.json`. You can leave the image
   file in place or delete it too — either is fine.
+
+**To add a video:** the gallery can also show videos from YouTube or Vimeo,
+mixed right in with the photos — no separate video page. Add an entry like this:
+
+```json
+{ "type": "video", "file": "images/gallery/my-video-thumb.jpg", "alt": "Behind the scenes on the Acme Radio shoot", "category": "narrative", "videoEmbed": "https://www.youtube.com/embed/VIDEO_ID" }
+```
+
+- `type` is `"video"`.
+- `file` is a thumbnail image for the tile (upload one to `images/gallery/` the
+  same way as a photo — a still frame or a behind-the-scenes shot works well).
+- `videoEmbed` is the video's **embed URL**, not the regular watch/share link:
+  - **YouTube:** if the normal link is `https://www.youtube.com/watch?v=VIDEO_ID`,
+    the embed URL is `https://www.youtube.com/embed/VIDEO_ID`.
+  - **Vimeo:** if the normal link is `https://vimeo.com/VIDEO_ID`, the embed URL
+    is `https://player.vimeo.com/video/VIDEO_ID`.
+- Video tiles show a play icon over the thumbnail. Clicking one opens the video
+  right in the lightbox and starts playing automatically.
+
+Video entries always get a large tile, and every 5th photo gets one too, which is
+what creates the varied bento layout — you don't need to set that yourself.
 
 **Home "From the field" strip** works the same way, via `field.json` (no category
 needed there, just `file` and `alt`) — keep it to 3 photos, since that's what the
