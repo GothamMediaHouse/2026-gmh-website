@@ -83,5 +83,11 @@
     "file": "images/gallery/img-2766.jpg",
     "alt": "Wireless Camera",
     "category": "live"
+  },
+  {
+    "type": "photo",
+    "file": "images/gallery/img-2770.jpg",
+    "alt": "Wireless Transmit",
+    "category": "live"
   }
 ]
