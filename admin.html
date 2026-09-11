@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gallery admin — Gotham Media House</title>
+<meta name="robots" content="noindex">
+<style>
+  :root{
+    --bg:#101314; --surface:#171B1D; --surface-2:#1D2224; --line:#2A3033; --line-soft:#23282A;
+    --ink:#ECE9E2; --ink-dim:#9AA1A3; --ink-faint:#5F6668;
+    --teal:#2FB09E; --teal-soft:#15302B; --teal-ink:#06201C;
+    --amber:#E7A73E; --amber-soft:#3A2A18; --red:#E17569; --red-soft:#3A1E1B;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif; font-size:15px; line-height:1.55;
+    padding:40px 20px 80px;
+  }
+  .wrap{max-width:760px; margin:0 auto;}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace; font-size:11.5px; letter-spacing:0.08em;
+    color:var(--teal); text-transform:uppercase;
+  }
+  h1{
+    font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:30px;
+    margin:8px 0 6px; letter-spacing:-0.01em;
+  }
+  .sub{color:var(--ink-dim); margin:0 0 28px; max-width:60ch;}
+  .card{
+    background:var(--surface); border:1px solid var(--line); border-radius:10px;
+    padding:26px 28px; margin-bottom:20px;
+  }
+  .card h2{
+    font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:16px;
+    margin:0 0 18px; display:flex; align-items:center; justify-content:space-between; gap:10px;
+  }
+  label{
+    display:block; font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.05em;
+    text-transform:uppercase; color:var(--ink-faint); margin:0 0 6px;
+  }
+  .field{margin-bottom:16px;}
+  .field:last-child{margin-bottom:0;}
+  input[type=text], input[type=password], select{
+    width:100%; background:var(--surface-2); border:1px solid var(--line); border-radius:6px;
+    padding:11px 12px; color:var(--ink); font-family:'Inter',system-ui,sans-serif; font-size:14px;
+  }
+  input:focus, select:focus{outline:none; border-color:var(--teal);}
+  .hint{font-size:12.5px; color:var(--ink-faint); margin-top:6px;}
+  .hint.err{color:var(--red);}
+  .hint.ok{color:var(--teal);}
+  .row2{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  .row3{display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:14px;}
+  @media (max-width:560px){ .row2, .row3{grid-template-columns:1fr;} }
+  .pw-row{position:relative;}
+  .pw-row button{
+    position:absolute; right:8px; top:8px; bottom:8px;
+    background:transparent; border:0; color:var(--ink-faint); cursor:pointer;
+    font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.04em;
+  }
+  .pw-row button:hover{color:var(--teal);}
+  .btn{
+    font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:13.5px;
+    padding:11px 20px; border-radius:7px; border:1px solid var(--teal); background:var(--teal-soft);
+    color:var(--teal); cursor:pointer; transition:background .15s ease;
+  }
+  .btn:hover{background:var(--teal); color:var(--teal-ink);}
+  .btn:disabled{opacity:0.4; cursor:not-allowed;}
+  .btn.ghost{background:transparent; border-color:var(--line); color:var(--ink-dim);}
+  .btn.ghost:hover{border-color:var(--red); color:var(--red); background:transparent;}
+  .btn.danger{background:transparent; border-color:var(--red); color:var(--red);}
+  .btn.danger:hover{background:var(--red); color:#1a0e0c;}
+  .btn.small{padding:7px 14px; font-size:12.5px;}
+  .btn-row{display:flex; gap:10px; flex-wrap:wrap; align-items:center;}
+  details{margin-top:14px;}
+  summary{
+    cursor:pointer; font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--ink-faint);
+    letter-spacing:0.03em;
+  }
+  summary:hover{color:var(--teal);}
+  details .steps{margin-top:12px;}
+  .steps{list-style:none; margin:0; padding:0; counter-reset:s;}
+  .steps li{position:relative; padding-left:30px; margin-bottom:12px; counter-increment:s; color:var(--ink-dim); font-size:13.5px;}
+  .steps li:last-child{margin-bottom:0;}
+  .steps li::before{
+    content:counter(s); position:absolute; left:0; top:0;
+    width:20px; height:20px; border-radius:50%; background:var(--surface-2); color:var(--teal);
+    font-family:'JetBrains Mono',monospace; font-size:11px; display:flex; align-items:center; justify-content:center;
+  }
+  .steps code{background:var(--surface-2); border:1px solid var(--line); border-radius:4px; padding:1px 6px; font-family:'JetBrains Mono',monospace; font-size:12.5px; color:var(--teal);}
+  .warn{
+    background:var(--amber-soft); border:1px solid rgba(231,167,62,0.35); border-radius:8px;
+    padding:12px 14px; font-size:13px; color:var(--amber); margin-top:14px;
+  }
+  .status{
+    display:flex; align-items:center; gap:8px; font-family:'JetBrains Mono',monospace; font-size:12.5px;
+    padding:10px 12px; border-radius:6px; background:var(--surface-2); border:1px solid var(--line);
+    color:var(--ink-dim); margin-top:14px;
+  }
+  .status .dot{width:8px; height:8px; border-radius:50%; background:var(--ink-faint); flex:none;}
+  .status.ok .dot{background:var(--teal);}
+  .status.ok{color:var(--teal); border-color:var(--teal);}
+  .status.err .dot{background:var(--red);}
+  .status.err{color:var(--red); border-color:var(--red);}
+  .status.busy .dot{background:var(--amber); animation:pulse 1s infinite;}
+  .status.busy{color:var(--amber);}
+  @keyframes pulse{0%,100%{opacity:1;} 50%{opacity:0.3;}}
+  .conn-summary{
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--teal);
+  }
+  #connectedCard{display:none;}
+  .type-toggle{display:flex; gap:8px; margin-bottom:22px;}
+  .type-toggle button{
+    flex:1; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:13.5px;
+    padding:12px; border-radius:7px; border:1px solid var(--line); background:var(--surface-2);
+    color:var(--ink-dim); cursor:pointer; transition:border-color .15s ease, color .15s ease, background .15s ease;
+  }
+  .type-toggle button.active{background:var(--teal-soft); border-color:var(--teal); color:var(--teal);}
+  input[type=file]{
+    width:100%; background:var(--surface-2); border:1px solid var(--line); border-radius:6px;
+    padding:10px 12px; color:var(--ink-dim); font-size:13px;
+  }
+  .gallery-list{display:grid; grid-template-columns:repeat(auto-fill, minmax(140px, 1fr)); gap:12px; margin-top:4px;}
+  .gitem{
+    background:var(--surface-2); border:1px solid var(--line); border-radius:8px; overflow:hidden;
+    position:relative;
+  }
+  .gitem .thumb{width:100%; aspect-ratio:4/3; object-fit:cover; display:block; background:var(--bg);}
+  .gitem .meta{padding:8px 9px;}
+  .gitem .cat{font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:0.05em; color:var(--teal); text-transform:uppercase;}
+  .gitem .alt{font-size:12px; color:var(--ink-dim); margin-top:3px; line-height:1.35; max-height:2.7em; overflow:hidden;}
+  .gitem .rm{
+    position:absolute; top:6px; right:6px; width:24px; height:24px; border-radius:50%;
+    background:rgba(16,19,20,0.75); border:1px solid var(--line); color:var(--ink);
+    font-size:13px; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  }
+  .gitem .rm:hover{background:var(--red); border-color:var(--red); color:#1a0e0c;}
+  .gitem .badge-video{
+    position:absolute; bottom:6px; left:6px; background:rgba(16,19,20,0.75); border:1px solid var(--line);
+    border-radius:4px; padding:2px 6px; font-family:'JetBrains Mono',monospace; font-size:9.5px; color:var(--teal);
+  }
+  .empty-note{color:var(--ink-faint); font-size:13.5px; font-style:italic;}
+  .log{
+    font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--ink-dim);
+    background:var(--surface-2); border:1px solid var(--line); border-radius:6px;
+    padding:12px 14px; margin-top:14px; max-height:160px; overflow-y:auto; display:none;
+  }
+  .log div{margin-bottom:4px;}
+  .log div:last-child{margin-bottom:0;}
+  .log .ok-line{color:var(--teal);}
+  .log .err-line{color:var(--red);}
+  .back{
+    display:inline-block; margin-bottom:28px; color:var(--ink-faint); text-decoration:none;
+    font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.04em;
+  }
+  .back:hover{color:var(--teal);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="index.html">&larr; BACK TO SITE</a>
+  <div class="eyebrow">Our Work — gallery admin</div>
+  <h1>Gallery admin</h1>
+  <p class="sub">Add or remove photos and videos and it publishes straight to your live site — no visiting
+    GitHub required. This needs a one-time connection to your repo using a personal access token (set up
+    below); after that it's saved in this browser.</p>
+
+  <div class="card" id="setupCard">
+    <h2>Connect to your repository</h2>
+    <div class="row3">
+      <div class="field">
+        <label>GitHub username</label>
+        <input type="text" id="owner" placeholder="e.g. mattfox">
+      </div>
+      <div class="field">
+        <label>Repository name</label>
+        <input type="text" id="repo" placeholder="e.g. gmh-site">
+      </div>
+      <div class="field">
+        <label>Branch</label>
+        <input type="text" id="branch" placeholder="main" value="main">
+      </div>
+    </div>
+    <div class="field">
+      <label>Personal access token</label>
+      <div class="pw-row">
+        <input type="password" id="token" placeholder="paste your token here">
+        <button type="button" id="toggleToken">SHOW</button>
+      </div>
+      <div class="hint">Saved only in this browser, on this device — sent only to GitHub's API, nowhere else.</div>
+    </div>
+    <div class="btn-row">
+      <button type="button" class="btn" id="connectBtn">Connect</button>
+    </div>
+    <div class="status" id="connStatus" style="display:none;"><span class="dot"></span><span class="txt"></span></div>
+
+    <details>
+      <summary>How do I get a token?</summary>
+      <ol class="steps">
+        <li>On GitHub, go to <b>Settings → Developer settings → Personal access tokens → Fine-grained tokens</b>,
+          then <b>Generate new token</b>.</li>
+        <li>Give it a name like <code>gallery admin</code>, and under <b>Repository access</b> choose
+          <b>Only select repositories</b> — pick just this site's repo.</li>
+        <li>Under <b>Permissions → Repository permissions</b>, find <b>Contents</b> and set it to
+          <b>Read and write</b>. Leave everything else as-is.</li>
+        <li>Click <b>Generate token</b>, then copy it — GitHub only shows it once — and paste it above.</li>
+      </ol>
+      <div class="warn">Scoping the token to just this one repo means that even if it ever leaked, it couldn't
+        touch anything else in your GitHub account. Treat it like a password — don't share this page or paste
+        the token anywhere else — and you can revoke it any time from that same Settings page.</div>
+    </details>
+  </div>
+
+  <div class="card" id="connectedCard">
+    <h2>
+      <span class="conn-summary"><span id="connSummaryTxt">Connected</span></span>
+      <button type="button" class="btn ghost small" id="forgetBtn">Disconnect</button>
+    </h2>
+  </div>
+
+  <div class="card" id="addCard" style="display:none;">
+    <h2>Add a photo or video</h2>
+    <div class="type-toggle">
+      <button type="button" id="btnPhoto" class="active">Photo</button>
+      <button type="button" id="btnVideo">Video</button>
+    </div>
+    <div class="row2">
+      <div class="field">
+        <label>Category</label>
+        <select id="category">
+          <option value="narrative">Narrative</option>
+          <option value="documentary">Documentary</option>
+          <option value="live">Live &amp; Broadcast</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Alt text (short description)</label>
+        <input type="text" id="alt" placeholder="e.g. Crew setting up a night shoot downtown">
+      </div>
+    </div>
+    <div class="field" id="videoUrlField" style="display:none;">
+      <label>Video link</label>
+      <input type="text" id="videoUrl" placeholder="Paste the normal YouTube or Vimeo link">
+      <div class="hint" id="videoUrlHint">Paste the regular share/watch link — this converts it automatically.</div>
+    </div>
+    <div class="field">
+      <label id="fileLabel">Image file</label>
+      <input type="file" id="fileInput" accept="image/*">
+      <div class="hint" id="fileHint">Choose the photo to add.</div>
+    </div>
+    <div class="btn-row" style="margin-top:18px;">
+      <button type="button" class="btn" id="addBtn" disabled>Add to gallery</button>
+    </div>
+    <div class="log" id="log"></div>
+  </div>
+
+  <div class="card" id="currentCard" style="display:none;">
+    <h2>Current gallery <span id="countTxt" style="color:var(--ink-faint); font-weight:400; font-size:12.5px;"></span></h2>
+    <div id="galleryList" class="gallery-list"></div>
+    <div class="empty-note" id="emptyNote" style="display:none;">No items yet.</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var els = {};
+  ['owner','repo','branch','token','toggleToken','connectBtn','connStatus','setupCard','connectedCard',
+   'connSummaryTxt','forgetBtn','addCard','currentCard','galleryList','countTxt','emptyNote',
+   'btnPhoto','btnVideo','category','alt','videoUrlField','videoUrl','videoUrlHint',
+   'fileInput','fileLabel','fileHint','addBtn','log'].forEach(function(id){ els[id] = document.getElementById(id); });
+
+  var STORAGE_KEY = 'gmh_admin_conn_v1';
+  var conn = null;       // { owner, repo, branch, token }
+  var galleryData = null; // { sha, items: [...] }
+  var mode = 'photo';
+
+  // ---------- small utils ----------
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
+    });
+  }
+  function setStatus(el, kind, text){
+    el.style.display = 'flex';
+    el.className = 'status' + (kind ? ' ' + kind : '');
+    el.querySelector('.txt').textContent = text;
+  }
+  function logLine(msg, kind){
+    els.log.style.display = 'block';
+    var d = document.createElement('div');
+    if(kind) d.className = kind === 'ok' ? 'ok-line' : 'err-line';
+    d.textContent = msg;
+    els.log.appendChild(d);
+    els.log.scrollTop = els.log.scrollHeight;
+  }
+  function clearLog(){ els.log.innerHTML=''; els.log.style.display='none'; }
+
+  function utf8ToB64(str){
+    var bytes = new TextEncoder().encode(str);
+    var bin = '';
+    for(var i=0;i<bytes.length;i++) bin += String.fromCharCode(bytes[i]);
+    return btoa(bin);
+  }
+  function b64ToUtf8(b64){
+    var bin = atob((b64 || '').replace(/\s/g,''));
+    var bytes = new Uint8Array(bin.length);
+    for(var i=0;i<bin.length;i++) bytes[i] = bin.charCodeAt(i);
+    return new TextDecoder('utf-8').decode(bytes);
+  }
+  function fileToB64(file){
+    return new Promise(function(resolve, reject){
+      var r = new FileReader();
+      r.onload = function(){
+        var result = r.result; // data:<mime>;base64,XXXX
+        var idx = result.indexOf(',');
+        resolve(idx >= 0 ? result.slice(idx + 1) : result);
+      };
+      r.onerror = function(){ reject(new Error('Could not read the file.')); };
+      r.readAsDataURL(file);
+    });
+  }
+  function safeFilename(name){
+    return name.trim().toLowerCase().replace(/[^a-z0-9.\-_]+/g, '-').replace(/-+/g,'-');
+  }
+
+  // Accepts a normal YouTube or Vimeo share link and returns its embed URL, or null if unrecognized.
+  function toEmbedUrl(raw){
+    var s = (raw || '').trim();
+    if(!s) return null;
+    if(!/^https?:\/\//i.test(s)) s = 'https://' + s;
+    var u;
+    try{ u = new URL(s); } catch(e){ return null; }
+    var host = u.hostname.replace(/^www\./, '');
+    if(host === 'youtu.be'){
+      var id = u.pathname.split('/').filter(Boolean)[0];
+      return id ? { platform: 'YouTube', embedUrl: 'https://www.youtube.com/embed/' + id } : null;
+    }
+    if(host === 'youtube.com' || host === 'm.youtube.com'){
+      var parts = u.pathname.split('/').filter(Boolean);
+      if(parts[0] === 'embed' && parts[1]) return { platform: 'YouTube', embedUrl: 'https://www.youtube.com/embed/' + parts[1] };
+      if(parts[0] === 'shorts' && parts[1]) return { platform: 'YouTube', embedUrl: 'https://www.youtube.com/embed/' + parts[1] };
+      var v = u.searchParams.get('v');
+      if(v) return { platform: 'YouTube', embedUrl: 'https://www.youtube.com/embed/' + v };
+      return null;
+    }
+    if(host === 'player.vimeo.com'){
+      var pv = u.pathname.split('/').filter(Boolean);
+      if(pv[0] === 'video' && pv[1]) return { platform: 'Vimeo', embedUrl: 'https://player.vimeo.com/video/' + pv[1] };
+      return null;
+    }
+    if(host === 'vimeo.com'){
+      var pparts = u.pathname.split('/').filter(Boolean);
+      var num = pparts.filter(function(p){ return /^\d+$/.test(p); })[0];
+      return num ? { platform: 'Vimeo', embedUrl: 'https://player.vimeo.com/video/' + num } : null;
+    }
+    return null;
+  }
+
+  // ---------- GitHub API ----------
+  var API = 'https://api.github.com';
+  function ghHeaders(){
+    return {
+      'Authorization': 'token ' + conn.token,
+      'Accept': 'application/vnd.github+json'
+    };
+  }
+  function ghUrl(path){
+    return API + '/repos/' + encodeURIComponent(conn.owner) + '/' + encodeURIComponent(conn.repo) +
+      '/contents/' + path.split('/').map(encodeURIComponent).join('/') + '?ref=' + encodeURIComponent(conn.branch);
+  }
+  // Returns { sha, contentText } or null if the file doesn't exist (404).
+  function ghGetFile(path){
+    return fetch(ghUrl(path), { headers: ghHeaders() }).then(function(r){
+      if(r.status === 404) return null;
+      if(!r.ok) return r.json().catch(function(){return {};}).then(function(body){
+        throw new Error('GitHub error (' + r.status + '): ' + (body.message || r.statusText));
+      });
+      return r.json().then(function(body){
+        return { sha: body.sha, contentText: b64ToUtf8(body.content) };
+      });
+    });
+  }
+  function ghPutFile(path, contentB64OrText, message, sha, isRawB64){
+    var body = {
+      message: message,
+      branch: conn.branch,
+      content: isRawB64 ? contentB64OrText : utf8ToB64(contentB64OrText)
+    };
+    if(sha) body.sha = sha;
+    return fetch(API + '/repos/' + encodeURIComponent(conn.owner) + '/' + encodeURIComponent(conn.repo) +
+      '/contents/' + path.split('/').map(encodeURIComponent).join('/'), {
+      method: 'PUT',
+      headers: Object.assign({ 'Content-Type': 'application/json' }, ghHeaders()),
+      body: JSON.stringify(body)
+    }).then(function(r){
+      if(!r.ok) return r.json().catch(function(){return {};}).then(function(errBody){
+        throw new Error('GitHub error (' + r.status + '): ' + (errBody.message || r.statusText));
+      });
+      return r.json();
+    });
+  }
+
+  // ---------- connection ----------
+  function loadConn(){
+    try{
+      var raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : null;
+    }catch(e){ return null; }
+  }
+  function saveConn(c){
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(c)); }catch(e){}
+  }
+  function forgetConn(){
+    try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
+    conn = null; galleryData = null;
+    els.setupCard.style.display = '';
+    els.connectedCard.style.display = 'none';
+    els.addCard.style.display = 'none';
+    els.currentCard.style.display = 'none';
+    els.connStatus.style.display = 'none';
+  }
+
+  function connect(showBusy){
+    var owner = els.owner.value.trim();
+    var repo = els.repo.value.trim();
+    var branch = els.branch.value.trim() || 'main';
+    var token = els.token.value.trim();
+    if(!owner || !repo || !token){
+      setStatus(els.connStatus, 'err', 'Fill in username, repository, and token.');
+      return;
+    }
+    conn = { owner: owner, repo: repo, branch: branch, token: token };
+    if(showBusy) setStatus(els.connStatus, 'busy', 'Connecting…');
+    return fetch(API + '/repos/' + encodeURIComponent(owner) + '/' + encodeURIComponent(repo), { headers: ghHeaders() })
+      .then(function(r){
+        if(r.status === 401) throw new Error("That token isn't valid (or has expired).");
+        if(r.status === 404) throw new Error("Can't find that repository, or this token doesn't have access to it.");
+        if(!r.ok) throw new Error('GitHub error (' + r.status + ').');
+        return ghGetFile('gallery.json');
+      })
+      .then(function(file){
+        if(!file) throw new Error("Connected, but couldn't find gallery.json in that repo/branch.");
+        var items;
+        try{ items = JSON.parse(file.contentText); }
+        catch(e){ throw new Error('gallery.json exists but is not valid JSON.'); }
+        galleryData = { sha: file.sha, items: items };
+        saveConn(conn);
+        setStatus(els.connStatus, 'ok', 'Connected.');
+        showConnected();
+        renderGalleryList();
+      })
+      .catch(function(err){
+        setStatus(els.connStatus, 'err', err.message);
+      });
+  }
+
+  function showConnected(){
+    els.setupCard.style.display = 'none';
+    els.connectedCard.style.display = 'block';
+    els.addCard.style.display = '';
+    els.currentCard.style.display = '';
+    els.connSummaryTxt.textContent = 'Connected to ' + conn.owner + '/' + conn.repo + ' @ ' + conn.branch;
+  }
+
+  function renderGalleryList(){
+    var items = (galleryData && galleryData.items) || [];
+    els.countTxt.textContent = '(' + items.length + ')';
+    els.galleryList.innerHTML = '';
+    els.emptyNote.style.display = items.length ? 'none' : '';
+    items.forEach(function(item, idx){
+      var div = document.createElement('div');
+      div.className = 'gitem';
+      var thumbUrl = 'https://raw.githubusercontent.com/' + conn.owner + '/' + conn.repo + '/' + conn.branch + '/' + item.file;
+      div.innerHTML =
+        '<img class="thumb" src="' + escapeHtml(thumbUrl) + '" alt="" loading="lazy" onerror="this.style.opacity=0.25">' +
+        (item.type === 'video' ? '<span class="badge-video">VIDEO</span>' : '') +
+        '<button type="button" class="rm" data-idx="' + idx + '" title="Remove">&times;</button>' +
+        '<div class="meta"><div class="cat">' + escapeHtml(item.category || '') + '</div>' +
+        '<div class="alt">' + escapeHtml(item.alt || '') + '</div></div>';
+      els.galleryList.appendChild(div);
+    });
+  }
+
+  els.galleryList.addEventListener('click', function(e){
+    var btn = e.target.closest('.rm');
+    if(!btn) return;
+    var idx = parseInt(btn.getAttribute('data-idx'), 10);
+    var item = galleryData.items[idx];
+    if(!item) return;
+    if(!confirm('Remove "' + (item.alt || item.file) + '" from the gallery?')) return;
+    removeItem(idx);
+  });
+
+  function removeItem(idx){
+    var newItems = galleryData.items.slice();
+    newItems.splice(idx, 1);
+    var text = JSON.stringify(newItems, null, 2) + '\n';
+    setStatus(els.connStatus, 'busy', 'Removing…');
+    ghPutFile('gallery.json', text, 'Remove gallery item via admin page', galleryData.sha, false)
+      .then(function(res){
+        galleryData = { sha: res.content.sha, items: newItems };
+        setStatus(els.connStatus, 'ok', 'Removed. Live in a minute or two.');
+        renderGalleryList();
+      })
+      .catch(function(err){
+        setStatus(els.connStatus, 'err', err.message);
+      });
+  }
+
+  // ---------- add flow ----------
+  function setMode(m){
+    mode = m;
+    els.btnPhoto.classList.toggle('active', m === 'photo');
+    els.btnVideo.classList.toggle('active', m === 'video');
+    els.videoUrlField.style.display = m === 'video' ? '' : 'none';
+    els.fileLabel.textContent = m === 'video' ? 'Thumbnail image' : 'Image file';
+    els.fileHint.textContent = m === 'video'
+      ? 'A still frame or behind-the-scenes photo to represent the video.'
+      : 'Choose the photo to add.';
+    validateAddForm();
+  }
+  els.btnPhoto.addEventListener('click', function(){ setMode('photo'); });
+  els.btnVideo.addEventListener('click', function(){ setMode('video'); });
+
+  function validateAddForm(){
+    var ok = !!els.alt.value.trim() && !!els.fileInput.files[0];
+    if(mode === 'video'){
+      var embed = toEmbedUrl(els.videoUrl.value);
+      if(!els.videoUrl.value.trim()){
+        els.videoUrlHint.textContent = 'Paste the regular share/watch link — this converts it automatically.';
+        els.videoUrlHint.className = 'hint';
+      } else if(!embed){
+        els.videoUrlHint.textContent = "Couldn't recognize that as a YouTube or Vimeo link.";
+        els.videoUrlHint.className = 'hint err';
+      } else {
+        els.videoUrlHint.textContent = 'Recognized as ' + embed.platform + '.';
+        els.videoUrlHint.className = 'hint ok';
+      }
+      ok = ok && !!embed;
+    }
+    els.addBtn.disabled = !ok;
+    return ok;
+  }
+  [els.alt, els.videoUrl, els.fileInput].forEach(function(el){
+    el.addEventListener('input', validateAddForm);
+    el.addEventListener('change', validateAddForm);
+  });
+
+  els.addBtn.addEventListener('click', function(){
+    if(!validateAddForm()) return;
+    var file = els.fileInput.files[0];
+    var alt = els.alt.value.trim();
+    var category = els.category.value;
+    var embed = mode === 'video' ? toEmbedUrl(els.videoUrl.value) : null;
+    var filename = safeFilename(file.name);
+    var path = 'images/gallery/' + filename;
+
+    els.addBtn.disabled = true;
+    clearLog();
+    logLine('Reading ' + file.name + '…');
+
+    fileToB64(file)
+      .then(function(b64){
+        logLine('Checking if ' + path + ' already exists…');
+        return ghGetFile(path).then(function(existing){
+          logLine(existing ? 'File exists — will overwrite it.' : 'Uploading new file…');
+          return ghPutFile(path, b64, (existing ? 'Replace' : 'Add') + ' gallery image: ' + filename,
+            existing ? existing.sha : null, true);
+        });
+      })
+      .then(function(){
+        logLine('Image uploaded.', 'ok');
+        logLine('Updating gallery.json…');
+        var entry = { type: mode, file: path, alt: alt, category: category };
+        if(mode === 'video') entry.videoEmbed = embed.embedUrl;
+        var newItems = galleryData.items.concat([entry]);
+        var text = JSON.stringify(newItems, null, 2) + '\n';
+        return ghPutFile('gallery.json', text, 'Add gallery item via admin page: ' + alt, galleryData.sha, false)
+          .then(function(res){
+            galleryData = { sha: res.content.sha, items: newItems };
+          });
+      })
+      .then(function(){
+        logLine('Done — live within a minute or two.', 'ok');
+        renderGalleryList();
+        els.alt.value = '';
+        els.videoUrl.value = '';
+        els.fileInput.value = '';
+        validateAddForm();
+      })
+      .catch(function(err){
+        logLine('Failed: ' + err.message, 'err');
+      })
+      .then(function(){
+        els.addBtn.disabled = false;
+      });
+  });
+
+  // ---------- token show/hide ----------
+  els.toggleToken.addEventListener('click', function(){
+    var isPw = els.token.type === 'password';
+    els.token.type = isPw ? 'text' : 'password';
+    els.toggleToken.textContent = isPw ? 'HIDE' : 'SHOW';
+  });
+
+  els.connectBtn.addEventListener('click', function(){ connect(true); });
+  els.forgetBtn.addEventListener('click', function(){
+    if(confirm('Disconnect and forget this token on this device?')) forgetConn();
+  });
+
+  // ---------- init ----------
+  var saved = loadConn();
+  if(saved){
+    els.owner.value = saved.owner || '';
+    els.repo.value = saved.repo || '';
+    els.branch.value = saved.branch || 'main';
+    els.token.value = saved.token || '';
+    connect(true);
+  }
+  setMode('photo');
+})();
+</script>
+</body>
+</html>
