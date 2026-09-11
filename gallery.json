@@ -9,5 +9,5 @@
   { "type": "photo", "file": "images/gallery/boom-mic-bar.jpg", "alt": "Boom mic operator recording a scene at a bar during a documentary shoot", "category": "documentary" },
   { "type": "photo", "file": "images/gallery/live-switcher-monitors.jpg", "alt": "Multi-camera switcher and preview monitors set up for a live outdoor event broadcast", "category": "live" },
   { "type": "photo", "file": "images/gallery/hardware-store-interview.jpg", "alt": "Sony camera capturing an interview with a shop owner in a hardware store aisle", "category": "documentary" },
-  { "type": "video", "file": "images/gallery/my-video-thumb.jpg", "alt": "Behind the scenes on the Acme Radio shoot", "category": "narrative", "videoEmbed": "https://www.youtube.com/embed/VIDEO_ID" }
+  { "type": "video", "file": "images/gallery/my-video-thumb.jpg", "alt": "Behind the scenes on the Acme Radio shoot", "category": "narrative", "videoEmbed": "https://youtu.be/VcVEsj3bFBI?si=GTuoE4XjboP4XGuq" }
 ]
