@@ -71,5 +71,11 @@
     "file": "images/gallery/img-2755.jpg",
     "alt": "Live Tent Setup",
     "category": "live"
+  },
+  {
+    "type": "photo",
+    "file": "images/gallery/img-2758.jpg",
+    "alt": "Live Camera",
+    "category": "live"
   }
 ]
