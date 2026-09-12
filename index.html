@@ -405,6 +405,31 @@
   }
   .spec-row .v{color:var(--ink);}
 
+  /* ---- capabilities strip ---- */
+  .cap-strip{
+    background:var(--surface-2); border-top:1px solid var(--line-soft); border-bottom:1px solid var(--line-soft);
+  }
+  .cap-strip-inner{padding-block:34px;}
+  .cap-row{
+    display:flex; align-items:stretch; justify-content:space-between; flex-wrap:wrap; gap:24px 0;
+  }
+  .cap-item{
+    display:flex; align-items:center; gap:12px;
+    padding:0 22px; flex:1 1 0;
+    border-left:1px solid var(--line);
+    min-width:150px;
+  }
+  .cap-item:first-child{border-left:none; padding-left:0;}
+  .cap-item svg{flex:none; width:22px; height:22px; stroke:var(--teal); fill:none; stroke-width:1.6;}
+  .cap-item .txt{display:flex; flex-direction:column; gap:2px;}
+  .cap-item .label{font-size:13.5px; font-weight:600; color:var(--ink); font-family:'Space Grotesk',sans-serif;}
+  .cap-item .sub{font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.05em; color:var(--ink-faint); text-transform:uppercase;}
+  @media (max-width:900px){
+    .cap-row{flex-direction:column; gap:18px;}
+    .cap-item{border-left:none; padding-left:0; border-top:1px solid var(--line); padding-top:18px;}
+    .cap-item:first-child{border-top:none; padding-top:0;}
+  }
+
   /* ---- coverage ---- */
   .coverage-section{
     display:grid; grid-template-columns:0.9fr 1.1fr; gap:48px; align-items:center;
@@ -882,6 +907,33 @@
       </div>
     </div>
   </section>
+</div>
+
+<div class="cap-strip">
+  <div class="wrap cap-strip-inner">
+    <div class="cap-row">
+      <div class="cap-item">
+        <svg viewBox="0 0 24 24"><path d="M4 8h11l3-3h2v14h-2l-3-3H4z"/><circle cx="10.5" cy="12" r="3"/></svg>
+        <div class="txt"><div class="label">4K / 6K Capture</div><div class="sub">Cinema-grade</div></div>
+      </div>
+      <div class="cap-item">
+        <svg viewBox="0 0 24 24"><rect x="3" y="6" width="7" height="12" rx="1"/><rect x="14" y="4" width="7" height="16" rx="1"/></svg>
+        <div class="txt"><div class="label">Multi-Camera</div><div class="sub">Live coverage</div></div>
+      </div>
+      <div class="cap-item">
+        <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        <div class="txt"><div class="label">Live Switching</div><div class="sub">Broadcast-ready</div></div>
+      </div>
+      <div class="cap-item">
+        <svg viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3z"/><path d="M6 11a6 6 0 0 0 12 0M12 17v4M9 21h6"/></svg>
+        <div class="txt"><div class="label">Wireless Audio</div><div class="sub">Studio-clean</div></div>
+      </div>
+      <div class="cap-item">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18z"/></svg>
+        <div class="txt"><div class="label">Worldwide Travel</div><div class="sub">On request</div></div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="banner-photo services-banner-photo">
