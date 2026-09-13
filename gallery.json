@@ -113,5 +113,11 @@
     "file": "images/gallery/8f6def85-cbb6-4738-b376-0043d9f409c4_4_5005_c.jpeg",
     "alt": "Live Production",
     "category": "live"
+  },
+  {
+    "type": "photo",
+    "file": "images/gallery/4e63b439-b112-448a-aae0-c2d2616aabad_1_102_o.jpeg",
+    "alt": "Camera Build",
+    "category": "narrative"
   }
 ]
