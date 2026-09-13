@@ -70,5 +70,11 @@
     "file": "images/gallery/43dab1e5-d885-4048-a393-f0abcfc888b9_1_105_c.jpeg",
     "alt": "Multiview",
     "category": "live"
+  },
+  {
+    "type": "photo",
+    "file": "images/gallery/fa883d66-9e14-4b8b-948f-019cbee1c37e_1_105_c.jpeg",
+    "alt": "Camera Setup",
+    "category": "live"
   }
 ]
