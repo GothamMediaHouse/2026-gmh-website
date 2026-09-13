@@ -101,5 +101,11 @@
     "file": "images/gallery/0829b046-c353-41af-83e9-b6b36fa4e567_4_5005_c.jpeg",
     "alt": "Camera Build",
     "category": "live"
+  },
+  {
+    "type": "photo",
+    "file": "images/gallery/e94e1d80-36af-4fbc-9ce1-f3dc302b8f31_4_5005_c.jpeg",
+    "alt": "Corporate Shoot",
+    "category": "documentary"
   }
 ]
