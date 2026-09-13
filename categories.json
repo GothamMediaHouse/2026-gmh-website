@@ -1,5 +1,18 @@
 [
-  { "key": "narrative", "label": "Narrative" },
-  { "key": "documentary", "label": "Documentary" },
-  { "key": "live", "label": "Live & Broadcast" }
+  {
+    "key": "narrative",
+    "label": "Narrative"
+  },
+  {
+    "key": "documentary",
+    "label": "Documentary"
+  },
+  {
+    "key": "live",
+    "label": "Live & Broadcast"
+  },
+  {
+    "key": "behind-the-scenes",
+    "label": "Behind the Scenes"
+  }
 ]
