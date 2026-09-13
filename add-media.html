@@ -195,7 +195,7 @@
   // Try to load the site's actual category list (managed via admin.html) so this stays in sync.
   // If this page is opened straight from a file (not through the live site), the fetch will fail
   // and the three default options above are used instead — nothing breaks either way.
-  fetch('categories.json').then(function(r){ return r.json(); }).then(function(cats){
+  fetch('categories.json?v=' + Date.now(), { cache: 'no-store' }).then(function(r){ return r.json(); }).then(function(cats){
     if(!Array.isArray(cats) || !cats.length) throw new Error('empty');
     var prev = category.value;
     category.innerHTML = '';

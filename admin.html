@@ -141,7 +141,51 @@
     position:absolute; bottom:6px; left:6px; background:rgba(16,19,20,0.75); border:1px solid var(--line);
     border-radius:4px; padding:2px 6px; font-family:'JetBrains Mono',monospace; font-size:9.5px; color:var(--teal);
   }
+  .gitem .edit-btn{
+    display:block; width:100%; border:0; border-top:1px solid var(--line);
+    background:var(--surface); color:var(--teal); font-family:'Space Grotesk',sans-serif; font-weight:600;
+    font-size:12px; padding:8px; cursor:pointer;
+  }
+  .gitem .edit-btn:hover{background:var(--teal-soft);}
   .empty-note{color:var(--ink-faint); font-size:13.5px; font-style:italic;}
+
+  /* ---- edit modal ---- */
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(8,10,10,0.75); z-index:100;
+    display:flex; align-items:center; justify-content:center; padding:24px; overflow-y:auto;
+  }
+  .modal{
+    background:var(--surface); border:1px solid var(--line); border-radius:12px;
+    max-width:560px; width:100%; max-height:calc(100vh - 48px); overflow-y:auto; margin:auto;
+  }
+  .modal-head{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 20px; border-bottom:1px solid var(--line-soft);
+  }
+  .modal-head h3{margin:0; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:16px;}
+  .modal-close{background:transparent; border:0; color:var(--ink-faint); font-size:20px; cursor:pointer; line-height:1;}
+  .modal-close:hover{color:var(--red);}
+  .modal-body{padding:20px;}
+  .modal-foot{padding:14px 20px; border-top:1px solid var(--line-soft);}
+  .crop-picker{
+    position:relative; width:100%; border-radius:8px; overflow:hidden; background:#000;
+    cursor:crosshair; user-select:none; line-height:0;
+  }
+  .crop-picker img{width:100%; height:auto; display:block; pointer-events:none;}
+  .crop-crosshair{
+    position:absolute; width:22px; height:22px; margin:-11px 0 0 -11px; top:50%; left:50%;
+    border-radius:50%; border:2px solid var(--teal); box-shadow:0 0 0 2px rgba(0,0,0,0.5);
+    pointer-events:none;
+  }
+  .crop-hint{font-size:12px; color:var(--ink-faint); margin-top:8px;}
+  .crop-preview-row{display:flex; gap:14px; align-items:center; margin-top:16px; flex-wrap:wrap;}
+  .crop-preview-label{
+    font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--ink-faint);
+    text-transform:uppercase; letter-spacing:0.05em; width:100%;
+  }
+  .crop-preview{width:110px; aspect-ratio:4/3; border-radius:6px; overflow:hidden; border:1px solid var(--line); background:var(--surface-2); flex:none;}
+  .crop-preview-lg{width:190px; aspect-ratio:8/3;}
+  .crop-preview img{width:100%; height:100%; object-fit:cover; display:block;}
   .cat-list{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px;}
   .cat-chip{
     display:flex; align-items:center; gap:7px;
@@ -284,6 +328,42 @@
   </div>
 </div>
 
+<div class="modal-overlay" id="editOverlay" style="display:none;">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Edit item</h3>
+      <button type="button" class="modal-close" id="editClose">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="crop-picker" id="cropPicker">
+        <img id="cropImg" src="" alt="">
+        <div class="crop-crosshair" id="cropCrosshair"></div>
+      </div>
+      <div class="crop-hint">Click anywhere on the photo to set what stays in frame when it's cropped for the grid.</div>
+      <div class="crop-preview-row">
+        <div class="crop-preview-label">Preview in grid</div>
+        <div class="crop-preview" id="cropPreviewNormal"><img id="cropPreviewImgN" src="" alt=""></div>
+        <div class="crop-preview crop-preview-lg" id="cropPreviewLarge"><img id="cropPreviewImgL" src="" alt=""></div>
+      </div>
+      <div class="row2" style="margin-top:20px;">
+        <div class="field">
+          <label>Category</label>
+          <select id="editCategory"></select>
+        </div>
+        <div class="field">
+          <label>Alt text</label>
+          <input type="text" id="editAlt">
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot btn-row">
+      <button type="button" class="btn" id="editSaveBtn">Save changes</button>
+      <button type="button" class="btn ghost" id="editCancelBtn">Cancel</button>
+      <span class="hint" id="editHint" style="margin-left:auto;"></span>
+    </div>
+  </div>
+</div>
+
 <script>
 (function(){
   var els = {};
@@ -291,13 +371,17 @@
    'connSummaryTxt','forgetBtn','addCard','currentCard','galleryList','countTxt','emptyNote',
    'btnPhoto','btnVideo','category','alt','videoUrlField','videoUrl','videoUrlHint',
    'fileInput','fileLabel','fileHint','addBtn','log',
-   'categoriesCard','categoriesList','newCategoryLabel','addCategoryBtn'].forEach(function(id){ els[id] = document.getElementById(id); });
+   'categoriesCard','categoriesList','newCategoryLabel','addCategoryBtn',
+   'editOverlay','editClose','cropPicker','cropImg','cropCrosshair','cropPreviewImgN','cropPreviewImgL',
+   'editCategory','editAlt','editSaveBtn','editCancelBtn','editHint'].forEach(function(id){ els[id] = document.getElementById(id); });
 
   var STORAGE_KEY = 'gmh_admin_conn_v1';
   var conn = null;       // { owner, repo, branch, token }
   var galleryData = null; // { sha, items: [...] }
   var categoriesData = null; // { sha, items: [{key,label}] }
   var mode = 'photo';
+  var editingIdx = null;
+  var editingFocal = '50% 50%'; // "x% y%", matches CSS object-position
 
   // ---------- small utils ----------
   function escapeHtml(s){
@@ -521,12 +605,14 @@
       var div = document.createElement('div');
       div.className = 'gitem';
       var thumbUrl = 'https://raw.githubusercontent.com/' + conn.owner + '/' + conn.repo + '/' + conn.branch + '/' + item.file;
+      var thumbStyle = item.focal ? ' style="object-position:' + escapeHtml(item.focal) + ';"' : '';
       div.innerHTML =
-        '<img class="thumb" src="' + escapeHtml(thumbUrl) + '" alt="" loading="lazy" onerror="this.style.opacity=0.25">' +
+        '<img class="thumb" src="' + escapeHtml(thumbUrl) + '"' + thumbStyle + ' alt="" loading="lazy" onerror="this.style.opacity=0.25">' +
         (item.type === 'video' ? '<span class="badge-video">VIDEO</span>' : '') +
         '<button type="button" class="rm" data-idx="' + idx + '" title="Remove">&times;</button>' +
         '<div class="meta"><div class="cat">' + escapeHtml(catLabels[item.category] || item.category || '') + '</div>' +
-        '<div class="alt">' + escapeHtml(item.alt || '') + '</div></div>';
+        '<div class="alt">' + escapeHtml(item.alt || '') + '</div></div>' +
+        '<button type="button" class="edit-btn" data-idx="' + idx + '">Edit category / crop</button>';
       els.galleryList.appendChild(div);
     });
   }
@@ -553,17 +639,21 @@
     });
   }
 
-  function populateCategorySelect(){
+  function fillCategoryOptions(selectEl, preferKey){
     var items = (categoriesData && categoriesData.items) || [];
-    var prev = els.category.value;
-    els.category.innerHTML = '';
+    var prev = preferKey !== undefined ? preferKey : selectEl.value;
+    selectEl.innerHTML = '';
     items.forEach(function(c){
       var opt = document.createElement('option');
       opt.value = c.key;
       opt.textContent = c.label || c.key;
-      els.category.appendChild(opt);
+      selectEl.appendChild(opt);
     });
-    if(items.some(function(c){ return c.key === prev; })) els.category.value = prev;
+    if(items.some(function(c){ return c.key === prev; })) selectEl.value = prev;
+  }
+
+  function populateCategorySelect(){
+    fillCategoryOptions(els.category);
   }
 
   function saveCategories(newItems, message, onDone){
@@ -624,13 +714,100 @@
   });
 
   els.galleryList.addEventListener('click', function(e){
-    var btn = e.target.closest('.rm');
-    if(!btn) return;
-    var idx = parseInt(btn.getAttribute('data-idx'), 10);
+    var rmBtn = e.target.closest('.rm');
+    if(rmBtn){
+      var idx = parseInt(rmBtn.getAttribute('data-idx'), 10);
+      var item = galleryData.items[idx];
+      if(!item) return;
+      if(!confirm('Remove "' + (item.alt || item.file) + '" from the gallery?')) return;
+      removeItem(idx);
+      return;
+    }
+    var editBtn = e.target.closest('.edit-btn');
+    if(editBtn){
+      openEditModal(parseInt(editBtn.getAttribute('data-idx'), 10));
+    }
+  });
+
+  // ---------- edit modal (category + crop/focal point) ----------
+  function setFocal(xPct, yPct){
+    xPct = Math.max(0, Math.min(100, xPct));
+    yPct = Math.max(0, Math.min(100, yPct));
+    editingFocal = xPct.toFixed(1) + '% ' + yPct.toFixed(1) + '%';
+    els.cropCrosshair.style.left = xPct + '%';
+    els.cropCrosshair.style.top = yPct + '%';
+    els.cropPreviewImgN.style.objectPosition = editingFocal;
+    els.cropPreviewImgL.style.objectPosition = editingFocal;
+  }
+
+  function parseFocal(focal){
+    var parts = (focal || '50% 50%').split(/\s+/);
+    var x = parseFloat(parts[0]) || 50;
+    var y = parseFloat(parts[1]) || 50;
+    return { x: x, y: y };
+  }
+
+  function openEditModal(idx){
     var item = galleryData.items[idx];
     if(!item) return;
-    if(!confirm('Remove "' + (item.alt || item.file) + '" from the gallery?')) return;
-    removeItem(idx);
+    editingIdx = idx;
+    var thumbUrl = 'https://raw.githubusercontent.com/' + conn.owner + '/' + conn.repo + '/' + conn.branch + '/' + item.file;
+    els.cropImg.src = thumbUrl;
+    els.cropPreviewImgN.src = thumbUrl;
+    els.cropPreviewImgL.src = thumbUrl;
+    fillCategoryOptions(els.editCategory, item.category);
+    els.editAlt.value = item.alt || '';
+    var f = parseFocal(item.focal);
+    setFocal(f.x, f.y);
+    els.editHint.textContent = '';
+    els.editOverlay.style.display = 'flex';
+  }
+
+  function closeEditModal(){
+    els.editOverlay.style.display = 'none';
+    editingIdx = null;
+  }
+
+  els.cropPicker.addEventListener('click', function(e){
+    var rect = els.cropImg.getBoundingClientRect();
+    if(!rect.width || !rect.height) return;
+    var x = ((e.clientX - rect.left) / rect.width) * 100;
+    var y = ((e.clientY - rect.top) / rect.height) * 100;
+    setFocal(x, y);
+  });
+
+  els.editClose.addEventListener('click', closeEditModal);
+  els.editCancelBtn.addEventListener('click', closeEditModal);
+  els.editOverlay.addEventListener('click', function(e){
+    if(e.target === els.editOverlay) closeEditModal();
+  });
+
+  els.editSaveBtn.addEventListener('click', function(){
+    if(editingIdx === null) return;
+    var idx = editingIdx;
+    var item = galleryData.items[idx];
+    if(!item) return;
+    var newItems = galleryData.items.slice();
+    newItems[idx] = Object.assign({}, item, {
+      category: els.editCategory.value,
+      alt: els.editAlt.value.trim(),
+      focal: editingFocal
+    });
+    els.editHint.textContent = 'Saving…';
+    els.editSaveBtn.disabled = true;
+    var text = JSON.stringify(newItems, null, 2) + '\n';
+    ghPutFile('gallery.json', text, 'Edit gallery item via admin page: ' + (newItems[idx].alt || newItems[idx].file), galleryData.sha, false)
+      .then(function(res){
+        galleryData = { sha: res.content.sha, items: newItems };
+        renderGalleryList();
+        closeEditModal();
+      })
+      .catch(function(err){
+        els.editHint.textContent = err.message;
+      })
+      .then(function(){
+        els.editSaveBtn.disabled = false;
+      });
   });
 
   function removeItem(idx){

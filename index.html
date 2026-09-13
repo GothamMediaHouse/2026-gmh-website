@@ -1248,6 +1248,12 @@
   var currentFilter = 'all';
   var visibleCount = BATCH;
 
+  // Bust GitHub Pages' CDN + browser caching for our content files, so a photo/video/category
+  // added via admin.html shows up on next page load instead of waiting out a stale cache.
+  function freshFetch(path){
+    return fetch(path + '?v=' + Date.now(), { cache: 'no-store' });
+  }
+
   function escapeHtml(s){
     return String(s).replace(/[&<>"']/g, function(c){
       return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
@@ -1262,8 +1268,9 @@
     if(isVideo){
       dataAttrs += ' data-video-embed="' + escapeHtml(p.videoEmbed) + '" data-video-title="' + escapeHtml(p.alt) + '"';
     }
+    var imgStyle = p.focal ? ' style="object-position:' + escapeHtml(p.focal) + ';"' : '';
     return '<div class="' + classes + '" ' + dataAttrs + '>' +
-      '<img src="' + escapeHtml(p.file) + '" alt="' + escapeHtml(p.alt) + '" loading="lazy" />' +
+      '<img src="' + escapeHtml(p.file) + '" alt="' + escapeHtml(p.alt) + '"' + imgStyle + ' loading="lazy" />' +
       (isVideo ? PLAY_ICON : '') +
       '<span class="gallery-caption">' + escapeHtml(label) + '</span></div>';
   }
@@ -1277,7 +1284,7 @@
   }
 
   if(workGrid){
-    fetch('categories.json').then(function(r){ return r.json(); }).then(function(cats){
+    freshFetch('categories.json').then(function(r){ return r.json(); }).then(function(cats){
       (cats || []).forEach(function(c){
         catLabel[c.key] = (c.label || c.key).toUpperCase();
         var btn = document.createElement('button');
@@ -1288,7 +1295,7 @@
         filtersWrap.appendChild(btn);
       });
     }).catch(function(err){ console.warn('categories.json failed to load', err); }).then(function(){
-      return fetch('gallery.json').then(function(r){ return r.json(); }).then(function(list){
+      return freshFetch('gallery.json').then(function(r){ return r.json(); }).then(function(list){
         allItems = list.map(function(p, i){
           // Video items always get a large tile; otherwise every 5th photo does,
           // for a bit of magazine-style rhythm instead of a flat uniform grid.
@@ -1320,7 +1327,7 @@
   }
 
   if(fieldGrid){
-    fetch('field.json').then(function(r){ return r.json(); }).then(function(list){
+    freshFetch('field.json').then(function(r){ return r.json(); }).then(function(list){
       fieldGrid.innerHTML = list.map(function(p){
         return '<div class="teaser-item"><img src="' + escapeHtml(p.file) + '" alt="' + escapeHtml(p.alt) + '"></div>';
       }).join('');

@@ -87,6 +87,17 @@ photos or videos; items that used it just keep showing under "All" and lose
 their own tab, since the admin page will tell you how many items are affected
 before you confirm.
 
+**Changing a photo's category, or how it crops in the grid.** Every item in
+"Current gallery" has an "Edit category / crop" button. Clicking it opens the
+photo (or a video's thumbnail) full-size with a small dot you can click
+anywhere on the image to choose what stays in frame — the grid crops every
+tile to a fixed shape, so this is how you tell it "keep this part visible"
+instead of it defaulting to the center. Two live previews next to it show
+exactly how that crop will look in both a normal tile and a wide/featured
+tile. The same screen also lets you change the category or fix the alt text.
+Click **Save changes** and it publishes straight to `gallery.json`, same as
+everything else here.
+
 ### The copy-paste way: the media helper page (no token needed)
 
 Prefer not to set up a token at all? Open `gothammediahouse.com/add-media.html`
