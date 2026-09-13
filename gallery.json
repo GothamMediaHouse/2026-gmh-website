@@ -107,5 +107,11 @@
     "file": "images/gallery/e94e1d80-36af-4fbc-9ce1-f3dc302b8f31_4_5005_c.jpeg",
     "alt": "Corporate Shoot",
     "category": "documentary"
+  },
+  {
+    "type": "photo",
+    "file": "images/gallery/8f6def85-cbb6-4738-b376-0043d9f409c4_4_5005_c.jpeg",
+    "alt": "Live Production",
+    "category": "live"
   }
 ]
