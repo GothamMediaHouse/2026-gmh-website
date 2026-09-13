@@ -127,6 +127,7 @@
           <option value="documentary">Documentary</option>
           <option value="live">Live &amp; Broadcast</option>
         </select>
+        <div class="hint" id="categoryHint">Loading your site's current categories&hellip;</div>
       </div>
       <div class="field">
         <label>Alt text (short description)</label>
@@ -188,7 +189,29 @@
   var photoFields = document.getElementById('photoFields');
   var videoFields = document.getElementById('videoFields');
   var category = document.getElementById('category');
+  var categoryHint = document.getElementById('categoryHint');
   var alt = document.getElementById('alt');
+
+  // Try to load the site's actual category list (managed via admin.html) so this stays in sync.
+  // If this page is opened straight from a file (not through the live site), the fetch will fail
+  // and the three default options above are used instead — nothing breaks either way.
+  fetch('categories.json').then(function(r){ return r.json(); }).then(function(cats){
+    if(!Array.isArray(cats) || !cats.length) throw new Error('empty');
+    var prev = category.value;
+    category.innerHTML = '';
+    cats.forEach(function(c){
+      var opt = document.createElement('option');
+      opt.value = c.key;
+      opt.textContent = c.label || c.key;
+      category.appendChild(opt);
+    });
+    if(cats.some(function(c){ return c.key === prev; })) category.value = prev;
+    categoryHint.textContent = "Loaded from your site's current categories.";
+    categoryHint.className = 'hint ok';
+  }).catch(function(){
+    categoryHint.textContent = "Showing default categories (couldn't load your site's list — that's fine if you're viewing this file locally).";
+  });
+
   var photoFile = document.getElementById('photoFile');
   var videoUrl = document.getElementById('videoUrl');
   var videoUrlHint = document.getElementById('videoUrlHint');

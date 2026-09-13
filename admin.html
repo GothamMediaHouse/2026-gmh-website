@@ -142,6 +142,20 @@
     border-radius:4px; padding:2px 6px; font-family:'JetBrains Mono',monospace; font-size:9.5px; color:var(--teal);
   }
   .empty-note{color:var(--ink-faint); font-size:13.5px; font-style:italic;}
+  .cat-list{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px;}
+  .cat-chip{
+    display:flex; align-items:center; gap:7px;
+    background:var(--surface-2); border:1px solid var(--line); border-radius:20px;
+    padding:7px 8px 7px 14px; font-size:13px;
+  }
+  .cat-chip .key{font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--ink-faint);}
+  .cat-chip .rm{
+    width:20px; height:20px; border-radius:50%; border:0; background:transparent; color:var(--ink-faint);
+    cursor:pointer; font-size:13px; display:flex; align-items:center; justify-content:center; flex:none;
+  }
+  .cat-chip .rm:hover{background:var(--red); color:#1a0e0c;}
+  .cat-addrow{display:flex; gap:10px; flex-wrap:wrap; align-items:center;}
+  .cat-addrow input{flex:1; min-width:160px;}
   .log{
     font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--ink-dim);
     background:var(--surface-2); border:1px solid var(--line); border-radius:6px;
@@ -220,6 +234,17 @@
     </h2>
   </div>
 
+  <div class="card" id="categoriesCard" style="display:none;">
+    <h2>Categories</h2>
+    <div id="categoriesList" class="cat-list"></div>
+    <div class="cat-addrow">
+      <input type="text" id="newCategoryLabel" placeholder="e.g. Weddings">
+      <button type="button" class="btn small" id="addCategoryBtn">Add category</button>
+    </div>
+    <div class="hint">These are the filter tabs on your Our Work page. Removing one doesn't delete any
+      photos or videos — items keep showing under "All," they just lose their own tab.</div>
+  </div>
+
   <div class="card" id="addCard" style="display:none;">
     <h2>Add a photo or video</h2>
     <div class="type-toggle">
@@ -229,11 +254,7 @@
     <div class="row2">
       <div class="field">
         <label>Category</label>
-        <select id="category">
-          <option value="narrative">Narrative</option>
-          <option value="documentary">Documentary</option>
-          <option value="live">Live &amp; Broadcast</option>
-        </select>
+        <select id="category"></select>
       </div>
       <div class="field">
         <label>Alt text (short description)</label>
@@ -269,11 +290,13 @@
   ['owner','repo','branch','token','toggleToken','connectBtn','connStatus','setupCard','connectedCard',
    'connSummaryTxt','forgetBtn','addCard','currentCard','galleryList','countTxt','emptyNote',
    'btnPhoto','btnVideo','category','alt','videoUrlField','videoUrl','videoUrlHint',
-   'fileInput','fileLabel','fileHint','addBtn','log'].forEach(function(id){ els[id] = document.getElementById(id); });
+   'fileInput','fileLabel','fileHint','addBtn','log',
+   'categoriesCard','categoriesList','newCategoryLabel','addCategoryBtn'].forEach(function(id){ els[id] = document.getElementById(id); });
 
   var STORAGE_KEY = 'gmh_admin_conn_v1';
   var conn = null;       // { owner, repo, branch, token }
   var galleryData = null; // { sha, items: [...] }
+  var categoriesData = null; // { sha, items: [{key,label}] }
   var mode = 'photo';
 
   // ---------- small utils ----------
@@ -414,9 +437,10 @@
   }
   function forgetConn(){
     try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
-    conn = null; galleryData = null;
+    conn = null; galleryData = null; categoriesData = null;
     els.setupCard.style.display = '';
     els.connectedCard.style.display = 'none';
+    els.categoriesCard.style.display = 'none';
     els.addCard.style.display = 'none';
     els.currentCard.style.display = 'none';
     els.connStatus.style.display = 'none';
@@ -438,18 +462,39 @@
         if(r.status === 401) throw new Error("That token isn't valid (or has expired).");
         if(r.status === 404) throw new Error("Can't find that repository, or this token doesn't have access to it.");
         if(!r.ok) throw new Error('GitHub error (' + r.status + ').');
-        return ghGetFile('gallery.json');
+        return Promise.all([ghGetFile('gallery.json'), ghGetFile('categories.json')]);
       })
-      .then(function(file){
-        if(!file) throw new Error("Connected, but couldn't find gallery.json in that repo/branch.");
+      .then(function(results){
+        var galleryFile = results[0], categoriesFile = results[1];
+        if(!galleryFile) throw new Error("Connected, but couldn't find gallery.json in that repo/branch.");
         var items;
-        try{ items = JSON.parse(file.contentText); }
+        try{ items = JSON.parse(galleryFile.contentText); }
         catch(e){ throw new Error('gallery.json exists but is not valid JSON.'); }
-        galleryData = { sha: file.sha, items: items };
+        galleryData = { sha: galleryFile.sha, items: items };
+
+        var catItems = null;
+        if(categoriesFile){
+          try{ catItems = JSON.parse(categoriesFile.contentText); }catch(e){ catItems = null; }
+        }
+        if(!Array.isArray(catItems)) catItems = null;
+        if(catItems){
+          categoriesData = { sha: categoriesFile.sha, items: catItems };
+        } else {
+          // No categories.json yet in this repo — start from the site's current defaults;
+          // it'll be created automatically the first time a category is added or removed here.
+          categoriesData = { sha: null, items: [
+            { key: 'narrative', label: 'Narrative' },
+            { key: 'documentary', label: 'Documentary' },
+            { key: 'live', label: 'Live & Broadcast' }
+          ] };
+        }
+
         saveConn(conn);
         setStatus(els.connStatus, 'ok', 'Connected.');
         showConnected();
         renderGalleryList();
+        renderCategories();
+        populateCategorySelect();
       })
       .catch(function(err){
         setStatus(els.connStatus, 'err', err.message);
@@ -459,6 +504,7 @@
   function showConnected(){
     els.setupCard.style.display = 'none';
     els.connectedCard.style.display = 'block';
+    els.categoriesCard.style.display = '';
     els.addCard.style.display = '';
     els.currentCard.style.display = '';
     els.connSummaryTxt.textContent = 'Connected to ' + conn.owner + '/' + conn.repo + ' @ ' + conn.branch;
@@ -466,6 +512,8 @@
 
   function renderGalleryList(){
     var items = (galleryData && galleryData.items) || [];
+    var catLabels = {};
+    ((categoriesData && categoriesData.items) || []).forEach(function(c){ catLabels[c.key] = c.label; });
     els.countTxt.textContent = '(' + items.length + ')';
     els.galleryList.innerHTML = '';
     els.emptyNote.style.display = items.length ? 'none' : '';
@@ -477,11 +525,103 @@
         '<img class="thumb" src="' + escapeHtml(thumbUrl) + '" alt="" loading="lazy" onerror="this.style.opacity=0.25">' +
         (item.type === 'video' ? '<span class="badge-video">VIDEO</span>' : '') +
         '<button type="button" class="rm" data-idx="' + idx + '" title="Remove">&times;</button>' +
-        '<div class="meta"><div class="cat">' + escapeHtml(item.category || '') + '</div>' +
+        '<div class="meta"><div class="cat">' + escapeHtml(catLabels[item.category] || item.category || '') + '</div>' +
         '<div class="alt">' + escapeHtml(item.alt || '') + '</div></div>';
       els.galleryList.appendChild(div);
     });
   }
+
+  // ---------- categories ----------
+  function slugifyCategory(label){
+    return label.trim().toLowerCase()
+      .replace(/&/g, ' and ')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  }
+
+  function renderCategories(){
+    var items = (categoriesData && categoriesData.items) || [];
+    els.categoriesList.innerHTML = '';
+    items.forEach(function(c, idx){
+      var chip = document.createElement('div');
+      chip.className = 'cat-chip';
+      chip.innerHTML =
+        '<span>' + escapeHtml(c.label || c.key) + '</span>' +
+        '<span class="key">' + escapeHtml(c.key) + '</span>' +
+        '<button type="button" class="rm" data-idx="' + idx + '" title="Remove category">&times;</button>';
+      els.categoriesList.appendChild(chip);
+    });
+  }
+
+  function populateCategorySelect(){
+    var items = (categoriesData && categoriesData.items) || [];
+    var prev = els.category.value;
+    els.category.innerHTML = '';
+    items.forEach(function(c){
+      var opt = document.createElement('option');
+      opt.value = c.key;
+      opt.textContent = c.label || c.key;
+      els.category.appendChild(opt);
+    });
+    if(items.some(function(c){ return c.key === prev; })) els.category.value = prev;
+  }
+
+  function saveCategories(newItems, message, onDone){
+    setStatus(els.connStatus, 'busy', 'Saving categories…');
+    var text = JSON.stringify(newItems, null, 2) + '\n';
+    ghPutFile('categories.json', text, message, categoriesData ? categoriesData.sha : null, false)
+      .then(function(res){
+        categoriesData = { sha: res.content.sha, items: newItems };
+        setStatus(els.connStatus, 'ok', 'Saved. Live in a minute or two.');
+        renderCategories();
+        populateCategorySelect();
+        if(onDone) onDone();
+      })
+      .catch(function(err){
+        setStatus(els.connStatus, 'err', err.message);
+      });
+  }
+
+  els.categoriesList.addEventListener('click', function(e){
+    var btn = e.target.closest('.rm');
+    if(!btn) return;
+    var idx = parseInt(btn.getAttribute('data-idx'), 10);
+    var cat = categoriesData.items[idx];
+    if(!cat) return;
+    var count = (galleryData.items || []).filter(function(it){ return it.category === cat.key; }).length;
+    var msg = 'Remove the "' + (cat.label || cat.key) + '" category?';
+    if(count > 0){
+      msg += ' ' + count + ' item' + (count === 1 ? '' : 's') + ' in your gallery currently use it — ' +
+        "they'll stay in the gallery and still show under \"All,\" they just won't have their own filter tab anymore.";
+    }
+    if(!confirm(msg)) return;
+    var newItems = categoriesData.items.slice();
+    newItems.splice(idx, 1);
+    saveCategories(newItems, 'Remove category via admin page: ' + (cat.label || cat.key));
+  });
+
+  els.addCategoryBtn.addEventListener('click', function(){
+    var label = els.newCategoryLabel.value.trim();
+    if(!label) return;
+    var key = slugifyCategory(label);
+    if(!key){
+      setStatus(els.connStatus, 'err', "Couldn't turn that into a category key — try using letters or numbers.");
+      return;
+    }
+    var items = (categoriesData && categoriesData.items) || [];
+    if(items.some(function(c){ return c.key === key; })){
+      setStatus(els.connStatus, 'err', 'A category with that name already exists.');
+      return;
+    }
+    var newItems = items.concat([{ key: key, label: label }]);
+    saveCategories(newItems, 'Add category via admin page: ' + label, function(){
+      els.newCategoryLabel.value = '';
+    });
+  });
+
+  els.newCategoryLabel.addEventListener('keydown', function(e){
+    if(e.key === 'Enter'){ e.preventDefault(); els.addCategoryBtn.click(); }
+  });
 
   els.galleryList.addEventListener('click', function(e){
     var btn = e.target.closest('.rm');

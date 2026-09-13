@@ -1,0 +1,5 @@
+[
+  { "key": "narrative", "label": "Narrative" },
+  { "key": "documentary", "label": "Documentary" },
+  { "key": "live", "label": "Live & Broadcast" }
+]

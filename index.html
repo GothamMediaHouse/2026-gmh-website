@@ -995,11 +995,8 @@
       <h2>Our work</h2>
       <div class="section-note">Every project we produce is driven by story, executed with precision, and delivered at broadcast-level quality.</div>
     </div>
-    <div class="gallery-filters" role="group" aria-label="Filter work by category">
+    <div class="gallery-filters" role="group" aria-label="Filter work by category" id="galleryFilters">
       <button type="button" class="gallery-filter-btn active" data-filter="all">All</button>
-      <button type="button" class="gallery-filter-btn" data-filter="narrative">Narrative</button>
-      <button type="button" class="gallery-filter-btn" data-filter="documentary">Documentary</button>
-      <button type="button" class="gallery-filter-btn" data-filter="live">Live &amp; Broadcast</button>
     </div>
     <div class="gallery-grid" id="workGrid"></div>
     <div class="gallery-loadmore" id="galleryLoadMore" hidden>
@@ -1234,14 +1231,16 @@
   // Content-managed Our Work gallery + Home "From the field" strip.
   // Add or remove a photo/video by editing field.json or gallery.json — no HTML editing needed.
   // gallery.json entries: { "type": "photo"|"video", "file": "images/gallery/xxx.jpg" (thumbnail
-  // for video), "alt": "...", "category": "narrative|documentary|live", "videoEmbed": "https://
+  // for video), "alt": "...", "category": "<a key from categories.json>", "videoEmbed": "https://
   // www.youtube.com/embed/XXXX" or a Vimeo player URL (video entries only) }
+  // The category filter buttons and labels come from categories.json (managed via admin.html's
+  // "Manage categories" panel) — this file doesn't need editing to add/remove a category.
   var fieldGrid = document.getElementById('fieldGrid');
   var workGrid = document.getElementById('workGrid');
-  var filterBtns = document.querySelectorAll('.gallery-filter-btn');
+  var filtersWrap = document.getElementById('galleryFilters');
   var loadMoreWrap = document.getElementById('galleryLoadMore');
   var loadMoreBtn = document.getElementById('galleryLoadMoreBtn');
-  var catLabel = { narrative: 'NARRATIVE', documentary: 'DOCUMENTARY', live: 'LIVE & BROADCAST' };
+  var catLabel = {};
   var BATCH = 12;
   var PLAY_ICON = '<span class="play-badge"><span class="circle"><svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"></polygon></svg></span></span>';
 
@@ -1278,26 +1277,40 @@
   }
 
   if(workGrid){
-    fetch('gallery.json').then(function(r){ return r.json(); }).then(function(list){
-      allItems = list.map(function(p, i){
-        // Video items always get a large tile; otherwise every 5th photo does,
-        // for a bit of magazine-style rhythm instead of a flat uniform grid.
-        p._large = (p.type === 'video') || (i % 5 === 0);
-        return p;
+    fetch('categories.json').then(function(r){ return r.json(); }).then(function(cats){
+      (cats || []).forEach(function(c){
+        catLabel[c.key] = (c.label || c.key).toUpperCase();
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'gallery-filter-btn';
+        btn.setAttribute('data-filter', c.key);
+        btn.textContent = c.label || c.key;
+        filtersWrap.appendChild(btn);
       });
-      render();
-    }).catch(function(err){ console.warn('gallery.json failed to load', err); });
+    }).catch(function(err){ console.warn('categories.json failed to load', err); }).then(function(){
+      return fetch('gallery.json').then(function(r){ return r.json(); }).then(function(list){
+        allItems = list.map(function(p, i){
+          // Video items always get a large tile; otherwise every 5th photo does,
+          // for a bit of magazine-style rhythm instead of a flat uniform grid.
+          p._large = (p.type === 'video') || (i % 5 === 0);
+          return p;
+        });
+        render();
+      }).catch(function(err){ console.warn('gallery.json failed to load', err); });
+    });
   }
 
-  filterBtns.forEach(function(btn){
-    btn.addEventListener('click', function(){
-      filterBtns.forEach(function(b){ b.classList.remove('active'); });
+  if(filtersWrap){
+    filtersWrap.addEventListener('click', function(e){
+      var btn = e.target.closest('.gallery-filter-btn');
+      if(!btn) return;
+      filtersWrap.querySelectorAll('.gallery-filter-btn').forEach(function(b){ b.classList.remove('active'); });
       btn.classList.add('active');
       currentFilter = btn.getAttribute('data-filter');
       visibleCount = BATCH;
       render();
     });
-  });
+  }
 
   if(loadMoreBtn){
     loadMoreBtn.addEventListener('click', function(){

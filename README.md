@@ -9,9 +9,12 @@ any code.
 
 ```
 index.html          the whole site (one file, all five pages)
+add-media.html       a helper page that writes the gallery.json entry for you
+admin.html           a one-click admin panel that publishes photos/videos for you
 images/              banner/portrait photos — swap by re-uploading a file with the same name
 images/gallery/      Our Work gallery + "From the field" photos
 gallery.json         the list that drives the Our Work gallery
+categories.json      the list of Our Work filter categories (Narrative, Documentary, etc.)
 field.json           the list that drives the Home "From the field" strip
 CNAME                tells GitHub Pages this site should answer to gothammediahouse.com
 ```
@@ -51,8 +54,51 @@ rhythm, and it automatically shows a "Load more" button once there are more than
 12 items in the current filter, so you can keep adding photos (and videos)
 without the page ever feeling unwieldy.
 
-Open `gallery.json` in GitHub (click the file, then the pencil/edit icon). It's a
-list like this:
+### The easiest way: the admin panel (one click, no GitHub visits)
+
+Once the site is live, open `gothammediahouse.com/admin.html`. The first time,
+connect it to your repo:
+
+1. Enter your GitHub username, this repo's name, and the branch (`main`).
+2. Generate a personal access token (the page has a "How do I get a token?"
+   section with exact steps) and paste it in, then click **Connect**.
+
+After that, adding something is just: pick Photo or Video, choose the file,
+fill in the description and category (and paste a video link, for a video),
+and click **Add to gallery**. It uploads the image and updates `gallery.json`
+for you — nothing to copy, paste, or commit by hand. You can also remove
+existing items right from the same page. The connection (including the
+token) is remembered in that browser, so you only set it up once — click
+**Disconnect** to forget it on a shared or public computer.
+
+This page isn't linked from the site itself, so bookmark it. Keep the token
+scoped to just this one repo (the setup steps show how) and don't share this
+page or paste the token anywhere else — anyone with it could edit this repo.
+
+**Managing categories.** Once connected, a "Categories" panel sits above the
+add-photo form — it lists the current filter categories (Narrative,
+Documentary, Live & Broadcast, and any others you've added) as removable
+chips, plus a field to add a new one by name (it figures out the internal key
+for you). Add or remove a category here and it publishes straight to
+`categories.json` — the filter tabs on the Our Work page, and the category
+dropdown in both `admin.html` and `add-media.html`, all pick it up
+automatically. Removing a category doesn't delete or change any existing
+photos or videos; items that used it just keep showing under "All" and lose
+their own tab, since the admin page will tell you how many items are affected
+before you confirm.
+
+### The copy-paste way: the media helper page (no token needed)
+
+Prefer not to set up a token at all? Open `gothammediahouse.com/add-media.html`
+instead. Pick Photo or Video, fill in a couple of fields, and it builds the
+exact line for you — including converting a normal YouTube/Vimeo link into
+the embed format automatically. Copy what it gives you, then upload the image
+and paste the line into `gallery.json` on GitHub yourself.
+
+### What's actually happening (the fully manual way)
+
+If you'd rather edit things directly: open `gallery.json` in GitHub (click the
+file, then the pencil/edit icon). It's a list like this:
 
 ```json
 { "type": "photo", "file": "images/gallery/lakeside-camera.jpg", "alt": "Cinema camera on tripod set up at a lakeside location for a scenic shoot", "category": "documentary" }
@@ -61,8 +107,9 @@ list like this:
 - **To add a photo:** upload the new image file into `images/gallery/` (Add file →
   Upload files), then add one more entry like the one above to `gallery.json` —
   `type` is `"photo"`, `file` is the path you just uploaded to, `alt` is a plain
-  description (for accessibility and search), `category` is `narrative`,
-  `documentary`, or `live`.
+  description (for accessibility and search), and `category` is one of the keys
+  in `categories.json` (`narrative`, `documentary`, or `live` by default — see
+  "Managing categories" above for the easier way to add a new one).
 - **To remove one:** delete its entry from `gallery.json`. You can leave the image
   file in place or delete it too — either is fine.
 
@@ -100,6 +147,13 @@ yes) and it updates automatically, no code edit needed.
 
 Either way, changes go live within a minute or two of saving in GitHub — no build
 step, no redeploy button to press.
+
+**The Reel page** (the "Reel" nav link) is a single embedded video, set directly in
+`index.html` rather than through a JSON file. To swap it for a new reel later: open
+`index.html` in GitHub, find `id="page-reel"` (use the file's search), and change the
+`src="https://www.youtube.com/embed/..."` on the `<iframe>` to the new video's embed
+URL — converted the same way described above for gallery videos. Or just bring the
+new video link back to this conversation and I'll make the edit for you.
 
 ## If you'd rather not manage this yourself
 
