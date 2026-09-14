@@ -200,6 +200,21 @@
   .cat-chip .rm:hover{background:var(--red); color:#1a0e0c;}
   .cat-addrow{display:flex; gap:10px; flex-wrap:wrap; align-items:center;}
   .cat-addrow input{flex:1; min-width:160px;}
+  .testi-list{display:flex; flex-direction:column; gap:12px; margin-bottom:18px;}
+  .testi-item{
+    background:var(--surface-2); border:1px solid var(--line); border-radius:8px;
+    padding:14px 16px; position:relative;
+  }
+  .testi-item .q{font-size:13.5px; color:var(--ink); line-height:1.5; max-height:4.5em; overflow:hidden; padding-right:30px;}
+  .testi-item .a{margin-top:8px; font-size:12px; color:var(--ink-faint);}
+  .testi-item .a b{color:var(--ink-dim); font-weight:600;}
+  .testi-item .rm{position:absolute; top:10px; right:10px;}
+  textarea{
+    width:100%; background:var(--surface-2); border:1px solid var(--line); border-radius:6px;
+    padding:11px 12px; color:var(--ink); font-family:'Inter',system-ui,sans-serif; font-size:14px;
+    resize:vertical; min-height:80px;
+  }
+  textarea:focus{outline:none; border-color:var(--teal);}
   .log{
     font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--ink-dim);
     background:var(--surface-2); border:1px solid var(--line); border-radius:6px;
@@ -326,6 +341,32 @@
     <div id="galleryList" class="gallery-list"></div>
     <div class="empty-note" id="emptyNote" style="display:none;">No items yet.</div>
   </div>
+
+  <div class="card" id="testiCard" style="display:none;">
+    <h2>Testimonials</h2>
+    <div id="testiList" class="testi-list"></div>
+    <div class="empty-note" id="testiEmptyNote" style="display:none;">No testimonials yet.</div>
+    <div class="field">
+      <label>Quote</label>
+      <textarea id="testiQuote" placeholder="Paste the testimonial text here"></textarea>
+    </div>
+    <div class="row2" style="margin-top:14px;">
+      <div class="field">
+        <label>Name</label>
+        <input type="text" id="testiName" placeholder="e.g. David Stephen">
+      </div>
+      <div class="field">
+        <label>Title / company</label>
+        <input type="text" id="testiTitle" placeholder="e.g. Executive Producer, Center of Gravity">
+      </div>
+    </div>
+    <div class="btn-row" style="margin-top:16px;">
+      <button type="button" class="btn" id="addTestiBtn">Add testimonial</button>
+      <span class="hint" id="testiHint"></span>
+    </div>
+    <div class="hint" style="margin-top:14px;">Shows on the Home page under "What clients say." Only real testimonials
+      from actual clients belong here — this publishes straight to the live site.</div>
+  </div>
 </div>
 
 <div class="modal-overlay" id="editOverlay" style="display:none;">
@@ -373,12 +414,15 @@
    'fileInput','fileLabel','fileHint','addBtn','log',
    'categoriesCard','categoriesList','newCategoryLabel','addCategoryBtn',
    'editOverlay','editClose','cropPicker','cropImg','cropCrosshair','cropPreviewImgN','cropPreviewImgL',
-   'editCategory','editAlt','editSaveBtn','editCancelBtn','editHint'].forEach(function(id){ els[id] = document.getElementById(id); });
+   'editCategory','editAlt','editSaveBtn','editCancelBtn','editHint',
+   'testiCard','testiList','testiEmptyNote','testiQuote','testiName','testiTitle','addTestiBtn','testiHint'
+  ].forEach(function(id){ els[id] = document.getElementById(id); });
 
   var STORAGE_KEY = 'gmh_admin_conn_v1';
   var conn = null;       // { owner, repo, branch, token }
   var galleryData = null; // { sha, items: [...] }
   var categoriesData = null; // { sha, items: [{key,label}] }
+  var testimonialsData = null; // { sha, items: [{quote,name,title}] }
   var mode = 'photo';
   var editingIdx = null;
   var editingFocal = '50% 50%'; // "x% y%", matches CSS object-position
@@ -521,12 +565,13 @@
   }
   function forgetConn(){
     try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
-    conn = null; galleryData = null; categoriesData = null;
+    conn = null; galleryData = null; categoriesData = null; testimonialsData = null;
     els.setupCard.style.display = '';
     els.connectedCard.style.display = 'none';
     els.categoriesCard.style.display = 'none';
     els.addCard.style.display = 'none';
     els.currentCard.style.display = 'none';
+    els.testiCard.style.display = 'none';
     els.connStatus.style.display = 'none';
   }
 
@@ -546,10 +591,10 @@
         if(r.status === 401) throw new Error("That token isn't valid (or has expired).");
         if(r.status === 404) throw new Error("Can't find that repository, or this token doesn't have access to it.");
         if(!r.ok) throw new Error('GitHub error (' + r.status + ').');
-        return Promise.all([ghGetFile('gallery.json'), ghGetFile('categories.json')]);
+        return Promise.all([ghGetFile('gallery.json'), ghGetFile('categories.json'), ghGetFile('testimonials.json')]);
       })
       .then(function(results){
-        var galleryFile = results[0], categoriesFile = results[1];
+        var galleryFile = results[0], categoriesFile = results[1], testimonialsFile = results[2];
         if(!galleryFile) throw new Error("Connected, but couldn't find gallery.json in that repo/branch.");
         var items;
         try{ items = JSON.parse(galleryFile.contentText); }
@@ -573,12 +618,20 @@
           ] };
         }
 
+        var testiItems = null;
+        if(testimonialsFile){
+          try{ testiItems = JSON.parse(testimonialsFile.contentText); }catch(e){ testiItems = null; }
+        }
+        if(!Array.isArray(testiItems)) testiItems = null;
+        testimonialsData = { sha: testimonialsFile ? testimonialsFile.sha : null, items: testiItems || [] };
+
         saveConn(conn);
         setStatus(els.connStatus, 'ok', 'Connected.');
         showConnected();
         renderGalleryList();
         renderCategories();
         populateCategorySelect();
+        renderTestimonials();
       })
       .catch(function(err){
         setStatus(els.connStatus, 'err', err.message);
@@ -591,6 +644,7 @@
     els.categoriesCard.style.display = '';
     els.addCard.style.display = '';
     els.currentCard.style.display = '';
+    els.testiCard.style.display = '';
     els.connSummaryTxt.textContent = 'Connected to ' + conn.owner + '/' + conn.repo + ' @ ' + conn.branch;
   }
 
@@ -711,6 +765,72 @@
 
   els.newCategoryLabel.addEventListener('keydown', function(e){
     if(e.key === 'Enter'){ e.preventDefault(); els.addCategoryBtn.click(); }
+  });
+
+  // ---------- testimonials ----------
+  function renderTestimonials(){
+    var items = (testimonialsData && testimonialsData.items) || [];
+    els.testiList.innerHTML = '';
+    els.testiEmptyNote.style.display = items.length ? 'none' : '';
+    items.forEach(function(t, idx){
+      var div = document.createElement('div');
+      div.className = 'testi-item';
+      div.innerHTML =
+        '<button type="button" class="rm" data-idx="' + idx + '" title="Remove">&times;</button>' +
+        '<div class="q">' + escapeHtml(t.quote || '') + '</div>' +
+        '<div class="a"><b>' + escapeHtml(t.name || '') + '</b>' + (t.title ? ' — ' + escapeHtml(t.title) : '') + '</div>';
+      els.testiList.appendChild(div);
+    });
+  }
+
+  function saveTestimonials(newItems, message, onDone){
+    els.testiHint.textContent = 'Saving…';
+    els.testiHint.className = 'hint';
+    var text = JSON.stringify(newItems, null, 2) + '\n';
+    ghPutFile('testimonials.json', text, message, testimonialsData ? testimonialsData.sha : null, false)
+      .then(function(res){
+        testimonialsData = { sha: res.content.sha, items: newItems };
+        els.testiHint.textContent = 'Saved. Live in a minute or two.';
+        els.testiHint.className = 'hint ok';
+        renderTestimonials();
+        if(onDone) onDone();
+      })
+      .catch(function(err){
+        els.testiHint.textContent = err.message;
+        els.testiHint.className = 'hint err';
+      });
+  }
+
+  els.testiList.addEventListener('click', function(e){
+    var btn = e.target.closest('.rm');
+    if(!btn) return;
+    var idx = parseInt(btn.getAttribute('data-idx'), 10);
+    var t = testimonialsData.items[idx];
+    if(!t) return;
+    if(!confirm('Remove the testimonial from "' + (t.name || 'this client') + '"?')) return;
+    var newItems = testimonialsData.items.slice();
+    newItems.splice(idx, 1);
+    saveTestimonials(newItems, 'Remove testimonial via admin page: ' + (t.name || ''));
+  });
+
+  els.addTestiBtn.addEventListener('click', function(){
+    var quote = els.testiQuote.value.trim();
+    var name = els.testiName.value.trim();
+    var title = els.testiTitle.value.trim();
+    if(!quote || !name){
+      els.testiHint.textContent = 'A quote and a name are both needed.';
+      els.testiHint.className = 'hint err';
+      return;
+    }
+    var items = (testimonialsData && testimonialsData.items) || [];
+    var entry = { quote: quote, name: name };
+    if(title) entry.title = title;
+    var newItems = items.concat([entry]);
+    saveTestimonials(newItems, 'Add testimonial via admin page: ' + name, function(){
+      els.testiQuote.value = '';
+      els.testiName.value = '';
+      els.testiTitle.value = '';
+    });
   });
 
   els.galleryList.addEventListener('click', function(e){

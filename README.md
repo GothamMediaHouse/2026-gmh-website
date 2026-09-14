@@ -16,6 +16,7 @@ images/gallery/      Our Work gallery + "From the field" photos
 gallery.json         the list that drives the Our Work gallery
 categories.json      the list of Our Work filter categories (Narrative, Documentary, etc.)
 field.json           the list that drives the Home "From the field" strip
+testimonials.json    the quotes that drive the Home page "What clients say" section
 CNAME                tells GitHub Pages this site should answer to gothammediahouse.com
 ```
 
@@ -97,6 +98,16 @@ exactly how that crop will look in both a normal tile and a wide/featured
 tile. The same screen also lets you change the category or fix the alt text.
 Click **Save changes** and it publishes straight to `gallery.json`, same as
 everything else here.
+
+**Adding testimonials.** A "Testimonials" panel near the bottom of the admin
+page lists whatever's currently showing in the Home page's "What clients
+say" section, with a form below it — paste in the quote, the client's name,
+and their title/company, then click **Add testimonial**. It shows up on the
+live site within a minute or two, and the section only appears on the
+homepage at all once there's at least one testimonial in `testimonials.json`.
+Remove one with the × the same way you remove a gallery photo. Only use real
+quotes from real clients here — it's a direct, unfiltered publish to the
+public site.
 
 ### The copy-paste way: the media helper page (no token needed)
 

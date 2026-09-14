@@ -291,6 +291,21 @@
   }
   .teaser-item:hover img{transform:scale(1.05);}
 
+  /* ---- home testimonials (open pull-quote, no card box) ---- */
+  .testi-section{padding-block:64px;}
+  .testi-grid{display:flex; flex-wrap:wrap; justify-content:center; gap:48px; margin-top:38px;}
+  .testi-card{
+    flex:0 1 560px; max-width:560px;
+    display:flex; flex-direction:column; align-items:center;
+    text-align:center; gap:14px;
+  }
+  .testi-mark{font-family:'Space Grotesk',sans-serif; font-size:30px; line-height:1; color:var(--teal); opacity:0.55;}
+  .testi-quote{font-family:'Space Grotesk',sans-serif; font-weight:500; font-size:17px; line-height:1.6; color:var(--ink);}
+  .testi-bar{width:36px; height:2px; background:var(--teal);}
+  .testi-attrib{font-size:12.5px; color:var(--ink-dim);}
+  .testi-attrib .name{font-weight:600; color:var(--ink); font-family:'Space Grotesk',sans-serif;}
+  .testi-attrib .role{display:block; margin-top:3px; color:var(--ink-faint); font-size:12.5px;}
+
   /* ---- banner photo (services break) ---- */
   .banner-photo{position:relative; min-height:280px; display:flex; align-items:center; overflow:hidden;}
   .banner-photo img{
@@ -756,6 +771,16 @@
         <a class="teaser-link" href="#work">See all our work →</a>
       </div>
       <div class="teaser-grid" id="fieldGrid"></div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="testi-section" id="testiSection" hidden>
+      <div class="section-head">
+        <h2>What clients say</h2>
+        <div class="section-note">A few words from the people we've worked with.</div>
+      </div>
+      <div class="testi-grid" id="testiGrid"></div>
     </div>
   </div>
 
@@ -1332,6 +1357,25 @@
         return '<div class="teaser-item"><img src="' + escapeHtml(p.file) + '" alt="' + escapeHtml(p.alt) + '"></div>';
       }).join('');
     }).catch(function(err){ console.warn('field.json failed to load', err); });
+  }
+
+  // Home page testimonials — content-managed via testimonials.json (add/remove through admin.html).
+  var testiSection = document.getElementById('testiSection');
+  var testiGrid = document.getElementById('testiGrid');
+  if(testiGrid){
+    freshFetch('testimonials.json').then(function(r){ return r.json(); }).then(function(list){
+      if(!Array.isArray(list) || !list.length) return;
+      testiGrid.innerHTML = list.map(function(t){
+        return '<div class="testi-card">' +
+          '<div class="testi-mark">&rdquo;</div>' +
+          '<p class="testi-quote">' + escapeHtml(t.quote) + '</p>' +
+          '<div class="testi-bar"></div>' +
+          '<div class="testi-attrib"><span class="name">' + escapeHtml(t.name || '') + '</span>' +
+          (t.title ? '<span class="role">' + escapeHtml(t.title) + '</span>' : '') +
+          '</div></div>';
+      }).join('');
+      if(testiSection) testiSection.hidden = false;
+    }).catch(function(err){ console.warn('testimonials.json failed to load', err); });
   }
 })();
 </script>
