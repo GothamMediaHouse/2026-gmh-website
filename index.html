@@ -295,6 +295,195 @@
   }
   .teaser-item:hover img{transform:scale(1.05);}
 
+  /* ---- about: behind the scenes bento ---- */
+  .bts-section{padding-block:56px 64px;}
+  .bts-grid{
+    display:grid; gap:12px; margin-top:28px;
+    grid-template-columns:repeat(4,1fr);
+    grid-template-rows:repeat(3,150px);
+    grid-template-areas:
+      "a a b c"
+      "a a b d"
+      "e e f g";
+  }
+  .bts-item{position:relative; overflow:hidden; border-radius:10px; border:1px solid var(--line); background:var(--surface-2);}
+  .bts-item img{width:100%; height:100%; object-fit:cover; display:block; transition:transform .3s ease;}
+  .bts-item:hover img{transform:scale(1.04);}
+  .bts-a{grid-area:a;} .bts-b{grid-area:b;} .bts-c{grid-area:c;}
+  .bts-d{grid-area:d;} .bts-e{grid-area:e;} .bts-f{grid-area:f;} .bts-g{grid-area:g;}
+  @media (max-width:760px){
+    .bts-grid{
+      grid-template-columns:1fr 1fr;
+      grid-template-rows:repeat(5,150px);
+      grid-template-areas:
+        "a a"
+        "e e"
+        "b c"
+        "d f"
+        "g g";
+    }
+  }
+  @media (max-width:480px){
+    .bts-grid{
+      grid-template-columns:1fr;
+      grid-template-rows:repeat(7,200px);
+      grid-template-areas:
+        "a" "e" "b" "c" "d" "f" "g";
+    }
+  }
+
+  /* ---- software page: full-bleed split hero + expandable detail ---- */
+
+  /* per-brand palettes */
+  .sw-upstage{
+    --sw-bg:#0A101C; --sw-border:#1C2A3D; --sw-fg:#F2F6FA; --sw-fg-dim:rgba(242,246,250,0.66);
+    --sw-accent:#3FD0FF; --sw-accent-soft:rgba(63,208,255,0.14); --sw-line:#1C2A3D;
+  }
+  .sw-backtime{
+    --sw-bg:#16130C; --sw-border:#2C2515; --sw-fg:#F5F1E8; --sw-fg-dim:rgba(245,241,232,0.64);
+    --sw-accent:#E7A73E; --sw-accent-soft:rgba(231,167,62,0.14); --sw-line:#2C2515;
+  }
+
+  /* split hero (two full-bleed halves, click to reveal detail) */
+  .sw-split{display:flex; min-height:480px;}
+  @media (max-width:760px){ .sw-split{flex-direction:column; min-height:0;} }
+  .sw-half{
+    flex:1 1 50%; position:relative; overflow:hidden; cursor:pointer;
+    border:none; margin:0; font:inherit; text-align:center;
+    display:flex; align-items:center; justify-content:center;
+    min-height:480px; background:var(--sw-bg);
+    transition:filter .2s ease;
+  }
+  @media (max-width:760px){ .sw-half{min-height:320px;} }
+  .sw-half:hover, .sw-half.is-active{filter:brightness(1.1);}
+  .sw-half + .sw-half{border-left:1px solid rgba(245,244,238,0.08);}
+  @media (max-width:760px){ .sw-half + .sw-half{border-left:none; border-top:1px solid rgba(245,244,238,0.08);} }
+  .sw-half-bg{position:absolute; inset:0; z-index:0; overflow:hidden;}
+  .sw-half-bg::before{
+    content:""; position:absolute; inset:0;
+    background:radial-gradient(circle at 68% 30%, var(--sw-accent-soft) 0%, transparent 60%);
+  }
+  .sw-half-backtime .sw-half-bg::before{background:radial-gradient(circle at 32% 30%, var(--sw-accent-soft) 0%, transparent 60%);}
+  .sw-half-upstage .sw-half-bg::after{
+    content:""; position:absolute; inset:0;
+    background-image:repeating-linear-gradient(0deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 4px);
+  }
+  .sw-half-backtime .sw-half-bg::after{
+    content:""; position:absolute; inset:0;
+    background-image:repeating-linear-gradient(180deg, rgba(255,255,255,0.035) 0 1px, transparent 1px 30px);
+  }
+  .sw-half-glyph{
+    position:absolute; width:340px; height:340px; bottom:-60px; right:-50px;
+    stroke:var(--sw-accent); opacity:0.07; fill:none; stroke-width:1;
+  }
+  .sw-half-backtime .sw-half-glyph{left:-50px; right:auto;}
+  .sw-half-content{position:relative; z-index:1; padding:32px; max-width:420px;}
+  .sw-half-content .eyebrow{color:var(--sw-accent); justify-content:center;}
+  .sw-half-content h2{color:#F5F4EE; font-size:clamp(32px,4.2vw,48px); margin-top:14px;}
+  .sw-half-tagline{
+    font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.05em;
+    color:rgba(245,244,238,0.7); margin-top:10px;
+  }
+  .sw-half-cta{
+    margin-top:26px; display:inline-flex; pointer-events:none;
+    font-family:'Space Grotesk',sans-serif; font-weight:600;
+    font-size:11px; letter-spacing:0.1em; text-transform:uppercase;
+    padding:12px 26px; border:1px solid rgba(245,244,238,0.5); color:#F5F4EE; border-radius:2px;
+  }
+  .sw-half:hover .sw-half-cta, .sw-half.is-active .sw-half-cta{border-color:#F5F4EE;}
+
+  /* detail panel (expands full-width below the split hero) */
+  .sw-detail{background:var(--sw-bg); border-top:1px solid var(--sw-line); overflow:hidden;}
+  @keyframes winFadeIn{from{opacity:0; transform:translateY(-6px);} to{opacity:1; transform:translateY(0);}}
+  .sw-detail:not([hidden]){animation:winFadeIn .3s ease;}
+  .sw-detail .wrap{padding-block:40px 48px; position:relative;}
+  .sw-detail-close{
+    position:absolute; top:40px; right:24px; z-index:2;
+    width:30px; height:30px; border-radius:50%; border:1px solid var(--sw-line);
+    background:transparent; color:var(--sw-fg-dim); cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .sw-detail-close:hover{color:var(--sw-fg); border-color:var(--sw-fg-dim);}
+  .sw-detail-close svg{width:14px; height:14px; stroke:currentColor; fill:none; stroke-width:1.8;}
+  .sw-detail-head{display:flex; align-items:center; gap:14px; padding-right:40px;}
+  .win-icon{
+    width:42px; height:42px; border-radius:9px; background:var(--sw-accent-soft);
+    display:flex; align-items:center; justify-content:center; flex:none;
+  }
+  .win-icon svg{width:21px; height:21px; stroke:var(--sw-accent); fill:none; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round;}
+  .sw-detail h3{font-family:'Space Grotesk',sans-serif; font-size:19px; color:var(--sw-fg); margin:0;}
+  .win-tagline{
+    font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:0.05em;
+    color:var(--sw-accent); margin-top:3px;
+  }
+  .win-status{
+    margin-left:auto; font-family:'JetBrains Mono',monospace;
+    font-size:9.5px; letter-spacing:0.06em; text-transform:uppercase;
+    color:var(--sw-accent); background:var(--sw-accent-soft); padding:3px 8px; border-radius:3px; white-space:nowrap;
+  }
+  .win-content{margin-top:22px; max-width:640px;}
+  .win-content p{
+    font-family:'Inter',system-ui,sans-serif; font-size:14px; line-height:1.6;
+    color:var(--sw-fg-dim);
+  }
+  .win-stats{margin-top:18px; padding-top:16px; border-top:1px solid var(--sw-line); display:flex; flex-direction:column; gap:10px;}
+  .win-stat{display:grid; grid-template-columns:110px 1fr; gap:12px; font-size:11.5px; align-items:baseline;}
+  .win-stat .k{
+    font-family:'JetBrains Mono',monospace; color:var(--sw-fg-dim); opacity:0.7; letter-spacing:0.05em; text-transform:uppercase;
+  }
+  .win-stat .v{color:var(--sw-fg); font-family:'JetBrains Mono',monospace;}
+  .win-cta{margin-top:22px;}
+  .win-cta a{
+    font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:13.5px;
+    padding:11px 18px; border-radius:6px; text-decoration:none;
+    display:inline-flex; align-items:center; gap:8px; border:1px solid transparent;
+  }
+  .win-cta a.solid{background:var(--sw-accent); color:#06141C;}
+  .win-cta a.ghost{border-color:color-mix(in srgb, var(--sw-fg) 25%, transparent); color:var(--sw-fg);}
+  .win-cta a.ghost:hover{border-color:color-mix(in srgb, var(--sw-fg) 50%, transparent);}
+
+  /* ---- Upstage hero: monitor wall ---- */
+  .wall{display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin-top:4px;}
+  .wall-tile{
+    aspect-ratio:4/3; border-radius:4px; background:#060B13; border:1px solid var(--sw-line);
+    position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center;
+  }
+  .wall-tile .tally{position:absolute; top:5px; left:5px; width:6px; height:6px; border-radius:50%; background:#E8685C; animation:pulse 2.2s ease-in-out infinite;}
+  @media (prefers-reduced-motion: reduce){ .wall-tile .tally{animation:none;} }
+  .wall-tile .bars{display:flex; align-items:flex-end; gap:3px; height:60%;}
+  .wall-tile .bars span{width:4px; background:var(--sw-accent); opacity:0.75; border-radius:1px;}
+  .wall-tile .grid-pat{
+    position:absolute; inset:0;
+    background-image:linear-gradient(45deg, var(--sw-line) 25%, transparent 25%, transparent 75%, var(--sw-line) 75%), linear-gradient(45deg, var(--sw-line) 25%, transparent 25%, transparent 75%, var(--sw-line) 75%);
+    background-size:8px 8px; background-position:0 0, 4px 4px; opacity:0.5;
+  }
+  .wall-tile .idle{width:16px; height:16px; border-radius:50%; border:1.5px solid var(--sw-line);}
+  .wall-tile .lbl{
+    position:absolute; bottom:4px; right:6px; font-family:'JetBrains Mono',monospace;
+    font-size:7.5px; letter-spacing:0.04em; color:var(--sw-fg-dim); text-transform:uppercase;
+  }
+
+  /* ---- Backtime hero: script/teleprompter scroll ---- */
+  .script{margin-top:4px; display:flex; flex-direction:column; gap:7px;}
+  .script-line{height:9px; border-radius:3px; background:var(--sw-line); opacity:0.6;}
+  .script-line.now{
+    background:transparent; opacity:1; height:16px; display:flex; align-items:center; gap:6px;
+  }
+  .script-line.now .txt{
+    font-family:'JetBrains Mono',monospace; font-size:11px; color:#8FFF9E; letter-spacing:0.01em; white-space:nowrap;
+  }
+  .script-line.now .cursor{
+    width:7px; height:13px; background:#8FFF9E; animation:pulse 1s steps(2) infinite;
+  }
+  @media (prefers-reduced-motion: reduce){ .script-line.now .cursor{animation:none;} }
+  .onair{
+    display:inline-flex; align-items:center; gap:6px; margin-top:12px;
+    font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:0.06em;
+    color:#E8685C; background:rgba(232,104,92,0.12); padding:3px 8px; border-radius:3px;
+  }
+  .onair .d{width:6px; height:6px; border-radius:50%; background:#E8685C; animation:pulse 2.2s ease-in-out infinite;}
+  @media (prefers-reduced-motion: reduce){ .onair .d{animation:none;} }
+
   /* ---- home testimonials (open pull-quote, no card box) ---- */
   .testi-section{padding-block:64px;}
   .testi-grid{display:flex; flex-wrap:wrap; justify-content:center; gap:48px; margin-top:38px;}
@@ -695,6 +884,7 @@
       <a href="#about">About</a>
       <a href="#services">Services</a>
       <a href="#work">Our Work</a>
+      <a href="#software">Software</a>
       <a href="#contact">Contact</a>
     </div>
     <div class="tc-readout mono">TC <span id="tcClock">00:00:00:00</span></div>
@@ -872,6 +1062,25 @@
         <blockquote>Every story deserves to be told with authenticity and impact.</blockquote>
         <div class="attrib">— MATT FOX, FOUNDER</div>
       </div>
+    </div>
+  </section>
+</div>
+
+<div class="wrap">
+  <section class="bts-section">
+    <div class="section-head">
+      <div class="eyebrow">BEHIND THE SCENES</div>
+      <h2 style="margin-top:14px;">What hands-on actually looks like.</h2>
+      <div class="section-note">The setup, the gear, and the moments between takes on a recent interview shoot.</div>
+    </div>
+    <div class="bts-grid">
+      <div class="bts-item bts-a"><img src="images/gallery/bts/bts-04.jpg" alt="Lighting and camera setup built into a hotel suite for an on-location interview shoot" loading="lazy" /></div>
+      <div class="bts-item bts-b"><img src="images/gallery/bts/bts-02.jpg" alt="Clapperboard slate on set between a camera rig and sound bag" loading="lazy" /></div>
+      <div class="bts-item bts-c"><img src="images/gallery/bts/bts-03.jpg" alt="Close-up of a cinema camera rig with an interview subject in soft focus behind it" loading="lazy" /></div>
+      <div class="bts-item bts-d"><img src="images/gallery/bts/bts-06.jpg" alt="Director's monitor showing a live two-camera interview in progress" loading="lazy" /></div>
+      <div class="bts-item bts-e"><img src="images/gallery/bts/bts-07.jpg" alt="Wide shot of a two-person interview setup with camera, monitor, and audio bag in frame" loading="lazy" /></div>
+      <div class="bts-item bts-f"><img src="images/gallery/bts/bts-01.jpg" alt="Two cameras set up facing a conference table ahead of an interview" loading="lazy" /></div>
+      <div class="bts-item bts-g"><img src="images/gallery/bts/bts-05.jpg" alt="Lighting rig and seating area set up for an on-location interview" loading="lazy" /></div>
     </div>
   </section>
 </div>
@@ -1060,6 +1269,118 @@
 </div>
 </div>
 
+<div class="page" id="page-software" hidden>
+<div class="wrap" id="software">
+  <section style="padding-bottom:0;">
+    <div class="section-head" style="border-bottom:none; margin-bottom:0;">
+      <div class="eyebrow">BUILT IN-HOUSE</div>
+      <h2 style="margin-top:14px;">Software for the sets we run.</h2>
+      <div class="section-note">Two tools built to solve problems on Gotham Media House's own productions, now used beyond them. Pick one to see more.</div>
+    </div>
+  </section>
+</div>
+
+<div class="sw-split">
+  <button type="button" class="sw-half sw-upstage sw-half-upstage" data-sw="upstage" aria-expanded="false" aria-controls="swDetailUpstage">
+    <div class="sw-half-bg" aria-hidden="true">
+      <svg class="sw-half-glyph" viewBox="0 0 24 24"><rect x="2" y="3" width="8" height="7" rx="1"/><rect x="14" y="3" width="8" height="7" rx="1"/><rect x="2" y="14" width="8" height="7" rx="1"/><rect x="14" y="14" width="8" height="7" rx="1"/></svg>
+    </div>
+    <div class="sw-half-content">
+      <div class="eyebrow">BUILT IN-HOUSE</div>
+      <h2>Upstage</h2>
+      <div class="sw-half-tagline">Set monitor playback</div>
+      <span class="sw-half-cta">Learn more</span>
+    </div>
+  </button>
+  <button type="button" class="sw-half sw-backtime sw-half-backtime" data-sw="backtime" aria-expanded="false" aria-controls="swDetailBacktime">
+    <div class="sw-half-bg" aria-hidden="true">
+      <svg class="sw-half-glyph" viewBox="0 0 24 24"><rect x="3" y="3" width="14" height="18" rx="1"/><path d="M6 8h8M6 12h8M6 16h5"/><circle cx="18" cy="17" r="4"/><path d="M18 15v2l1.5 1"/></svg>
+    </div>
+    <div class="sw-half-content">
+      <div class="eyebrow">INVITE-ONLY BETA</div>
+      <h2>Backtime</h2>
+      <div class="sw-half-tagline">Rundown, script &amp; teleprompter</div>
+      <span class="sw-half-cta">Learn more</span>
+    </div>
+  </button>
+</div>
+
+<div class="sw-detail sw-upstage" id="swDetailUpstage" hidden>
+  <div class="wrap">
+    <button type="button" class="sw-detail-close" data-sw-close="upstage" aria-label="Close">
+      <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <div class="sw-detail-head">
+      <div class="win-icon">
+        <svg viewBox="0 0 24 24"><rect x="2" y="3" width="8" height="7" rx="1"/><rect x="14" y="3" width="8" height="7" rx="1"/><rect x="2" y="14" width="8" height="7" rx="1"/><rect x="14" y="14" width="8" height="7" rx="1"/></svg>
+      </div>
+      <div>
+        <h3>Upstage</h3>
+        <div class="win-tagline">SET MONITOR PLAYBACK</div>
+      </div>
+      <span class="win-status">Built in-house</span>
+    </div>
+    <div class="win-content">
+      <div class="wall">
+        <div class="wall-tile"><span class="tally"></span><div class="bars"><span style="height:70%"></span><span style="height:40%"></span><span style="height:85%"></span><span style="height:55%"></span></div><span class="lbl">CAM 1</span></div>
+        <div class="wall-tile"><span class="tally"></span><div class="bars"><span style="height:50%"></span><span style="height:90%"></span><span style="height:35%"></span><span style="height:65%"></span></div><span class="lbl">CAM 2</span></div>
+        <div class="wall-tile"><div class="grid-pat"></div><span class="lbl">GFX</span></div>
+        <div class="wall-tile"><div class="bars"><span style="height:60%; opacity:0.4;"></span><span style="height:30%; opacity:0.4;"></span><span style="height:80%; opacity:0.4;"></span><span style="height:45%; opacity:0.4;"></span></div><span class="lbl">LOOP</span></div>
+        <div class="wall-tile"><div class="idle"></div><span class="lbl">NDI</span></div>
+        <div class="wall-tile"><div class="grid-pat" style="opacity:0.25;"></div><span class="lbl">IDLE</span></div>
+      </div>
+      <p>Runs every monitor on a set — live camera and NDI feeds, looping video, graphics — from one control page, replacing a rack of separate OBS instances. Built for Gotham Media House's own studio network and already running on client installs.</p>
+      <div class="win-stats">
+        <div class="win-stat"><div class="k">Sources</div><div class="v">Multi-camera &amp; NDI</div></div>
+        <div class="win-stat"><div class="k">Switcher</div><div class="v">ATEM / vMix / OBS follow</div></div>
+        <div class="win-stat"><div class="k">Add-ons</div><div class="v">LED &amp; projection mapping</div></div>
+      </div>
+      <div class="win-cta">
+        <a class="ghost" href="mailto:info@gothammediahouse.com?subject=Upstage%20demo">Ask about a demo</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sw-detail sw-backtime" id="swDetailBacktime" hidden>
+  <div class="wrap">
+    <button type="button" class="sw-detail-close" data-sw-close="backtime" aria-label="Close">
+      <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <div class="sw-detail-head">
+      <div class="win-icon">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="14" height="18" rx="1"/><path d="M6 8h8M6 12h8M6 16h5"/><circle cx="18" cy="17" r="4"/><path d="M18 15v2l1.5 1"/></svg>
+      </div>
+      <div>
+        <h3>Backtime</h3>
+        <div class="win-tagline">RUNDOWN, SCRIPT &amp; TELEPROMPTER</div>
+      </div>
+      <span class="win-status">Invite-only beta</span>
+    </div>
+    <div class="win-content">
+      <div class="script">
+        <div class="script-line" style="width:88%;"></div>
+        <div class="script-line" style="width:64%;"></div>
+        <div class="script-line now"><span class="txt">...and that's how the segment opens—</span><span class="cursor"></span></div>
+        <div class="script-line" style="width:72%;"></div>
+        <div class="script-line" style="width:92%;"></div>
+        <div class="script-line" style="width:48%;"></div>
+      </div>
+      <div class="onair"><span class="d"></span>ON AIR · SEGMENT 03</div>
+      <p>A newsroom-style rundown, script, and teleprompter tool for live shows. Built to run Gotham Media House's own podcast studio, and now opening up to other productions.</p>
+      <div class="win-stats">
+        <div class="win-stat"><div class="k">Rundown</div><div class="v">Live, shared across the room</div></div>
+        <div class="win-stat"><div class="k">On-screen</div><div class="v">Built-in teleprompter</div></div>
+        <div class="win-stat"><div class="k">Status</div><div class="v">Studio-tested, now in beta</div></div>
+      </div>
+      <div class="win-cta">
+        <a class="solid" href="https://backtime.studio" target="_blank" rel="noopener">Visit backtime.studio</a>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
 <div class="page" id="page-contact" hidden>
 <div class="wrap" id="contact">
   <section style="padding-block:20px 64px;">
@@ -1177,6 +1498,7 @@
     'about': 'about',
     'services': 'services', 'coverage': 'services',
     'work': 'work',
+    'software': 'software',
     'contact': 'contact'
   };
   var titles = {
@@ -1185,9 +1507,10 @@
     about: 'About — Gotham Media House',
     services: 'Services — Gotham Media House',
     work: 'Our Work — Gotham Media House',
+    software: 'Software — Gotham Media House',
     contact: 'Contact — Gotham Media House'
   };
-  var pageKeys = ['home','reel','about','services','work','contact'];
+  var pageKeys = ['home','reel','about','services','work','software','contact'];
   function showPage(key){
     pageKeys.forEach(function(k){
       var el = document.getElementById('page-'+k);
@@ -1208,6 +1531,40 @@
   }
   window.addEventListener('hashchange', function(){ route(true); });
   route(false);
+})();
+
+(function(){
+  // Software page: split-hero halves toggle their matching detail panel.
+  var halves = document.querySelectorAll('.sw-half');
+  if(!halves.length) return;
+  var panels = {
+    upstage: document.getElementById('swDetailUpstage'),
+    backtime: document.getElementById('swDetailBacktime')
+  };
+  function closeAll(){
+    Object.keys(panels).forEach(function(k){ if(panels[k]) panels[k].hidden = true; });
+    halves.forEach(function(b){ b.setAttribute('aria-expanded','false'); b.classList.remove('is-active'); });
+  }
+  function open(key, btn){
+    closeAll();
+    var panel = panels[key];
+    if(!panel) return;
+    panel.hidden = false;
+    btn.setAttribute('aria-expanded','true');
+    btn.classList.add('is-active');
+    panel.scrollIntoView({behavior:'smooth', block:'start'});
+  }
+  halves.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var key = btn.getAttribute('data-sw');
+      var panel = panels[key];
+      var wasOpen = panel && !panel.hidden;
+      if(wasOpen){ closeAll(); } else { open(key, btn); }
+    });
+  });
+  document.querySelectorAll('[data-sw-close]').forEach(function(btn){
+    btn.addEventListener('click', function(){ closeAll(); });
+  });
 })();
 
 (function(){
