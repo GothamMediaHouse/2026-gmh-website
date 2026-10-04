@@ -141,6 +141,15 @@
   .navlinks a{text-decoration:none;}
   .navlinks a:hover{color:var(--ink);}
   .navlinks a.active{color:var(--ink);}
+  .navlinks a.nav-client{
+    border:1px solid color-mix(in srgb, var(--ink-dim) 45%, transparent);
+    border-radius:999px; padding:5px 13px; white-space:nowrap;
+  }
+  .navlinks a.nav-client:hover{border-color:var(--ink);}
+  .navlinks a{white-space:nowrap;}
+  @media (max-width:1100px){ .navlinks{gap:16px;} }
+  @media (min-width:761px) and (max-width:960px){ .tc-readout{display:none;} .navlinks{gap:14px; font-size:13px;} }
+  @media (min-width:761px) and (max-width:840px){ .navlinks{gap:9px; font-size:12.5px;} .navlinks a.nav-client{padding:4px 9px;} }
   .tc-readout{
     font-size:12px; color:var(--ink-faint);
     letter-spacing:0.03em; white-space:nowrap;
@@ -886,6 +895,7 @@
       <a href="#work">Our Work</a>
       <a href="#software">Software</a>
       <a href="#contact">Contact</a>
+      <a class="nav-client" href="https://review.gothammediahouse.com">Client Review</a>
     </div>
     <div class="tc-readout mono">TC <span id="tcClock">00:00:00:00</span></div>
   </div>
@@ -1452,6 +1462,7 @@
       <div>© <span id="yr"></span> Gotham Media House</div>
     </div>
     <div class="footer-links">
+      <a href="https://review.gothammediahouse.com">Client Review</a>
       <a href="https://instagram.com/gothammediahouse" target="_blank" rel="noopener">Instagram</a>
       <a href="https://x.com/GothamMediaNY" target="_blank" rel="noopener">Twitter / X</a>
     </div>
@@ -1517,7 +1528,9 @@
       if(el) el.hidden = (k !== key);
     });
     document.querySelectorAll('.navlinks a').forEach(function(a){
-      var h = (a.getAttribute('href') || '').replace('#','');
+      var href = a.getAttribute('href') || '';
+      if(href.charAt(0) !== '#') return; // external links (Client Review) are never "active"
+      var h = href.replace('#','');
       var mapped = pageMap.hasOwnProperty(h) ? pageMap[h] : 'home';
       a.classList.toggle('active', mapped === key);
     });
