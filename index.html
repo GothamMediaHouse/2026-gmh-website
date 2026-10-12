@@ -353,147 +353,87 @@
     --sw-radius:10px;
   }
 
-  /* split hero (two full-bleed halves, click to reveal detail) */
-  .sw-split{display:flex; min-height:480px;}
-  @media (max-width:760px){ .sw-split{flex-direction:column; min-height:0;} }
-  .sw-half{
-    flex:1 1 50%; position:relative; overflow:hidden; cursor:pointer;
-    border:none; margin:0; font:inherit; text-align:center;
-    display:flex; align-items:center; justify-content:center;
-    min-height:480px; background:var(--sw-bg);
-    transition:filter .2s ease;
+  /* product bands: one full-bleed band per product, text beside a real screenshot */
+  .sw-band{background:var(--sw-bg); color:var(--sw-fg); position:relative; overflow:hidden;}
+  .sw-band + .sw-band{border-top:1px solid rgba(245,244,238,0.06);}
+  .sw-band::before{
+    content:""; position:absolute; inset:0; pointer-events:none;
+    background:radial-gradient(ellipse 55% 70% at 78% 50%, var(--sw-accent-soft) 0%, transparent 70%);
   }
-  @media (max-width:760px){ .sw-half{min-height:320px;} }
-  .sw-half:hover, .sw-half.is-active{filter:brightness(1.1);}
-  .sw-half + .sw-half{border-left:1px solid rgba(245,244,238,0.08);}
-  @media (max-width:760px){ .sw-half + .sw-half{border-left:none; border-top:1px solid rgba(245,244,238,0.08);} }
-  .sw-half-bg{position:absolute; inset:0; z-index:0; overflow:hidden;}
-  .sw-half-bg::before{
-    content:""; position:absolute; inset:0;
-    background:radial-gradient(circle at 68% 30%, var(--sw-accent-soft) 0%, transparent 60%);
+  .sw-band.flip::before{background:radial-gradient(ellipse 55% 70% at 22% 50%, var(--sw-accent-soft) 0%, transparent 70%);}
+  .sw-band .wrap{
+    position:relative; display:grid; grid-template-columns:minmax(0,5fr) minmax(0,7fr);
+    gap:64px; align-items:center; padding-block:96px;
   }
-  .sw-half-backtime .sw-half-bg::before{background:radial-gradient(circle at 32% 30%, var(--sw-accent-soft) 0%, transparent 60%);}
-  .sw-half-showcaller .sw-half-bg::after{
-    content:""; position:absolute; inset:0;
-    background-image:repeating-linear-gradient(0deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 4px);
-  }
-  .sw-half-backtime .sw-half-bg::after{
-    content:""; position:absolute; inset:0;
-    background-image:repeating-linear-gradient(180deg, rgba(255,255,255,0.035) 0 1px, transparent 1px 30px);
-  }
-  .sw-half-glyph{
-    position:absolute; width:340px; height:340px; bottom:-60px; right:-50px;
-    stroke:var(--sw-accent); opacity:0.07; fill:none; stroke-width:1;
-  }
-  .sw-half-backtime .sw-half-glyph{left:-50px; right:auto;}
-  .sw-half-content{position:relative; z-index:1; padding:32px; max-width:420px;}
-  .sw-half-content .eyebrow{color:var(--sw-accent); justify-content:center;}
-  .sw-half-content h2{color:#F5F4EE; font-family:var(--sw-font-head); font-weight:700; font-size:clamp(32px,4.2vw,48px); margin-top:14px;}
-  .sw-half-content h2 em, .sw-detail h3 em{color:var(--sw-accent); font-style:italic;}
-  .sw-half-tagline{
-    font-family:var(--sw-font-body); font-size:12.5px; letter-spacing:0.02em;
-    color:rgba(245,244,238,0.7); margin-top:10px;
-  }
-  .sw-half-cta{
-    margin-top:26px; display:inline-flex; pointer-events:none;
-    font-family:var(--sw-font-body); font-weight:600;
-    font-size:11px; letter-spacing:0.1em; text-transform:uppercase;
-    padding:12px 26px; border:1px solid rgba(245,244,238,0.5); color:#F5F4EE; border-radius:var(--sw-radius);
-  }
-  .sw-half:hover .sw-half-cta, .sw-half.is-active .sw-half-cta{border-color:#F5F4EE;}
+  .sw-band.flip .wrap{grid-template-columns:minmax(0,7fr) minmax(0,5fr);}
+  .sw-band.flip .sw-copy{order:2;}
+  .sw-band.flip .sw-shot{order:1;}
 
-  /* detail panel (expands full-width below the split hero) */
-  .sw-detail{background:var(--sw-bg); border-top:1px solid var(--sw-line); overflow:hidden;}
-  @keyframes winFadeIn{from{opacity:0; transform:translateY(-6px);} to{opacity:1; transform:translateY(0);}}
-  .sw-detail:not([hidden]){animation:winFadeIn .3s ease;}
-  .sw-detail .wrap{padding-block:40px 48px; position:relative;}
-  .sw-detail-close{
-    position:absolute; top:40px; right:24px; z-index:2;
-    width:30px; height:30px; border-radius:50%; border:1px solid var(--sw-line);
-    background:transparent; color:var(--sw-fg-dim); cursor:pointer;
-    display:flex; align-items:center; justify-content:center;
-  }
-  .sw-detail-close:hover{color:var(--sw-fg); border-color:var(--sw-fg-dim);}
-  .sw-detail-close svg{width:14px; height:14px; stroke:currentColor; fill:none; stroke-width:1.8;}
-  .sw-detail-head{display:flex; align-items:center; gap:14px; padding-right:40px;}
-  .win-icon{
-    width:42px; height:42px; border-radius:9px; background:var(--sw-accent-soft);
-    display:flex; align-items:center; justify-content:center; flex:none;
-  }
-  .win-icon svg{width:21px; height:21px; stroke:var(--sw-accent); fill:none; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round;}
-  .sw-detail h3{font-family:var(--sw-font-head); font-weight:700; font-size:21px; color:var(--sw-fg); margin:0;}
-  .sw-showcaller .win-icon{border-radius:var(--sw-radius);}
-  .win-tagline{
-    font-family:var(--sw-font-body); font-size:10.5px; letter-spacing:0.05em;
-    color:var(--sw-accent); margin-top:3px;
-  }
-  .win-status{
-    margin-left:auto; font-family:var(--sw-font-body); font-weight:600;
-    font-size:9.5px; letter-spacing:0.06em; text-transform:uppercase;
-    color:var(--sw-accent); background:var(--sw-accent-soft); padding:3px 8px; border-radius:var(--sw-radius); white-space:nowrap;
-  }
-  .win-content{margin-top:22px; max-width:640px;}
-  .win-content p{
-    font-family:var(--sw-font-body); font-size:14px; line-height:1.6;
-    color:var(--sw-fg-dim);
-  }
-  .win-stats{margin-top:18px; padding-top:16px; border-top:1px solid var(--sw-line); display:flex; flex-direction:column; gap:10px;}
-  .win-stat{display:grid; grid-template-columns:110px 1fr; gap:12px; font-size:11.5px; align-items:baseline;}
-  .win-stat .k{
-    font-family:var(--sw-font-body); color:var(--sw-fg-dim); opacity:0.7; letter-spacing:0.05em; text-transform:uppercase;
-  }
-  .win-stat .v{color:var(--sw-fg); font-family:var(--sw-font-body); font-weight:500;}
-  .win-cta{margin-top:22px;}
-  .win-cta a{
-    font-family:var(--sw-font-body); font-weight:600; font-size:13.5px;
-    padding:11px 18px; border-radius:var(--sw-radius); text-decoration:none;
-    display:inline-flex; align-items:center; gap:8px; border:1px solid transparent;
-  }
-  .win-cta a.solid{background:var(--sw-accent); color:var(--sw-accent-ink);}
-  .win-cta a.ghost{border-color:color-mix(in srgb, var(--sw-fg) 25%, transparent); color:var(--sw-fg);}
-  .win-cta a.ghost:hover{border-color:color-mix(in srgb, var(--sw-fg) 50%, transparent);}
+  .sw-logo{display:flex; align-items:center; gap:12px; text-decoration:none; color:var(--sw-fg);}
+  .sw-logo svg{width:40px; height:40px; flex:none;}
+  .sw-logo .nm{font-family:var(--sw-font-head); font-weight:700; font-size:22px; line-height:1; letter-spacing:-0.01em;}
+  .sw-logo .nm small{display:block; font-family:var(--sw-font-body); font-weight:600; font-size:9px; letter-spacing:0.42em; color:var(--sw-accent); margin-top:5px;}
+  .sw-backtime .sw-logo .nm{font-size:30px; letter-spacing:0;}
+  .sw-backtime .sw-logo .nm em{color:var(--sw-accent); font-style:italic;}
+  .sw-logo .dot{width:12px; height:12px; border-radius:50%; background:#F0443A; box-shadow:0 0 0 4px rgba(240,68,58,0.18); flex:none;}
 
-  /* ---- Showcaller Studio hero: monitor wall ---- */
-  .wall{display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin-top:4px;}
-  .wall-tile{
-    aspect-ratio:4/3; border-radius:4px; background:#060B13; border:1px solid var(--sw-line);
-    position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center;
+  .sw-status{
+    display:inline-flex; align-items:center; gap:8px; margin-top:28px;
+    font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.12em; text-transform:uppercase;
+    color:var(--sw-accent); border:1px solid color-mix(in srgb, var(--sw-accent) 35%, transparent);
+    padding:6px 11px; border-radius:999px;
   }
-  .wall-tile .tally{position:absolute; top:5px; left:5px; width:6px; height:6px; border-radius:50%; background:#E8685C; animation:pulse 2.2s ease-in-out infinite;}
-  @media (prefers-reduced-motion: reduce){ .wall-tile .tally{animation:none;} }
-  .wall-tile .bars{display:flex; align-items:flex-end; gap:3px; height:60%;}
-  .wall-tile .bars span{width:4px; background:var(--sw-accent); opacity:0.75; border-radius:1px;}
-  .wall-tile .grid-pat{
-    position:absolute; inset:0;
-    background-image:linear-gradient(45deg, var(--sw-line) 25%, transparent 25%, transparent 75%, var(--sw-line) 75%), linear-gradient(45deg, var(--sw-line) 25%, transparent 25%, transparent 75%, var(--sw-line) 75%);
-    background-size:8px 8px; background-position:0 0, 4px 4px; opacity:0.5;
+  .sw-status::before{content:""; width:6px; height:6px; border-radius:50%; background:var(--sw-accent);}
+  .sw-copy h2{
+    font-family:var(--sw-font-head); font-weight:700; color:var(--sw-fg);
+    font-size:clamp(30px,3.4vw,42px); line-height:1.1; letter-spacing:-0.015em; margin:18px 0 0;
   }
-  .wall-tile .idle{width:16px; height:16px; border-radius:50%; border:1.5px solid var(--sw-line);}
-  .wall-tile .lbl{
-    position:absolute; bottom:4px; right:6px; font-family:'JetBrains Mono',monospace;
-    font-size:7.5px; letter-spacing:0.04em; color:var(--sw-fg-dim); text-transform:uppercase;
+  .sw-backtime .sw-copy h2{font-size:clamp(36px,4vw,52px); line-height:1; letter-spacing:0; text-transform:uppercase;}
+  .sw-copy p{font-family:var(--sw-font-body); font-size:16px; line-height:1.65; color:var(--sw-fg-dim); margin:18px 0 0; max-width:46ch;}
+  .sw-feats{list-style:none; margin:28px 0 0; padding:0; border-top:1px solid var(--sw-line);}
+  .sw-feats li{
+    display:grid; grid-template-columns:22px 1fr; gap:10px; align-items:baseline;
+    padding:13px 0; border-bottom:1px solid var(--sw-line);
+    font-family:var(--sw-font-body); font-size:14.5px; color:var(--sw-fg);
   }
+  .sw-feats li::before{content:""; width:12px; height:2px; background:var(--sw-accent); transform:translateY(-4px);}
+  .sw-feats li span{color:var(--sw-fg-dim);}
+  .sw-cta{display:flex; flex-wrap:wrap; gap:12px; margin-top:32px;}
+  .sw-cta a{
+    display:inline-flex; align-items:center; gap:10px; text-decoration:none;
+    font-family:var(--sw-font-body); font-weight:600; font-size:14.5px;
+    padding:13px 22px; border-radius:var(--sw-radius); transition:transform .15s ease, filter .15s ease;
+  }
+  .sw-cta a.solid{background:var(--sw-accent); color:var(--sw-accent-ink);}
+  .sw-cta a.solid:hover{filter:brightness(1.08); transform:translateY(-1px);}
+  .sw-cta a svg{width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round;}
 
-  /* ---- Backtime hero: script/teleprompter scroll ---- */
-  .script{margin-top:4px; display:flex; flex-direction:column; gap:7px;}
-  .script-line{height:9px; border-radius:3px; background:var(--sw-line); opacity:0.6;}
-  .script-line.now{
-    background:transparent; opacity:1; height:16px; display:flex; align-items:center; gap:6px;
+  .sw-shot{position:relative; margin-right:-140px;}
+  .sw-band.flip .sw-shot{margin-right:0; margin-left:-140px;}
+  .sw-shot figure{
+    margin:0; border-radius:12px; overflow:hidden; background:#000;
+    border:1px solid rgba(255,255,255,0.09);
+    box-shadow:0 40px 90px -30px rgba(0,0,0,0.85), 0 0 0 1px rgba(0,0,0,0.6), 0 0 120px -40px var(--sw-accent);
   }
-  .script-line.now .txt{
-    font-family:'JetBrains Mono',monospace; font-size:11px; color:#8FFF9E; letter-spacing:0.01em; white-space:nowrap;
+  .sw-shot img{display:block; width:100%; height:auto;}
+  .sw-shot figcaption{
+    position:absolute; left:16px; bottom:-30px;
+    font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:0.1em; text-transform:uppercase; color:var(--sw-fg-dim);
   }
-  .script-line.now .cursor{
-    width:7px; height:13px; background:#8FFF9E; animation:pulse 1s steps(2) infinite;
+  .sw-band.flip .sw-shot figcaption{left:auto; right:16px;}
+
+  @media (max-width:900px){
+    .sw-band .wrap, .sw-band.flip .wrap{grid-template-columns:1fr; gap:48px; padding-block:72px 88px;}
+    .sw-band.flip .sw-copy{order:1;} .sw-band.flip .sw-shot{order:2;}
+    .sw-band.flip .sw-shot figcaption{left:16px; right:auto;}
+    .sw-shot, .sw-band.flip .sw-shot{margin:0 -40px 0 0;}
+    .sw-band::before, .sw-band.flip::before{background:radial-gradient(ellipse 90% 45% at 60% 80%, var(--sw-accent-soft) 0%, transparent 70%);}
   }
-  @media (prefers-reduced-motion: reduce){ .script-line.now .cursor{animation:none;} }
-  .onair{
-    display:inline-flex; align-items:center; gap:6px; margin-top:12px;
-    font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:0.06em;
-    color:#E8685C; background:rgba(232,104,92,0.12); padding:3px 8px; border-radius:3px;
+  @media (max-width:560px){
+    .sw-shot, .sw-band.flip .sw-shot{margin-right:-16px;}
+    .sw-shot figure{border-radius:8px 0 0 8px; border-right:none;}
+    .sw-copy p{font-size:15px;}
   }
-  .onair .d{width:6px; height:6px; border-radius:50%; background:#E8685C; animation:pulse 2.2s ease-in-out infinite;}
-  @media (prefers-reduced-motion: reduce){ .onair .d{animation:none;} }
 
   /* ---- home testimonials (open pull-quote, no card box) ---- */
   .testi-section{padding-block:64px;}
@@ -1286,110 +1226,62 @@
     <div class="section-head" style="border-bottom:none; margin-bottom:0;">
       <div class="eyebrow">BUILT IN-HOUSE</div>
       <h2 style="margin-top:14px;">Software for the sets we run.</h2>
-      <div class="section-note">Two tools built to solve problems on Gotham Media House's own productions, now used beyond them. Pick one to see more.</div>
+      <div class="section-note">Two tools we built to run our own productions. Now they run other people's too.</div>
     </div>
   </section>
 </div>
 
-<div class="sw-split">
-  <button type="button" class="sw-half sw-showcaller sw-half-showcaller" data-sw="showcaller" aria-expanded="false" aria-controls="swDetailShowcaller">
-    <div class="sw-half-bg" aria-hidden="true">
-      <svg class="sw-half-glyph" viewBox="0 0 48 48"><rect x="5" y="9" width="28" height="30" rx="7"/><path d="M15 18l10 6-10 6z"/><path d="M38 16a10 10 0 0 1 0 16M43 11a17 17 0 0 1 0 26"/></svg>
-    </div>
-    <div class="sw-half-content">
-      <div class="eyebrow">LIVE · SHOWCALLERSTUDIO.COM</div>
-      <h2>Showcaller Studio</h2>
-      <div class="sw-half-tagline">Screen playback for sets and stages</div>
-      <span class="sw-half-cta">Learn more</span>
-    </div>
-  </button>
-  <button type="button" class="sw-half sw-backtime sw-half-backtime" data-sw="backtime" aria-expanded="false" aria-controls="swDetailBacktime">
-    <div class="sw-half-bg" aria-hidden="true">
-      <svg class="sw-half-glyph" viewBox="0 0 24 24"><rect x="3" y="3" width="14" height="18" rx="1"/><path d="M6 8h8M6 12h8M6 16h5"/><circle cx="18" cy="17" r="4"/><path d="M18 15v2l1.5 1"/></svg>
-    </div>
-    <div class="sw-half-content">
-      <div class="eyebrow">INVITE-ONLY BETA</div>
-      <h2>Back<em>time</em></h2>
-      <div class="sw-half-tagline">Rundown, script &amp; teleprompter</div>
-      <span class="sw-half-cta">Learn more</span>
-    </div>
-  </button>
-</div>
-
-<div class="sw-detail sw-showcaller" id="swDetailShowcaller" hidden>
+<section class="sw-band sw-showcaller" aria-labelledby="swShowcallerTitle">
   <div class="wrap">
-    <button type="button" class="sw-detail-close" data-sw-close="showcaller" aria-label="Close">
-      <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
-    </button>
-    <div class="sw-detail-head">
-      <div class="win-icon">
-        <svg viewBox="0 0 48 48"><rect x="5" y="9" width="28" height="30" rx="7"/><path d="M15 18l10 6-10 6z"/><path d="M38 16a10 10 0 0 1 0 16M43 11a17 17 0 0 1 0 26"/></svg>
+    <div class="sw-copy">
+      <a class="sw-logo" href="https://showcallerstudio.com" target="_blank" rel="noopener" aria-label="Showcaller Studio">
+        <svg viewBox="0 0 48 48" aria-hidden="true"><rect x="3" y="8" width="30" height="32" rx="7" fill="#FFB224"/><path d="M14 17l11 7-11 7z" fill="#0B0C0E"/><path d="M38 17a10 10 0 0 1 0 14M43 12a17 17 0 0 1 0 24" fill="none" stroke="#FFB224" stroke-width="3" stroke-linecap="round"/></svg>
+        <span class="nm">Showcaller<small>STUDIO</small></span>
+      </a>
+      <div class="sw-status">Available now</div>
+      <h2 id="swShowcallerTitle">Every screen on set, run from one page.</h2>
+      <p>Camera feeds, looping video and graphics on every monitor, LED wall and projector, cued from a single control page instead of a rack of separate OBS machines. Built for our own studio network and already running on client installs.</p>
+      <ul class="sw-feats">
+        <li><div>Live cameras &amp; NDI <span>on any monitor</span></div></li>
+        <li><div>Follows your switcher <span>ATEM, vMix, OBS</span></div></li>
+        <li><div>LED walls &amp; projection <span>mapped and blended</span></div></li>
+      </ul>
+      <div class="sw-cta">
+        <a class="solid" href="https://showcallerstudio.com" target="_blank" rel="noopener">Visit showcallerstudio.com<svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </div>
-      <div>
-        <h3>Showcaller Studio</h3>
-        <div class="win-tagline">SCREEN PLAYBACK FOR SETS AND STAGES</div>
-      </div>
-      <span class="win-status">Live · showcallerstudio.com</span>
     </div>
-    <div class="win-content">
-      <div class="wall">
-        <div class="wall-tile"><span class="tally"></span><div class="bars"><span style="height:70%"></span><span style="height:40%"></span><span style="height:85%"></span><span style="height:55%"></span></div><span class="lbl">CAM 1</span></div>
-        <div class="wall-tile"><span class="tally"></span><div class="bars"><span style="height:50%"></span><span style="height:90%"></span><span style="height:35%"></span><span style="height:65%"></span></div><span class="lbl">CAM 2</span></div>
-        <div class="wall-tile"><div class="grid-pat"></div><span class="lbl">GFX</span></div>
-        <div class="wall-tile"><div class="bars"><span style="height:60%; opacity:0.4;"></span><span style="height:30%; opacity:0.4;"></span><span style="height:80%; opacity:0.4;"></span><span style="height:45%; opacity:0.4;"></span></div><span class="lbl">LOOP</span></div>
-        <div class="wall-tile"><div class="idle"></div><span class="lbl">NDI</span></div>
-        <div class="wall-tile"><div class="grid-pat" style="opacity:0.25;"></div><span class="lbl">IDLE</span></div>
-      </div>
-      <p>Runs every monitor on a set — live camera and NDI feeds, looping video, graphics — from one control page, replacing a rack of separate OBS instances. Built for Gotham Media House's own studio network and already running on client installs.</p>
-      <div class="win-stats">
-        <div class="win-stat"><div class="k">Sources</div><div class="v">Multi-camera &amp; NDI</div></div>
-        <div class="win-stat"><div class="k">Switcher</div><div class="v">ATEM / vMix / OBS follow</div></div>
-        <div class="win-stat"><div class="k">Add-ons</div><div class="v">LED &amp; projection mapping</div></div>
-      </div>
-      <div class="win-cta">
-        <a class="solid" href="https://showcallerstudio.com" target="_blank" rel="noopener">Visit showcallerstudio.com</a>
-      </div>
+    <div class="sw-shot">
+      <figure><img src="images/software/showcaller.jpg" width="1440" height="900" loading="lazy" alt="Showcaller Studio control page showing four on-set monitors, the up-next queue, a timeline and the media library"></figure>
+      <figcaption>Control page · 4 monitors on air</figcaption>
     </div>
   </div>
-</div>
+</section>
 
-<div class="sw-detail sw-backtime" id="swDetailBacktime" hidden>
+<section class="sw-band sw-backtime flip" aria-labelledby="swBacktimeTitle">
   <div class="wrap">
-    <button type="button" class="sw-detail-close" data-sw-close="backtime" aria-label="Close">
-      <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
-    </button>
-    <div class="sw-detail-head">
-      <div class="win-icon">
-        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="14" height="18" rx="1"/><path d="M6 8h8M6 12h8M6 16h5"/><circle cx="18" cy="17" r="4"/><path d="M18 15v2l1.5 1"/></svg>
+    <div class="sw-copy">
+      <a class="sw-logo" href="https://backtime.studio" target="_blank" rel="noopener" aria-label="Backtime">
+        <span class="dot" aria-hidden="true"></span>
+        <span class="nm">Back<em>time</em></span>
+      </a>
+      <div class="sw-status">Invite-only beta</div>
+      <h2 id="swBacktimeTitle">Rundown, script and prompter, live in one room.</h2>
+      <p>A newsroom-style rundown that times the show as it runs, with scripts and a teleprompter built in, so producers, talent and crew all see the same clock. Built to run our own podcast studio, now opening to other productions.</p>
+      <ul class="sw-feats">
+        <li><div>Live rundown <span>with over/under timing</span></div></li>
+        <li><div>Scripts &amp; teleprompter <span>straight from each story</span></div></li>
+        <li><div>Talent &amp; graphics views <span>shared by link</span></div></li>
+      </ul>
+      <div class="sw-cta">
+        <a class="solid" href="https://backtime.studio" target="_blank" rel="noopener">Request an invite<svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </div>
-      <div>
-        <h3>Back<em>time</em></h3>
-        <div class="win-tagline">RUNDOWN, SCRIPT &amp; TELEPROMPTER</div>
-      </div>
-      <span class="win-status">Invite-only beta</span>
     </div>
-    <div class="win-content">
-      <div class="script">
-        <div class="script-line" style="width:88%;"></div>
-        <div class="script-line" style="width:64%;"></div>
-        <div class="script-line now"><span class="txt">...and that's how the segment opens—</span><span class="cursor"></span></div>
-        <div class="script-line" style="width:72%;"></div>
-        <div class="script-line" style="width:92%;"></div>
-        <div class="script-line" style="width:48%;"></div>
-      </div>
-      <div class="onair"><span class="d"></span>ON AIR · SEGMENT 03</div>
-      <p>A newsroom-style rundown, script, and teleprompter tool for live shows. Built to run Gotham Media House's own podcast studio, and now opening up to other productions.</p>
-      <div class="win-stats">
-        <div class="win-stat"><div class="k">Rundown</div><div class="v">Live, shared across the room</div></div>
-        <div class="win-stat"><div class="k">On-screen</div><div class="v">Built-in teleprompter</div></div>
-        <div class="win-stat"><div class="k">Status</div><div class="v">Studio-tested, now in beta</div></div>
-      </div>
-      <div class="win-cta">
-        <a class="solid" href="https://backtime.studio" target="_blank" rel="noopener">Visit backtime.studio</a>
-      </div>
+    <div class="sw-shot">
+      <figure><img src="images/software/backtime.jpg" width="1600" height="1000" loading="lazy" alt="Backtime rundown with a live show clock, a segment timeline, story statuses and a script panel"></figure>
+      <figcaption>Live rundown · Ep. 52 on air</figcaption>
     </div>
   </div>
-</div>
+</section>
 </div>
 
 <div class="page" id="page-contact" hidden>
@@ -1542,40 +1434,6 @@
   }
   window.addEventListener('hashchange', function(){ route(true); });
   route(false);
-})();
-
-(function(){
-  // Software page: split-hero halves toggle their matching detail panel.
-  var halves = document.querySelectorAll('.sw-half');
-  if(!halves.length) return;
-  var panels = {
-    showcaller: document.getElementById('swDetailShowcaller'),
-    backtime: document.getElementById('swDetailBacktime')
-  };
-  function closeAll(){
-    Object.keys(panels).forEach(function(k){ if(panels[k]) panels[k].hidden = true; });
-    halves.forEach(function(b){ b.setAttribute('aria-expanded','false'); b.classList.remove('is-active'); });
-  }
-  function open(key, btn){
-    closeAll();
-    var panel = panels[key];
-    if(!panel) return;
-    panel.hidden = false;
-    btn.setAttribute('aria-expanded','true');
-    btn.classList.add('is-active');
-    panel.scrollIntoView({behavior:'smooth', block:'start'});
-  }
-  halves.forEach(function(btn){
-    btn.addEventListener('click', function(){
-      var key = btn.getAttribute('data-sw');
-      var panel = panels[key];
-      var wasOpen = panel && !panel.hidden;
-      if(wasOpen){ closeAll(); } else { open(key, btn); }
-    });
-  });
-  document.querySelectorAll('[data-sw-close]').forEach(function(btn){
-    btn.addEventListener('click', function(){ closeAll(); });
-  });
 })();
 
 (function(){
