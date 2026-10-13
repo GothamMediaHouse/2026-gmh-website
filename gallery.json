@@ -9,6 +9,27 @@
   },
   {
     "type": "photo",
+    "file": "images/gallery/pool-table-camera.jpg",
+    "title": "Pool hall scene",
+    "alt": "Camera operator framing a shot across a pool table as an actor lines up a shot",
+    "category": "narrative"
+  },
+  {
+    "type": "photo",
+    "file": "images/gallery/street-crew-huddle.jpg",
+    "title": "Blocking on the street",
+    "alt": "Director and crew talking through a scene with cast on a city sidewalk",
+    "category": "narrative"
+  },
+  {
+    "type": "photo",
+    "file": "images/gallery/pool-hall-between-takes.jpg",
+    "title": "Between takes",
+    "alt": "Crew member with an earpiece waiting between takes at a pool hall table",
+    "category": "narrative"
+  },
+  {
+    "type": "photo",
     "file": "images/gallery/car-window-rig.jpg",
     "title": "Car window rig",
     "alt": "Camera rig shooting through a car window during a driving scene",
