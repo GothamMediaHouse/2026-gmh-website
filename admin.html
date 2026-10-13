@@ -320,6 +320,10 @@
         <input type="text" id="alt" placeholder="e.g. Crew setting up a night shoot downtown">
       </div>
     </div>
+    <div class="field">
+      <label>Title on the tile (optional)</label>
+      <input type="text" id="title" placeholder="e.g. Acme product launch">
+    </div>
     <div class="field" id="videoUrlField" style="display:none;">
       <label>Video link</label>
       <input type="text" id="videoUrl" placeholder="Paste the normal YouTube or Vimeo link">
@@ -395,6 +399,10 @@
           <label>Alt text</label>
           <input type="text" id="editAlt">
         </div>
+        <div class="field">
+          <label>Title on the tile</label>
+          <input type="text" id="editTitle">
+        </div>
       </div>
     </div>
     <div class="modal-foot btn-row">
@@ -410,11 +418,11 @@
   var els = {};
   ['owner','repo','branch','token','toggleToken','connectBtn','connStatus','setupCard','connectedCard',
    'connSummaryTxt','forgetBtn','addCard','currentCard','galleryList','countTxt','emptyNote',
-   'btnPhoto','btnVideo','category','alt','videoUrlField','videoUrl','videoUrlHint',
+   'btnPhoto','btnVideo','category','alt','title','videoUrlField','videoUrl','videoUrlHint',
    'fileInput','fileLabel','fileHint','addBtn','log',
    'categoriesCard','categoriesList','newCategoryLabel','addCategoryBtn',
    'editOverlay','editClose','cropPicker','cropImg','cropCrosshair','cropPreviewImgN','cropPreviewImgL',
-   'editCategory','editAlt','editSaveBtn','editCancelBtn','editHint',
+   'editCategory','editAlt','editTitle','editSaveBtn','editCancelBtn','editHint',
    'testiCard','testiList','testiEmptyNote','testiQuote','testiName','testiTitle','addTestiBtn','testiHint'
   ].forEach(function(id){ els[id] = document.getElementById(id); });
 
@@ -877,6 +885,7 @@
     els.cropPreviewImgL.src = thumbUrl;
     fillCategoryOptions(els.editCategory, item.category);
     els.editAlt.value = item.alt || '';
+    els.editTitle.value = item.title || '';
     var f = parseFocal(item.focal);
     setFocal(f.x, f.y);
     els.editHint.textContent = '';
@@ -911,8 +920,10 @@
     newItems[idx] = Object.assign({}, item, {
       category: els.editCategory.value,
       alt: els.editAlt.value.trim(),
+      title: els.editTitle.value.trim(),
       focal: editingFocal
     });
+    if(!newItems[idx].title) delete newItems[idx].title;
     els.editHint.textContent = 'Saving…';
     els.editSaveBtn.disabled = true;
     var text = JSON.stringify(newItems, null, 2) + '\n';
@@ -1010,7 +1021,8 @@
       .then(function(){
         logLine('Image uploaded.', 'ok');
         logLine('Updating gallery.json…');
-        var entry = { type: mode, file: path, alt: alt, category: category };
+        var entry = { type: mode, file: path, title: els.title.value.trim(), alt: alt, category: category };
+        if(!entry.title) delete entry.title;
         if(mode === 'video') entry.videoEmbed = embed.embedUrl;
         var newItems = galleryData.items.concat([entry]);
         var text = JSON.stringify(newItems, null, 2) + '\n';
@@ -1023,6 +1035,7 @@
         logLine('Done — live within a minute or two.', 'ok');
         renderGalleryList();
         els.alt.value = '';
+        els.title.value = '';
         els.videoUrl.value = '';
         els.fileInput.value = '';
         validateAddForm();

@@ -5,11 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Gotham Media House</title>
 <meta name="description" content="Gotham Media House — cinematic video production and live event production based in Pearl River, NY, available nationwide and worldwide.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Gotham Media House">
+<meta property="og:title" content="Gotham Media House: cinematic video and live production">
+<meta property="og:description" content="Emmy Award-winning video production, live streaming and event production from Pearl River, NY. Available worldwide.">
+<meta property="og:url" content="https://gothammediahouse.com/">
+<meta property="og:image" content="https://gothammediahouse.com/images/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@GothamMediaNY">
+<link rel="canonical" href="https://gothammediahouse.com/">
 <link rel="icon" type="image/png" href="images/favicon.png">
 <link rel="apple-touch-icon" href="images/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;700&family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=Sora:wght@600;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg: #EEF1EE;
@@ -19,10 +30,11 @@
     --line-soft: #E2E6E1;
     --ink: #14171A;
     --ink-dim: #565D5F;
-    --ink-faint: #868D8E;
-    --teal: #1F8E7F;
+    --ink-faint: #626869;
+    --teal: #17766A;
     --teal-soft: #DCEEEA;
     --teal-ink: #FFFFFF;
+    --teal-on-dark: #3CC2AE;
     --amber: #B97A1B;
     --amber-soft: #F7E9D2;
     --red: #B23F35;
@@ -38,7 +50,7 @@
       --line-soft: #23282A;
       --ink: #ECE9E2;
       --ink-dim: #9AA1A3;
-      --ink-faint: #5F6668;
+      --ink-faint: #7E8688;
       --teal: #2FB09E;
       --teal-soft: #15302B;
       --teal-ink: #06201C;
@@ -57,7 +69,7 @@
     --line-soft: #23282A;
     --ink: #ECE9E2;
     --ink-dim: #9AA1A3;
-    --ink-faint: #5F6668;
+    --ink-faint: #7E8688;
     --teal: #2FB09E;
     --teal-soft: #15302B;
     --teal-ink: #06201C;
@@ -149,7 +161,36 @@
     letter-spacing:0.03em; white-space:nowrap;
   }
   .tc-readout span{color:var(--ink-dim);}
-  @media (max-width:760px){ .navlinks{display:none;} }
+  .navlinks a:focus-visible, .menu-btn:focus-visible, .mobile-menu a:focus-visible{outline:2px solid var(--teal); outline-offset:3px; border-radius:2px;}
+  .menu-btn{
+    display:none; align-items:center; gap:10px;
+    font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.08em; text-transform:uppercase;
+    color:var(--ink); background:transparent; border:1px solid var(--line); border-radius:6px;
+    padding:9px 12px; cursor:pointer;
+  }
+  .menu-btn .bars{display:flex; flex-direction:column; gap:4px; width:16px;}
+  .menu-btn .bars span{display:block; height:2px; background:currentColor; border-radius:1px; transition:transform .2s ease;}
+  .menu-btn[aria-expanded="true"] .bars span:first-child{transform:translateY(3px) rotate(45deg);}
+  .menu-btn[aria-expanded="true"] .bars span:last-child{transform:translateY(-3px) rotate(-45deg);}
+  .mobile-menu{
+    position:fixed; left:0; right:0; top:var(--topbar-h, 63px); bottom:0; z-index:19;
+    background:var(--bg); overflow-y:auto; border-top:1px solid var(--line-soft);
+  }
+  .mobile-menu-inner{display:flex; flex-direction:column; padding-block:12px 32px;}
+  .mobile-menu-inner > a{
+    font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:26px; text-decoration:none;
+    padding:12px 0; border-bottom:1px solid var(--line-soft); color:var(--ink);
+  }
+  .mobile-menu-inner > a.active{color:var(--teal);}
+  .mobile-menu-foot{margin-top:28px; display:flex; flex-direction:column; align-items:flex-start; gap:14px;}
+  .mobile-menu-foot .mono{font-size:13px; color:var(--ink-dim);}
+  @media (max-width:760px){
+    .navlinks, .tc-readout{display:none;}
+    .menu-btn{display:inline-flex;}
+    .topbar-inner{padding-block:12px;}
+  }
+  @media (max-width:380px){ .wordmark{font-size:14px;} .wordmark img{height:26px;} }
+  body.menu-open{overflow:hidden;}
 
   /* ---- buttons (shared) ---- */
   .btn{
@@ -190,7 +231,7 @@
   .hero-hud .corner.bl{bottom:22px; left:22px; border-bottom-width:2.5px; border-left-width:2.5px;}
   .hero-hud .corner.br{bottom:22px; right:22px; border-bottom-width:2.5px; border-right-width:2.5px;}
   .hero-hud .row{position:absolute; left:48px; right:48px; display:flex; justify-content:space-between; font-size:11px; letter-spacing:0.05em;}
-  .hero-hud .row.top{top:28px; color:var(--teal);}
+  .hero-hud .row.top{top:28px; color:var(--teal-on-dark);}
   .hero-hud .row.bottom{bottom:28px; color:rgba(245,244,238,0.75);}
   .hero-hud .rec{display:flex; align-items:center; gap:6px; color:#E17569;}
   .hero-hud .rec .d{width:7px; height:7px; border-radius:50%; background:#E17569; animation:pulse 2.2s ease-in-out infinite;}
@@ -199,8 +240,14 @@
     position:relative; z-index:2; width:100%;
     max-width:1160px; margin:0 auto; padding:90px 24px 64px;
   }
-  @media (max-width:560px){ .hero-photo-content{padding:70px 16px 48px;} }
-  .hero-photo-content .eyebrow{color:var(--teal);}
+  @media (max-width:560px){
+    .hero-photo-content{padding:88px 16px 44px;}
+    .hero-photo-content .lede{font-size:16px;}
+    .hero-hud .row.bottom{display:none;}
+  }
+  /* eyebrows that sit on photos or dark bands: light text, bright teal dot */
+  .hero-photo-content .eyebrow, .cta-band .eyebrow, .banner-photo-content .eyebrow, .contact-bg-wrap .eyebrow{color:rgba(245,244,238,0.86);}
+  .hero-photo-content .eyebrow::before, .cta-band .eyebrow::before, .banner-photo-content .eyebrow::before, .contact-bg-wrap .eyebrow::before{background:var(--teal-on-dark);}
   .hero-photo-content h1{
     color:#F5F4EE; font-size:clamp(38px, 7vw, 84px); line-height:1.02; margin-top:18px; max-width:16ch;
   }
@@ -226,7 +273,7 @@
   .reel-hud .corner.bl{bottom:14px; left:14px; border-bottom-width:2px; border-left-width:2px;}
   .reel-hud .corner.br{bottom:14px; right:14px; border-bottom-width:2px; border-right-width:2px;}
   .reel-hud .row{position:absolute; left:34px; right:34px; display:flex; justify-content:space-between; font-size:10.5px; letter-spacing:0.05em;}
-  .reel-hud .row.top{top:16px; color:var(--teal);}
+  .reel-hud .row.top{top:16px; color:var(--teal-on-dark);}
   .reel-hud .row.bottom{bottom:16px; color:rgba(245,244,238,0.75);}
   .reel-hud .rec{display:flex; align-items:center; gap:6px; color:#E17569;}
   .reel-hud .rec .d{width:6px; height:6px; border-radius:50%; background:#E17569; animation:pulse 2.2s ease-in-out infinite;}
@@ -276,7 +323,7 @@
     border-block:1px solid var(--line-soft);
   }
   .cta-band-inner{padding-block:72px; text-align:center;}
-  .cta-band .eyebrow{justify-content:center; color:var(--teal);}
+  .cta-band .eyebrow{justify-content:center;}
   .cta-band h2{color:#F5F4EE; font-size:clamp(28px,4vw,42px); margin-top:16px; max-width:20ch; margin-inline:auto;}
   .cta-band p{color:rgba(245,244,238,0.72); margin-top:16px; max-width:52ch; margin-inline:auto; font-size:15px;}
   .cta-band .cta-row{justify-content:center; margin-top:30px;}
@@ -291,7 +338,8 @@
   .teaser-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:14px;}
   @media (max-width:760px){ .teaser-grid{grid-template-columns:1fr 1fr;} }
   @media (max-width:480px){ .teaser-grid{grid-template-columns:1fr;} }
-  .teaser-item{aspect-ratio:4/3; border-radius:8px; overflow:hidden; border:1px solid var(--line);}
+  .teaser-item{display:block; aspect-ratio:4/3; border-radius:8px; overflow:hidden; border:1px solid var(--line);}
+  .teaser-item:focus-visible{outline:3px solid var(--teal); outline-offset:3px;}
   .teaser-item img{
     width:100%; height:100%; object-fit:cover; display:block;
     transition:transform .3s ease;
@@ -518,7 +566,6 @@
     background:linear-gradient(90deg, rgba(8,10,10,0.8) 0%, rgba(8,10,10,0.3) 65%, rgba(8,10,10,0.15) 100%);
   }
   .banner-photo-content{position:relative; z-index:2; max-width:1160px; margin:0 auto; width:100%; padding:44px 24px;}
-  .banner-photo-content .eyebrow{color:var(--teal);}
   .banner-photo-content h3{color:#F5F4EE; font-size:clamp(22px,3vw,30px); margin-top:12px; max-width:22ch; line-height:1.25;}
   .about-banner-photo{min-height:340px;}
   .about-banner-photo img{object-position:center 15%;}
@@ -530,6 +577,7 @@
     display:none; align-items:center; justify-content:center; z-index:60; padding:32px;
   }
   .lightbox-overlay.open{display:flex;}
+  .lightbox-close:focus-visible{outline:2px solid var(--teal-on-dark); outline-offset:2px;}
   .lightbox-overlay img{max-width:100%; max-height:100%; border-radius:6px; box-shadow:0 20px 60px rgba(0,0,0,0.5);}
   .lightbox-video{
     width:min(92vw, 1100px); aspect-ratio:16/9; border:0; border-radius:6px;
@@ -552,6 +600,7 @@
   }
   .section-head h2{font-size:clamp(26px, 3.4vw, 36px);}
   .section-head .section-note{font-size:13.5px; color:var(--ink-faint); max-width:34ch;}
+  .section-title{display:flex; flex-direction:column; gap:14px; min-width:0;}
 
   /* ---- chips ---- */
   .chip-row{display:flex; gap:8px; flex-wrap:wrap;}
@@ -569,6 +618,7 @@
   @media (max-width:860px){ .about-section{grid-template-columns:1fr; gap:32px;} }
   .about-copy h2{font-size:clamp(26px, 3.2vw, 34px); margin-bottom:16px;}
   .about-copy p{color:var(--ink-dim); font-size:15.5px;}
+  .about-copy p + p{margin-top:14px;}
   .about-copy .chip-row{margin-top:24px;}
   .quote-card{
     background:var(--surface); border:1px solid var(--line); border-radius:10px;
@@ -714,9 +764,16 @@
     color:#F5F4EE; padding:10px 14px; border-radius:6px;
     font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.05em;
   }
-  .media-caption{padding:26px;}
-  .media-caption .quote-mark{font-size:44px;}
-  .media-caption blockquote{font-size:18px;}
+  .media-caption{padding:22px 26px 26px;}
+  .media-caption .quote-mark{font-size:44px; height:26px;}
+  .media-caption blockquote{
+    margin:0; font-family:'Space Grotesk',sans-serif; font-size:19px;
+    font-weight:500; line-height:1.4; color:var(--ink); text-wrap:balance;
+  }
+  .media-caption .attrib{
+    margin-top:14px; font-size:11.5px; color:var(--ink-faint);
+    font-family:'JetBrains Mono',monospace; letter-spacing:0.06em;
+  }
 
   /* ---- gallery ---- */
   .gallery-filters{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:22px;}
@@ -736,12 +793,13 @@
   @media (max-width:760px){ .gallery-grid{grid-template-columns:repeat(2, 1fr);} }
   @media (max-width:460px){ .gallery-grid{grid-template-columns:1fr;} }
   .gallery-item{
-    position:relative;
+    position:relative; display:block; width:100%; padding:0; margin:0; font:inherit; text-align:left; color:inherit;
     aspect-ratio:4/3; border-radius:8px; overflow:hidden;
     border:1px solid var(--line); background:var(--surface-2);
     cursor:zoom-in; transition:transform .2s ease, box-shadow .2s ease, opacity .2s ease;
   }
   .gallery-item:hover{transform:translateY(-3px); box-shadow:var(--shadow-lift);}
+  .gallery-item:focus-visible{outline:3px solid var(--teal); outline-offset:3px;}
   .gallery-item.is-lg{ grid-column:span 2; aspect-ratio:8/3; }
   @media (max-width:460px){ .gallery-item.is-lg{ grid-column:span 1; aspect-ratio:4/3; } }
   .gallery-item img{
@@ -754,11 +812,11 @@
     padding:20px 12px 10px;
     background:linear-gradient(180deg, transparent, rgba(8,10,10,0.82) 70%);
     color:#F5F4EE; font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:0.05em;
-    opacity:0; transform:translateY(6px);
-    transition:opacity .2s ease, transform .2s ease;
+    display:flex; flex-direction:column; gap:3px;
     pointer-events:none;
   }
-  .gallery-item:hover .gallery-caption{opacity:1; transform:translateY(0);}
+  .gallery-caption .t{font-family:'Space Grotesk',sans-serif; font-size:14.5px; font-weight:600; letter-spacing:0; text-transform:none;}
+  .gallery-caption .c{color:var(--teal-on-dark);}
   .play-badge{
     position:absolute; inset:0; z-index:1;
     display:flex; align-items:center; justify-content:center;
@@ -786,19 +844,15 @@
   .gallery-loadmore-btn:hover{ border-color:var(--ink-faint); }
 
   /* ---- work ---- */
-  .work-grid{
-    display:grid; grid-template-columns:1fr 1fr; gap:20px;
-  }
-  @media (max-width:820px){ .work-grid{grid-template-columns:1fr;} }
-  .work-card{
-    background:var(--surface); border:1px solid var(--line); border-radius:10px;
-    box-shadow:var(--shadow); padding:28px 26px;
-    transition:transform .2s ease, box-shadow .2s ease;
-  }
-  .work-card:hover{transform:translateY(-4px); box-shadow:var(--shadow-lift);}
-  .work-card h3{font-size:20px; margin-top:12px;}
-  .work-card p{margin-top:12px; color:var(--ink-dim); font-size:14.5px;}
-  .work-card .chip-row{margin-top:20px;}
+  .work-reel{display:grid; grid-template-columns:minmax(0,1.7fr) minmax(0,1fr); gap:36px; align-items:center; margin-bottom:56px;}
+  .work-reel .reel-frame{margin:0;}
+  .work-reel-copy h3{font-size:clamp(22px,2.6vw,28px); margin-top:12px;}
+  .work-reel-copy p{margin-top:12px; color:var(--ink-dim); font-size:15px;}
+  .work-reel-copy .chip-row{margin-top:18px;}
+  @media (max-width:860px){ .work-reel{grid-template-columns:1fr; gap:22px; margin-bottom:44px;} }
+  .work-gallery-head{display:flex; justify-content:space-between; align-items:center; gap:14px 24px; flex-wrap:wrap; margin-bottom:20px;}
+  .work-gallery-head h3{font-size:20px;}
+  .work-gallery-head .gallery-filters{margin-bottom:0;}
 
   /* ---- contact / footer ---- */
   .contact-bg-wrap{
@@ -817,12 +871,14 @@
   .contact-bg-wrap .contact-section{
     position:relative; z-index:2;
     background:transparent; border:none; box-shadow:none;
+    padding-top:76px;
   }
+  @media (max-width:560px){ .contact-bg-wrap .contact-section{padding-top:58px;} }
   .contact-bg-wrap .contact-top h2{color:#F5F4EE;}
   .contact-bg-wrap .slate{border-top-color:rgba(245,244,238,0.25);}
   .contact-bg-wrap .slate-field .k{color:rgba(245,244,238,0.55);}
   .contact-bg-wrap .slate-field .v{color:#F5F4EE;}
-  .contact-bg-wrap .slate-field a{color:var(--teal);}
+  .contact-bg-wrap .slate-field a{color:var(--teal-on-dark);}
   .contact-hud{position:absolute; inset:0; z-index:2; pointer-events:none; font-family:'JetBrains Mono',monospace;}
   .contact-hud .corner{position:absolute; width:22px; height:22px; border-color:rgba(245,244,238,0.4); border-style:solid; border-width:0;}
   .contact-hud .corner.tl{top:20px; left:20px; border-top-width:2px; border-left-width:2px;}
@@ -834,13 +890,38 @@
   @media (max-width:560px){ .contact-hud .rec-tag, .contact-hud .tc{display:none;} }
   .contact-top-copy{max-width:46ch;}
   .contact-top-copy p{margin-top:12px; color:rgba(245,244,238,0.78); font-size:14.5px; line-height:1.6;}
-  .contact-steps{
-    margin-top:36px; padding-top:28px; border-top:1px solid rgba(245,244,238,0.18);
-    display:grid; grid-template-columns:repeat(3, 1fr); gap:26px;
+  .contact-body{
+    margin-top:32px; padding-top:30px; border-top:1px solid rgba(245,244,238,0.18);
+    display:grid; grid-template-columns:minmax(0,1.6fr) minmax(0,1fr); gap:48px; align-items:start;
   }
-  @media (max-width:760px){ .contact-steps{grid-template-columns:1fr; gap:20px;} }
-  .contact-step .num{font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--teal); letter-spacing:0.06em;}
-  .contact-step h4{margin-top:8px; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:15.5px; color:#F5F4EE;}
+  @media (max-width:860px){ .contact-body{grid-template-columns:1fr; gap:36px;} }
+  .contact-steps{display:flex; flex-direction:column; gap:24px;}
+  .inquiry{display:flex; flex-direction:column; gap:16px;}
+  .inq-row{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  @media (max-width:560px){ .inq-row{grid-template-columns:1fr;} }
+  .inq-field{display:flex; flex-direction:column; gap:7px; min-width:0;}
+  .inq-field label{font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:rgba(245,244,238,0.72);}
+  .inq-field label span{text-transform:none; letter-spacing:0; color:rgba(245,244,238,0.5);}
+  .inq-field input, .inq-field select, .inq-field textarea{
+    font:inherit; font-size:15px; color:#F5F4EE; width:100%;
+    background:rgba(8,10,10,0.55); border:1px solid rgba(245,244,238,0.24); border-radius:6px;
+    padding:11px 12px; backdrop-filter:blur(4px); color-scheme:dark;
+  }
+  .inq-field textarea{resize:vertical; min-height:120px; line-height:1.5;}
+  .inq-field input::placeholder, .inq-field textarea::placeholder{color:rgba(245,244,238,0.42);}
+  .inq-field input:focus-visible, .inq-field select:focus-visible, .inq-field textarea:focus-visible{outline:2px solid var(--teal-on-dark); outline-offset:1px; border-color:transparent;}
+  .inq-field [aria-invalid="true"]{border-color:#E17569;}
+  .inq-hp{position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden;}
+  .inq-actions{display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin-top:4px;}
+  .inq-actions .btn{cursor:pointer; border:none;}
+  .inq-actions .btn[disabled]{opacity:0.6; cursor:progress;}
+  .inq-status{font-size:14px; color:rgba(245,244,238,0.86); max-width:44ch;}
+  .inq-status.err{color:#F2A49A;}
+  .inq-status a{color:var(--teal-on-dark);}
+  .inquiry.sent .inq-row, .inquiry.sent .inq-field, .inquiry.sent .inq-actions .btn{display:none;}
+  .inquiry.sent .inq-status{font-size:17px; color:#F5F4EE;}
+  .contact-step .num{font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--teal-on-dark); letter-spacing:0.06em;}
+  .contact-step h4{margin:8px 0 0; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:15.5px; color:#F5F4EE;}
   .contact-step p{margin-top:8px; font-size:13.5px; color:rgba(245,244,238,0.66); line-height:1.55; max-width:34ch;}
   .contact-section{
     background:var(--surface);
@@ -877,6 +958,10 @@
   footer a{text-decoration:none; color:var(--ink-faint);}
   footer a:hover{color:var(--ink-dim);}
   .footer-links{display:flex; gap:18px;}
+  .footer-nav{display:flex; gap:8px 18px; flex-wrap:wrap;}
+  .footer-sub{margin-top:3px;}
+  .footer-sub a{color:var(--ink-dim);}
+  @media (max-width:760px){ footer{flex-direction:column; align-items:flex-start; gap:18px;} }
   .footer-brand{display:flex; align-items:center; gap:12px;}
   .footer-brand img{height:34px; width:auto; display:block; border-radius:3px;}
 </style>
@@ -886,7 +971,7 @@
 <div class="topbar">
   <div class="wrap topbar-inner">
     <a class="wordmark" href="#top"><img src="images/logo.png" alt="" /><span>GOTHAM MEDIA HOUSE</span></a>
-    <div class="navlinks">
+    <nav class="navlinks" aria-label="Main">
       <a href="#top">Home</a>
       <a href="#reel">Reel</a>
       <a href="#about">About</a>
@@ -894,10 +979,28 @@
       <a href="#work">Our Work</a>
       <a href="#software">Software</a>
       <a href="#contact">Contact</a>
-    </div>
+    </nav>
     <div class="tc-readout mono">TC <span id="tcClock">00:00:00:00</span></div>
+    <button type="button" class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu">
+      <span class="bars" aria-hidden="true"><span></span><span></span></span><span class="menu-btn-label">Menu</span>
+    </button>
   </div>
 </div>
+<nav class="mobile-menu" id="mobileMenu" aria-label="Main" hidden>
+  <div class="wrap mobile-menu-inner">
+    <a href="#top">Home</a>
+    <a href="#reel">Reel</a>
+    <a href="#about">About</a>
+    <a href="#services">Services</a>
+    <a href="#work">Our Work</a>
+    <a href="#software">Software</a>
+    <a href="#contact">Contact</a>
+    <div class="mobile-menu-foot">
+      <a class="btn btn-solid" href="#contact">Book a shoot</a>
+      <span class="mono">info@gothammediahouse.com</span>
+    </div>
+  </div>
+</nav>
 
 <div class="page" id="page-home">
   <div class="hero-photo">
@@ -912,7 +1015,7 @@
       <h1>Cinematic brilliance. Live event energy.</h1>
       <p class="lede">We craft stories that resonate — merging cinematic brilliance with live event energy. Every project becomes a unique, immersive experience, delivered on time, on budget, and built to perform.</p>
       <div class="cta-row">
-        <a class="btn btn-solid" href="mailto:info@gothammediahouse.com?subject=Project%20inquiry">Book a shoot</a>
+        <a class="btn btn-solid" href="#contact">Book a shoot</a>
         <a class="btn btn-ghost-on-photo" href="#services">See services</a>
       </div>
     </div>
@@ -992,7 +1095,7 @@
       <h2>Let's make something worth watching.</h2>
       <p>From a first call to final delivery, Matt is hands-on for every project — brand films, live streams, and everything in between.</p>
       <div class="cta-row">
-        <a class="btn btn-solid" href="mailto:info@gothammediahouse.com?subject=Project%20inquiry">Book a shoot</a>
+        <a class="btn btn-solid" href="#contact">Book a shoot</a>
         <a class="btn btn-ghost" href="#work">See our work</a>
       </div>
     </div>
@@ -1028,7 +1131,7 @@
     <h2>Let's make something worth watching.</h2>
     <p>From a first call to final delivery, Matt is hands-on for every project — brand films, live streams, and everything in between.</p>
     <div class="cta-row">
-      <a class="btn btn-solid" href="mailto:info@gothammediahouse.com?subject=Project%20inquiry">Book a shoot</a>
+      <a class="btn btn-solid" href="#contact">Book a shoot</a>
       <a class="btn btn-ghost" href="#work">See our work</a>
     </div>
   </div>
@@ -1077,8 +1180,10 @@
 <div class="wrap">
   <section class="bts-section">
     <div class="section-head">
-      <div class="eyebrow">BEHIND THE SCENES</div>
-      <h2 style="margin-top:14px;">What hands-on actually looks like.</h2>
+      <div class="section-title">
+        <div class="eyebrow">BEHIND THE SCENES</div>
+        <h2>What hands-on actually looks like.</h2>
+      </div>
       <div class="section-note">The setup, the gear, and the moments between takes on a recent interview shoot.</div>
     </div>
     <div class="bts-grid">
@@ -1115,9 +1220,9 @@
         <h3>Video Production</h3>
         <p>High-quality video content designed to engage audiences and strengthen brand identity, built with a cinematic eye and a strategic understanding of how video performs across platforms.</p>
         <div class="spec-list">
-          <div class="spec-row"><div class="k">Formats</div><div class="v">Brand &amp; promotional video</div></div>
-          <div class="spec-row"><div class="k">Formats</div><div class="v">Corporate &amp; documentary content</div></div>
-          <div class="spec-row"><div class="k">Formats</div><div class="v">Social campaigns &amp; event recap</div></div>
+          <div class="spec-row"><div class="k">Brand</div><div class="v">Brand &amp; promotional video</div></div>
+          <div class="spec-row"><div class="k">Corporate</div><div class="v">Corporate &amp; documentary content</div></div>
+          <div class="spec-row"><div class="k">Social</div><div class="v">Social campaigns &amp; event recaps</div></div>
         </div>
       </div>
       <div class="service-card">
@@ -1207,30 +1312,36 @@
       </div>
     </div>
     <div class="route-panel">
-      <svg viewBox="0 0 500 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Schematic route diagram: New York to Washington D.C. to Florida, with worldwide travel available on request">
-        <line x1="55" y1="60" x2="230" y2="150" stroke="var(--line)" stroke-width="2"/>
-        <line x1="230" y1="150" x2="400" y2="60" stroke="var(--line)" stroke-width="2"/>
-        <line x1="400" y1="60" x2="458" y2="128" stroke="var(--teal)" stroke-width="2" stroke-dasharray="4 5" opacity="0.6"/>
-        <g>
-          <circle cx="55" cy="60" r="7" fill="var(--teal)"/>
-          <text x="55" y="38" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" fill="var(--ink)">NY</text>
-        </g>
-        <g>
-          <circle cx="230" cy="150" r="6" fill="var(--teal)"/>
-          <text x="230" y="176" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" fill="var(--ink)">D.C.</text>
-        </g>
-        <g>
-          <circle cx="400" cy="60" r="6" fill="var(--teal)"/>
-          <text x="400" y="38" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" fill="var(--ink)">FL</text>
-        </g>
-        <g>
-          <circle cx="458" cy="128" r="9" fill="var(--teal)"/>
-          <circle cx="458" cy="128" r="14" fill="none" stroke="var(--teal)" stroke-width="1.5" opacity="0.4"/>
-          <text x="458" y="158" text-anchor="middle" font-family="JetBrains Mono, monospace" font-weight="700" font-size="13" fill="var(--ink)">WORLD</text>
+      <svg viewBox="0 0 500 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Route diagram: New York down the East Coast to Washington D.C. and Florida, with worldwide travel on request">
+        <path d="M150 42 C 132 80, 118 100, 116 128 C 114 160, 140 190, 168 218" fill="none" stroke="var(--line)" stroke-width="2"/>
+        <path d="M150 42 C 170 8, 360 0, 410 110" fill="none" stroke="var(--teal)" stroke-width="2" stroke-dasharray="4 6" opacity="0.7"/>
+        <g font-family="JetBrains Mono, monospace" font-size="12" fill="var(--ink)">
+          <circle cx="150" cy="42" r="7" fill="var(--teal)"/>
+          <text x="166" y="47">NEW YORK</text>
+          <text x="166" y="62" font-size="10" fill="var(--ink-faint)">HOME BASE</text>
+          <circle cx="116" cy="128" r="6" fill="var(--teal)"/>
+          <text x="132" y="133">WASHINGTON, D.C.</text>
+          <circle cx="168" cy="218" r="6" fill="var(--teal)"/>
+          <text x="184" y="223">FLORIDA</text>
+          <circle cx="414" cy="124" r="9" fill="var(--teal)"/>
+          <circle cx="414" cy="124" r="15" fill="none" stroke="var(--teal)" stroke-width="1.5" opacity="0.4"/>
+          <text x="414" y="158" text-anchor="middle" font-weight="700">WORLDWIDE</text>
+          <text x="414" y="173" text-anchor="middle" font-size="10" fill="var(--ink-faint)">ON REQUEST</text>
         </g>
       </svg>
     </div>
   </section>
+</div>
+<div class="cta-band">
+  <div class="wrap cta-band-inner">
+    <div class="eyebrow">START A PROJECT</div>
+    <h2>Let's make something worth watching.</h2>
+    <p>From a first call to final delivery, Matt is hands-on for every project — brand films, live streams, and everything in between.</p>
+    <div class="cta-row">
+      <a class="btn btn-solid" href="#contact">Book a shoot</a>
+      <a class="btn btn-ghost" href="#work">See our work</a>
+    </div>
+  </div>
 </div>
 </div>
 
@@ -1241,39 +1352,47 @@
       <h2>Our work</h2>
       <div class="section-note">Every project we produce is driven by story, executed with precision, and delivered at broadcast-level quality.</div>
     </div>
-    <div class="gallery-filters" role="group" aria-label="Filter work by category" id="galleryFilters">
-      <button type="button" class="gallery-filter-btn active" data-filter="all">All</button>
+
+    <div class="work-reel">
+      <div class="reel-frame">
+        <div class="reel-video">
+          <iframe src="https://www.youtube.com/embed/VcVEsj3bFBI" title="Gotham Media House — Cinematography Reel"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen loading="lazy"></iframe>
+        </div>
+      </div>
+      <div class="work-reel-copy">
+        <div class="eyebrow">SHOWREEL 2026</div>
+        <h3>Cinematography Reel</h3>
+        <p>Narrative, documentary and broadcast work from recent Gotham Media House projects.</p>
+        <div class="chip-row">
+          <span class="chip">BRAND</span><span class="chip">DOCUMENTARY</span><span class="chip">LIVE &amp; BROADCAST</span><span class="chip">EVENTS</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="work-gallery-head">
+      <h3>From recent shoots</h3>
+      <div class="gallery-filters" role="group" aria-label="Filter work by category" id="galleryFilters">
+        <button type="button" class="gallery-filter-btn active" data-filter="all" aria-pressed="true">All</button>
+      </div>
     </div>
     <div class="gallery-grid" id="workGrid"></div>
     <div class="gallery-loadmore" id="galleryLoadMore" hidden>
       <button type="button" class="gallery-loadmore-btn" id="galleryLoadMoreBtn">Load more</button>
     </div>
-
-    <div class="work-grid">
-      <div class="work-card">
-        <div class="eyebrow">NARRATIVE</div>
-        <h3>Stories in Motion</h3>
-        <p>High-quality storytelling and thoughtful production — from brand and promotional films to corporate, documentary, social, and event-driven content.</p>
-        <div class="chip-row">
-          <span class="chip">BRAND</span>
-          <span class="chip">DOCUMENTARY</span>
-          <span class="chip">SOCIAL</span>
-          <span class="chip">EVENT RECAP</span>
-        </div>
-      </div>
-      <div class="work-card">
-        <div class="eyebrow">REAL-TIME</div>
-        <h3>Live Production Services</h3>
-        <p>Built on precision, reliability, and real-time execution — from corporate meetings and brand activations to large-scale events and broadcast productions.</p>
-        <div class="chip-row">
-          <span class="chip">CORPORATE</span>
-          <span class="chip">BRAND ACTIVATIONS</span>
-          <span class="chip">LARGE-SCALE EVENTS</span>
-          <span class="chip">BROADCAST</span>
-        </div>
-      </div>
-    </div>
   </section>
+</div>
+<div class="cta-band">
+  <div class="wrap cta-band-inner">
+    <div class="eyebrow">START A PROJECT</div>
+    <h2>Let's make something worth watching.</h2>
+    <p>From a first call to final delivery, Matt is hands-on for every project — brand films, live streams, and everything in between.</p>
+    <div class="cta-row">
+      <a class="btn btn-solid" href="#contact">Book a shoot</a>
+      <a class="btn btn-ghost" href="#services">See services</a>
+    </div>
+  </div>
 </div>
 </div>
 
@@ -1281,8 +1400,10 @@
 <div class="wrap" id="software">
   <section style="padding-bottom:0;">
     <div class="section-head" style="border-bottom:none; margin-bottom:0;">
-      <div class="eyebrow">BUILT IN-HOUSE</div>
-      <h2 style="margin-top:14px;">Software for the sets we run.</h2>
+      <div class="section-title">
+        <div class="eyebrow">BUILT IN-HOUSE</div>
+        <h2>Software for the sets we run.</h2>
+      </div>
       <div class="section-note">Two tools we built to run our own productions. Now they run other people's too.</div>
     </div>
   </section>
@@ -1339,6 +1460,17 @@
     </div></div>
   </div>
 </section>
+<div class="cta-band">
+  <div class="wrap cta-band-inner">
+    <div class="eyebrow">NEED A CREW, TOO?</div>
+    <h2>Let's make something worth watching.</h2>
+    <p>From a first call to final delivery, Matt is hands-on for every project — brand films, live streams, and everything in between.</p>
+    <div class="cta-row">
+      <a class="btn btn-solid" href="#contact">Book a shoot</a>
+      <a class="btn btn-ghost" href="#work">See our work</a>
+    </div>
+  </div>
+</div>
 </div>
 
 <div class="page" id="page-contact" hidden>
@@ -1358,23 +1490,59 @@
           <h2>Let's roll.</h2>
           <p>Brand film, live stream, or full event coverage — tell us what you're planning and we'll put together the right crew and plan for it.</p>
         </div>
-        <a class="btn btn-solid" href="mailto:info@gothammediahouse.com?subject=Project%20inquiry">Start a project</a>
       </div>
-      <div class="contact-steps">
-        <div class="contact-step">
-          <div class="num">01 / REACH OUT</div>
-          <h4>Tell us about it</h4>
-          <p>Send a note on what the project is, roughly when it's happening, and any dates already locked in.</p>
-        </div>
-        <div class="contact-step">
-          <div class="num">02 / WE SCOPE IT</div>
-          <h4>Format, crew &amp; gear</h4>
-          <p>A short call or email thread to work out format, crew size, and equipment — live, narrative, or event coverage.</p>
-        </div>
-        <div class="contact-step">
-          <div class="num">03 / WE ROLL</div>
-          <h4>Cameras up, on schedule</h4>
-          <p>Same crew carries it from pre-production through final delivery.</p>
+      <div class="contact-body">
+        <form class="inquiry" id="inquiryForm" novalidate>
+          <div class="inq-row">
+            <div class="inq-field"><label for="inqName">Name</label><input id="inqName" name="name" autocomplete="name" required maxlength="120"></div>
+            <div class="inq-field"><label for="inqEmail">Email</label><input id="inqEmail" name="email" type="email" autocomplete="email" required maxlength="200"></div>
+          </div>
+          <div class="inq-row">
+            <div class="inq-field"><label for="inqPhone">Phone <span>optional</span></label><input id="inqPhone" name="phone" type="tel" autocomplete="tel" maxlength="40"></div>
+            <div class="inq-field"><label for="inqCompany">Company <span>optional</span></label><input id="inqCompany" name="company" autocomplete="organization" maxlength="160"></div>
+          </div>
+          <div class="inq-row">
+            <div class="inq-field"><label for="inqType">What is it?</label>
+              <select id="inqType" name="type">
+                <option>Video production</option>
+                <option>Live production &amp; streaming</option>
+                <option>Event production</option>
+                <option>Creative &amp; technical consulting</option>
+                <option>Something else</option>
+              </select></div>
+            <div class="inq-field"><label for="inqWhen">When? <span>optional</span></label><input id="inqWhen" name="when" placeholder="e.g. late March, or a date" maxlength="120"></div>
+          </div>
+          <div class="inq-field"><label for="inqBudget">Budget <span>optional</span></label>
+            <select id="inqBudget" name="budget">
+              <option value="">Not sure yet</option>
+              <option>Under $5k</option>
+              <option>$5k–$15k</option>
+              <option>$15k–$50k</option>
+              <option>$50k+</option>
+            </select></div>
+          <div class="inq-field"><label for="inqMessage">Tell us about it</label><textarea id="inqMessage" name="message" rows="5" required maxlength="5000" placeholder="What the project is, where it happens, and any dates already locked in."></textarea></div>
+          <div class="inq-hp" aria-hidden="true"><label for="inqWebsite">Website</label><input id="inqWebsite" name="website" tabindex="-1" autocomplete="off"></div>
+          <div class="inq-actions">
+            <button type="submit" class="btn btn-solid" id="inqSubmit">Send inquiry</button>
+            <p class="inq-status" id="inqStatus" role="status" aria-live="polite"></p>
+          </div>
+        </form>
+        <div class="contact-steps">
+          <div class="contact-step">
+            <div class="num">01 / REACH OUT</div>
+            <h4>Tell us about it</h4>
+            <p>Send a note on what the project is, roughly when it's happening, and any dates already locked in.</p>
+          </div>
+          <div class="contact-step">
+            <div class="num">02 / WE SCOPE IT</div>
+            <h4>Format, crew &amp; gear</h4>
+            <p>A short call or email thread to work out format, crew size, and equipment — live, narrative, or event coverage.</p>
+          </div>
+          <div class="contact-step">
+            <div class="num">03 / WE ROLL</div>
+            <h4>Cameras up, on schedule</h4>
+            <p>Same crew carries it from pre-production through final delivery.</p>
+          </div>
         </div>
       </div>
       <div class="slate">
@@ -1409,17 +1577,27 @@
   <footer>
     <div class="footer-brand">
       <img src="images/logo.png" alt="Gotham Media House" />
-      <div>© <span id="yr"></span> Gotham Media House</div>
+      <div>
+        <div>© <span id="yr"></span> Gotham Media House</div>
+        <div class="footer-sub">Pearl River, NY · <a href="mailto:info@gothammediahouse.com">info@gothammediahouse.com</a></div>
+      </div>
     </div>
+    <nav class="footer-nav" aria-label="Footer">
+      <a href="#reel">Reel</a>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#work">Our Work</a>
+      <a href="#software">Software</a>
+      <a href="#contact">Contact</a>
+    </nav>
     <div class="footer-links">
       <a href="https://instagram.com/gothammediahouse" target="_blank" rel="noopener">Instagram</a>
       <a href="https://x.com/GothamMediaNY" target="_blank" rel="noopener">Twitter / X</a>
     </div>
-    <div>Pearl River, NY</div>
   </footer>
 </div>
 
-<div class="lightbox-overlay" id="lightboxOverlay">
+<div class="lightbox-overlay" id="lightboxOverlay" role="dialog" aria-modal="true" aria-label="Photo viewer">
   <button class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
   <img id="lightboxImg" src="" alt="" />
   <iframe id="lightboxVideo" class="lightbox-video" src="" title="" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen hidden></iframe>
@@ -1476,7 +1654,7 @@
       var el = document.getElementById('page-'+k);
       if(el) el.hidden = (k !== key);
     });
-    document.querySelectorAll('.navlinks a').forEach(function(a){
+    document.querySelectorAll('.navlinks a, .mobile-menu-inner > a').forEach(function(a){
       var h = (a.getAttribute('href') || '').replace('#','');
       var mapped = pageMap.hasOwnProperty(h) ? pageMap[h] : 'home';
       a.classList.toggle('active', mapped === key);
@@ -1539,12 +1717,20 @@
   var overlayImg = document.getElementById('lightboxImg');
   var overlayVideo = document.getElementById('lightboxVideo');
   if(!overlay || !overlayImg || !overlayVideo) return;
+  var closeBtn = document.getElementById('lightboxClose');
+  var lastFocus = null;
+  function show(){
+    lastFocus = document.activeElement;
+    overlay.classList.add('open');
+    document.body.classList.add('menu-open');
+    closeBtn.focus();
+  }
   function openPhoto(src, alt){
     overlayVideo.hidden = true; overlayVideo.src = '';
     overlayImg.hidden = false;
     overlayImg.src = src;
     overlayImg.alt = alt || '';
-    overlay.classList.add('open');
+    show();
   }
   function openVideo(embedSrc, title){
     overlayImg.hidden = true; overlayImg.src = '';
@@ -1552,12 +1738,15 @@
     overlayVideo.title = title || 'Video';
     var sep = embedSrc.indexOf('?') === -1 ? '?' : '&';
     overlayVideo.src = embedSrc + sep + 'autoplay=1';
-    overlay.classList.add('open');
+    show();
   }
   function closeBox(){
+    if(!overlay.classList.contains('open')) return;
     overlay.classList.remove('open');
+    document.body.classList.remove('menu-open');
     overlayImg.src = '';
     overlayVideo.src = '';
+    if(lastFocus && lastFocus.focus) lastFocus.focus();
   }
   document.addEventListener('click', function(e){
     var item = e.target.closest('.gallery-item');
@@ -1569,12 +1758,20 @@
       if(img) openPhoto(img.src, img.alt);
     }
   });
-  overlay.addEventListener('click', closeBox);
-  document.getElementById('lightboxClose').addEventListener('click', function(e){
+  overlay.addEventListener('click', function(e){ if(e.target === overlay || e.target === overlayImg) closeBox(); });
+  closeBtn.addEventListener('click', function(e){
     e.stopPropagation(); closeBox();
   });
   document.addEventListener('keydown', function(e){
+    if(!overlay.classList.contains('open')) return;
     if(e.key === 'Escape') closeBox();
+    // keep keyboard focus inside the viewer
+    if(e.key === 'Tab'){
+      var stops = [closeBtn].concat(overlayVideo.hidden ? [] : [overlayVideo]);
+      var i = stops.indexOf(document.activeElement);
+      e.preventDefault();
+      stops[(i + (e.shiftKey ? stops.length - 1 : 1)) % stops.length].focus();
+    }
   });
 })();
 
@@ -1592,7 +1789,7 @@
   var loadMoreWrap = document.getElementById('galleryLoadMore');
   var loadMoreBtn = document.getElementById('galleryLoadMoreBtn');
   var catLabel = {};
-  var BATCH = 12;
+  var BATCH = 18;
   var PLAY_ICON = '<span class="play-badge"><span class="circle"><svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"></polygon></svg></span></span>';
 
   var allItems = [];
@@ -1616,14 +1813,17 @@
     var label = catLabel[p.category] || (p.category || '').toUpperCase();
     var classes = 'gallery-item' + (p._large ? ' is-lg' : '') + (isVideo ? ' is-video' : '');
     var dataAttrs = 'data-cat="' + escapeHtml(p.category) + '" data-type="' + (isVideo ? 'video' : 'photo') + '"';
+    var title = p.title || '';
     if(isVideo){
       dataAttrs += ' data-video-embed="' + escapeHtml(p.videoEmbed) + '" data-video-title="' + escapeHtml(p.alt) + '"';
     }
     var imgStyle = p.focal ? ' style="object-position:' + escapeHtml(p.focal) + ';"' : '';
-    return '<div class="' + classes + '" ' + dataAttrs + '>' +
+    var aria = (isVideo ? 'Play video: ' : 'View photo: ') + (title || p.alt || label);
+    return '<button type="button" class="' + classes + '" ' + dataAttrs + ' aria-label="' + escapeHtml(aria) + '">' +
       '<img src="' + escapeHtml(p.file) + '" alt="' + escapeHtml(p.alt) + '"' + imgStyle + ' loading="lazy" />' +
       (isVideo ? PLAY_ICON : '') +
-      '<span class="gallery-caption">' + escapeHtml(label) + '</span></div>';
+      '<span class="gallery-caption" aria-hidden="true">' + (title ? '<span class="t">' + escapeHtml(title) + '</span>' : '') +
+      '<span class="c">' + escapeHtml(label) + '</span></span></button>';
   }
 
   function render(){
@@ -1642,15 +1842,16 @@
         btn.type = 'button';
         btn.className = 'gallery-filter-btn';
         btn.setAttribute('data-filter', c.key);
+        btn.setAttribute('aria-pressed', 'false');
         btn.textContent = c.label || c.key;
         filtersWrap.appendChild(btn);
       });
     }).catch(function(err){ console.warn('categories.json failed to load', err); }).then(function(){
       return freshFetch('gallery.json').then(function(r){ return r.json(); }).then(function(list){
         allItems = list.map(function(p, i){
-          // Video items always get a large tile; otherwise every 5th photo does,
-          // for a bit of magazine-style rhythm instead of a flat uniform grid.
-          p._large = (p.type === 'video') || (i % 5 === 0);
+          // Video items get a large tile, and so do photos marked "wide": true in gallery.json
+          // (only use it on landscape photos at least ~1000px wide, or the tile looks soft).
+          p._large = (p.type === 'video') || p.wide === true;
           return p;
         });
         render();
@@ -1662,8 +1863,9 @@
     filtersWrap.addEventListener('click', function(e){
       var btn = e.target.closest('.gallery-filter-btn');
       if(!btn) return;
-      filtersWrap.querySelectorAll('.gallery-filter-btn').forEach(function(b){ b.classList.remove('active'); });
+      filtersWrap.querySelectorAll('.gallery-filter-btn').forEach(function(b){ b.classList.remove('active'); b.setAttribute('aria-pressed', 'false'); });
       btn.classList.add('active');
+      btn.setAttribute('aria-pressed', 'true');
       currentFilter = btn.getAttribute('data-filter');
       visibleCount = BATCH;
       render();
@@ -1680,7 +1882,7 @@
   if(fieldGrid){
     freshFetch('field.json').then(function(r){ return r.json(); }).then(function(list){
       fieldGrid.innerHTML = list.map(function(p){
-        return '<div class="teaser-item"><img src="' + escapeHtml(p.file) + '" alt="' + escapeHtml(p.alt) + '"></div>';
+        return '<a class="teaser-item" href="#work"><img src="' + escapeHtml(p.file) + '" alt="' + escapeHtml(p.alt) + '" loading="lazy"></a>';
       }).join('');
     }).catch(function(err){ console.warn('field.json failed to load', err); });
   }
@@ -1703,6 +1905,66 @@
       if(testiSection) testiSection.hidden = false;
     }).catch(function(err){ console.warn('testimonials.json failed to load', err); });
   }
+})();
+
+(function(){
+  // Phone menu: a full-screen sheet under the top bar.
+  var btn = document.getElementById('menuBtn');
+  var menu = document.getElementById('mobileMenu');
+  var bar = document.querySelector('.topbar');
+  if(!btn || !menu) return;
+  function setOpen(open){
+    if(open) document.documentElement.style.setProperty('--topbar-h', bar.getBoundingClientRect().height + 'px');
+    menu.hidden = !open;
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    btn.querySelector('.menu-btn-label').textContent = open ? 'Close' : 'Menu';
+    document.body.classList.toggle('menu-open', open);
+  }
+  btn.addEventListener('click', function(){ setOpen(menu.hidden); });
+  menu.addEventListener('click', function(e){ if(e.target.closest('a')) setOpen(false); });
+  window.addEventListener('hashchange', function(){ setOpen(false); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && !menu.hidden){ setOpen(false); btn.focus(); } });
+  window.matchMedia('(min-width:761px)').addEventListener('change', function(m){ if(m.matches) setOpen(false); });
+})();
+
+(function(){
+  // Contact form: sends through the Showcaller Studio site's mail sender (Resend), which emails info@.
+  var form = document.getElementById('inquiryForm');
+  if(!form) return;
+  var ENDPOINT = 'https://showcallerstudio.com/api/gmh-inquiry';
+  var status = document.getElementById('inqStatus');
+  var submit = document.getElementById('inqSubmit');
+  var opened = Date.now();
+  var FALLBACK = ' You can also email <a href="mailto:info@gothammediahouse.com">info@gothammediahouse.com</a>.';
+  function say(msg, err){ status.innerHTML = msg; status.classList.toggle('err', !!err); }
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var need = [['inqName','Add your name.'],['inqEmail','Add an email so we can reply.'],['inqMessage','Add a line about the project.']];
+    var bad = null;
+    need.forEach(function(n){
+      var el = document.getElementById(n[0]);
+      var ok = el.value.trim() !== '' && (n[0] !== 'inqEmail' || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value.trim()));
+      el.setAttribute('aria-invalid', ok ? 'false' : 'true');
+      if(!ok && !bad) bad = [el, n[0] === 'inqEmail' && el.value.trim() ? 'That email doesn\u2019t look right.' : n[1]];
+    });
+    if(bad){ say(bad[1], true); bad[0].focus(); return; }
+    var data = {};
+    new FormData(form).forEach(function(v, k){ data[k] = v; });
+    data.ms = Date.now() - opened;
+    submit.disabled = true; say('Sending\u2026');
+    fetch(ENDPOINT, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data) })
+      .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(j){ return { ok: r.ok && j.ok, j: j }; }); })
+      .then(function(res){
+        if(res.ok){
+          form.classList.add('sent');
+          say('Thanks, ' + data.name.split(' ')[0].replace(/[<>&]/g,'') + '. Your note is in, and Matt will reply by email.');
+        } else {
+          say((res.j && res.j.error ? res.j.error : 'It didn\u2019t send.') + FALLBACK, true);
+        }
+      })
+      .catch(function(){ say('It didn\u2019t send.' + FALLBACK, true); })
+      .then(function(){ submit.disabled = false; });
+  });
 })();
 </script>
 </body>

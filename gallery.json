@@ -1,12 +1,110 @@
 [
-  { "type": "photo", "file": "images/gallery/street-scene-setup.jpg", "alt": "On-location film shoot, crew and cast setting up a street scene", "category": "narrative" },
-  { "type": "photo", "file": "images/gallery/car-window-rig.jpg", "alt": "Camera rig shooting through a car window during a driving scene", "category": "narrative" },
-  { "type": "photo", "file": "images/gallery/doorway-narrative.jpg", "alt": "Talent walking through a doorway during a narrative shoot", "category": "narrative" },
-  { "type": "photo", "file": "images/gallery/field-monitor-review.jpg", "alt": "Crew reviewing a shot on a field monitor between takes", "category": "narrative" },
-  { "type": "photo", "file": "images/gallery/tripod-on-location.jpg", "alt": "Camera on a tripod set up on location outside a building", "category": "narrative" },
-  { "type": "photo", "file": "images/gallery/staircase-crew.jpg", "alt": "Crew filming talent descending a staircase on set", "category": "narrative" },
-  { "type": "photo", "file": "images/gallery/lakeside-camera.jpg", "alt": "Cinema camera on tripod set up at a lakeside location for a scenic shoot", "category": "documentary" },
-  { "type": "photo", "file": "images/gallery/boom-mic-bar.jpg", "alt": "Boom mic operator recording a scene at a bar during a documentary shoot", "category": "documentary" },
-  { "type": "photo", "file": "images/gallery/live-switcher-monitors.jpg", "alt": "Multi-camera switcher and preview monitors set up for a live outdoor event broadcast", "category": "live" },
-  { "type": "photo", "file": "images/gallery/hardware-store-interview.jpg", "alt": "Sony camera capturing an interview with a shop owner in a hardware store aisle", "category": "documentary" }
+  {
+    "type": "photo",
+    "file": "images/gallery/street-scene-setup.jpg",
+    "title": "Street scene setup",
+    "alt": "On-location film shoot, crew and cast setting up a street scene",
+    "category": "narrative",
+    "wide": true
+  },
+  {
+    "type": "photo",
+    "file": "images/gallery/car-window-rig.jpg",
+    "title": "Car window rig",
+    "alt": "Camera rig shooting through a car window during a driving scene",
+    "category": "narrative"
+  },
+  {
+    "type": "photo",
+    "file": "images/gallery/doorway-narrative.jpg",
+    "title": "Doorway scene",
+    "alt": "Talent walking through a doorway during a narrative shoot",
+    "category": "narrative"
+  },
+  {
+    "type": "photo",
+    "file": "images/gallery/field-monitor-review.jpg",
+    "title": "Reviewing the take",
+    "alt": "Crew reviewing a shot on a field monitor between takes",
+    "category": "narrative"
+  },
+  {
+    "type": "photo",
+    "file": "images/gallery/tripod-on-location.jpg",
+    "title": "On location",
+    "alt": "Camera on a tripod set up on location outside a building",
+    "category": "narrative"
+  },
+  {
+    "type": "photo",
+    "file": "images/gallery/staircase-crew.jpg",
+    "title": "Staircase scene",
+    "alt": "Crew filming talent descending a staircase on set",
+    "category": "narrative"
+  },
+  {
+    "type": "photo",
+    "file": "images/gallery/lakeside-camera.jpg",
+    "title": "Lakeside setup",
+    "alt": "Cinema camera on tripod set up at a lakeside location for a scenic shoot",
+    "category": "documentary"
+  },
+  {
+    "type": "photo",
+    "file": "images/gallery/boom-mic-bar.jpg",
+    "title": "Sound at the bar",
+    "alt": "Boom mic operator recording a scene at a bar during a documentary shoot",
+    "category": "documentary"
+  },
+  {
+    "type": "photo",
+    "file": "images/gallery/live-switcher-monitors.jpg",
+    "title": "Outdoor live switch",
+    "alt": "Multi-camera switcher and preview monitors set up for a live outdoor event broadcast",
+    "category": "live"
+  },
+  {
+    "type": "photo",
+    "file": "images/gallery/hardware-store-interview.jpg",
+    "title": "Hardware store interview",
+    "alt": "Sony camera capturing an interview with a shop owner in a hardware store aisle",
+    "category": "documentary"
+  },
+  {
+    "type": "photo",
+    "file": "images/gallery/ef0f4324-ec19-4c06-a0ba-019a87f48735_1_105_c.jpeg",
+    "title": "Wireless Camera",
+    "alt": "Camera operator on a wireless camera rig at a live event",
+    "category": "live"
+  },
+  {
+    "type": "photo",
+    "file": "images/gallery/43dab1e5-d885-4048-a393-f0abcfc888b9_1_105_c.jpeg",
+    "title": "Multiview",
+    "alt": "Multiviewer showing every camera feed during a live production",
+    "category": "live",
+    "wide": true
+  },
+  {
+    "type": "photo",
+    "file": "images/gallery/fa883d66-9e14-4b8b-948f-019cbee1c37e_1_105_c.jpeg",
+    "title": "Camera Setup",
+    "alt": "Camera set up and ready for a live broadcast",
+    "category": "live"
+  },
+  {
+    "type": "photo",
+    "file": "images/gallery/68224647-2be3-472d-ae32-bace20f7faa7_1_105_c.jpeg",
+    "title": "Broadcast Tent",
+    "alt": "Broadcast tent with switching and monitoring gear at an outdoor event",
+    "category": "live",
+    "wide": true
+  },
+  {
+    "type": "photo",
+    "file": "images/gallery/19be12e8-e580-402a-8e99-43e4dd7c93de_4_5005_c.jpeg",
+    "title": "B-Roll",
+    "alt": "Shooting b-roll on a corporate production",
+    "category": "corporate"
+  }
 ]
