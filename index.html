@@ -218,6 +218,10 @@
     position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:78% 30%;
     filter:contrast(1.05);
   }
+  .hero-photo > video{
+    position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:50% 50%;
+  }
+  @media (prefers-reduced-motion: reduce){ .hero-photo > video{display:none;} }
   .hero-photo::before{
     content:""; position:absolute; inset:0; z-index:1;
     background:
@@ -265,7 +269,11 @@
     background:#000; box-shadow:var(--shadow-lift);
   }
   .reel-video{position:relative; width:100%; aspect-ratio:16/9;}
-  .reel-video iframe{position:absolute; inset:0; width:100%; height:100%; border:0;}
+  .reel-video iframe, .reel-video video{position:absolute; inset:0; width:100%; height:100%; border:0; background:#000;}
+  .reel-video video{object-fit:contain;}
+  .reel-sub{margin-top:8px;}
+  .reel-sub h2{font-size:clamp(22px,2.8vw,30px);}
+  .reel-sub p{color:var(--ink-dim); margin-top:10px; max-width:62ch;}
   .reel-hud{position:absolute; inset:0; z-index:2; pointer-events:none; font-family:'JetBrains Mono',monospace;}
   .reel-hud .corner{position:absolute; width:20px; height:20px; border-color:var(--teal); border-style:solid; border-width:0;}
   .reel-hud .corner.tl{top:14px; left:14px; border-top-width:2px; border-left-width:2px;}
@@ -1005,6 +1013,9 @@
 <div class="page" id="page-home">
   <div class="hero-photo">
     <img src="images/hero-v2.jpg" alt="Director talking through a scene with cast and crew on a city sidewalk" />
+    <video autoplay muted loop playsinline preload="auto" poster="media/gmh-hero-poster.jpg" aria-hidden="true">
+      <source src="media/gmh-hero-loop.mp4" type="video/mp4">
+    </video>
     <div class="hero-hud" aria-hidden="true">
       <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
       <div class="row top"><span class="rec"><span class="d"></span>REC</span><span>4K · 24P</span></div>
@@ -1105,10 +1116,28 @@
 <div class="page" id="page-reel" hidden>
 <div class="wrap" id="reel">
   <section class="reel-intro">
-    <div class="eyebrow">SHOWREEL</div>
-    <h1 style="margin-top:14px;">Cinematography Reel</h1>
-    <p class="lede">A look at the cinematography, live production, and event work that defines Gotham Media House —
-      pulled from projects across narrative, documentary, and broadcast.</p>
+    <div class="eyebrow">SHOWREEL 2026</div>
+    <h1 style="margin-top:14px;">Company Reel</h1>
+    <p class="lede">Live production, corporate film, interviews, brand stories and our narrative short <em>The Clean Job</em> —
+      a look at the work that defines Gotham Media House.</p>
+  </section>
+
+  <div class="reel-frame">
+    <div class="reel-video">
+      <video controls playsinline preload="metadata" poster="media/gmh-company-reel-poster.jpg" title="Gotham Media House — Company Reel">
+        <source src="media/gmh-company-reel-720p.mp4" type="video/mp4" media="(max-width: 899px)">
+        <source src="media/gmh-company-reel-1080p.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="reel-hud" aria-hidden="true">
+      <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+    </div>
+  </div>
+
+  <section class="reel-sub">
+    <div class="eyebrow">CINEMATOGRAPHY</div>
+    <h2 style="margin-top:12px;">Cinematography Reel</h2>
+    <p>Narrative, documentary and broadcast camera work from recent projects.</p>
   </section>
 
   <div class="reel-frame">
